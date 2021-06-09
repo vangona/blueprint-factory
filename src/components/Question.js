@@ -16,7 +16,8 @@ function useInput(defaultValue) {
     return { value, onChange };
 }
 
-function Question({ishappy, fortest}) {
+function Question({fortest}) {
+    const ishappy = localStorage.getItem('ishappy')
 
     function handleEnter(e) {
         if (e.key === "Enter") {

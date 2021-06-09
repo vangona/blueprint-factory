@@ -2,13 +2,10 @@ import React from "react"
 import "./Happy.css"
 
 const Happy = (props) => {
-    const {location, history} = props
-    if (location.state === undefined){
-        history.push("/")
-        return ""
-    } else {
+    const ishappy = localStorage.getItem('ishappy')
+    const {location} = props
     let happy = ""
-    if (location.state.ishappy) {
+    if (ishappy) {
         happy = "yes"
     } else {
         happy = "no"
@@ -18,7 +15,7 @@ const Happy = (props) => {
             <div>{ happy }</div>
             <div>{ location.state.fortest }</div>
         </div>
-    )}
+    )
 }
 
 export default Happy;

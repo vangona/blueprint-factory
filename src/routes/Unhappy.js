@@ -3,11 +3,11 @@ import Question from "../components/Question"
 import "./Unhappy.css"
 
 const Unhappy = (props) => {
-    const {location : {state}} = props
-    return <Question 
-            ishappy = {state.ishappy}
-            fortest = {state.fortest}
+    return (
+    <Question 
+            fortest = {props.fortest}
     />
+    )
 }
 
 export default Unhappy;
