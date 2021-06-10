@@ -1,12 +1,12 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 
-function PrivateRoute ({ component: Component, ...rest }) {
+function ResultRoute ({ component: Component, ...rest }) {
     return (
         <Route
             {...rest}
             render = {props => 
-                props.location.state?(
+                localStorage.getItem('plan_happy_algoritm') !== null?(
                     <Component {...props} />
                 ) : ( 
                     <Redirect to={{
@@ -20,4 +20,4 @@ function PrivateRoute ({ component: Component, ...rest }) {
     )
 }
 
-export default PrivateRoute;
+export default ResultRoute;

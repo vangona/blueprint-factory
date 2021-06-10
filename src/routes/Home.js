@@ -1,11 +1,13 @@
 import React from "react"
+import { useHistory } from "react-router-dom"
 import "./Home.css"
 
-const Home = (props) => {
+const Home = () => {
+    const history = useHistory();
     function handleClick(e) {
         if (e.target.classList.contains('happy')) {
             localStorage.setItem('ishappy', true);
-            props.history.push({
+            history.push({
                 pathname: '/happy',
                 state: {
                     fortest: "행복"
@@ -13,7 +15,7 @@ const Home = (props) => {
             })
         } else {
             localStorage.setItem('ishappy', false);
-            props.history.push({
+            history.push({
                 pathname: '/unhappy',
                 state: {
                     fortest: "노력"

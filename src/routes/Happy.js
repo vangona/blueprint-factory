@@ -1,21 +1,27 @@
 import React from "react"
+import What from "../components/happy/What"
+import Plan from "../components/happy/Plan"
 import "./Happy.css"
+import { Redirect } from "react-router"
 
 const Happy = (props) => {
-    const ishappy = localStorage.getItem('ishappy')
-    const {location} = props
-    let happy = ""
-    if (ishappy) {
-        happy = "yes"
-    } else {
-        happy = "no"
+    if ( props.location.state.what === true ) {
+        return (
+            <Plan 
+                props= {props}
+            />
+        )
+    } else if ( localStorage.getItem('plan_happy_algoritm') !== null) {
+        return (
+            <Redirect to="/result" />
+        )
+    }else {
+        return (
+            <What 
+                    props= {props}
+            />
+        )
     }
-    return (
-        <div>
-            <div>{ happy }</div>
-            <div>{ location.state.fortest }</div>
-        </div>
-    )
 }
 
 export default Happy;
