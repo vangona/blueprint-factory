@@ -11,7 +11,7 @@ const Happy = (props) => {
                 props= {props}
             />
         )
-    } else if ( localStorage.getItem('plan_happy_algoritm') !== null) {
+    } else if ( props.location.state.plan === true ) {
         return (
             <Redirect to="/result" />
         )

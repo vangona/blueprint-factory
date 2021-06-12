@@ -4,13 +4,14 @@ import "./Home.css"
 
 const Home = () => {
     const history = useHistory();
+
     function handleClick(e) {
         if (e.target.classList.contains('happy')) {
             localStorage.setItem('ishappy', true);
             history.push({
                 pathname: '/happy',
                 state: {
-                    fortest: "행복"
+                    page: "when"
                 }
             })
         } else {
@@ -18,7 +19,7 @@ const Home = () => {
             history.push({
                 pathname: '/unhappy',
                 state: {
-                    fortest: "노력"
+                    page: "thinking"
                 }
             })
         }

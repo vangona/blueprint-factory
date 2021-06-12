@@ -6,22 +6,31 @@ import Doing from "../components/unhappy/Doing"
 import "./Unhappy.css"
 
 const Unhappy = (props) => {
-    if (props.location.state.want === false) {
+    if (props.location.state.page === "feeling") {
         return <Feeling 
-                props= {props}
-        />
-    } else if (props.location.state.feeling === false) {
-        return <Thinking 
-                props= {props}
-        />
-    } else if (props.location.state.thinking === false) {
-        return <Doing 
-                props= {props}
-        />
-    }else {
-        return (
-            <Want 
                     props= {props}
+                    page= "feeling"
+        />
+    } else if (props.location.state.page === "doing") {
+        return <Doing 
+                    props= {props}
+                    page= "doing"
+        />
+    } else if (props.location.state.page === "thinking") {
+        return <Thinking 
+                    props= {props}
+                    page= "thinking"
+        />
+    } else if (props.location.state.page === "want") {
+        return <Want 
+                    props= {props}
+                    page= "want"
+        />
+    } else {
+        return (
+            <Thinking 
+                    props= {props}
+                    page= "thinking"
             />
         )
     }
