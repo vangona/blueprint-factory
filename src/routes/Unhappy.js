@@ -1,39 +1,54 @@
 import React from "react"
-import Want from "../components/unhappy/Want"
-import Feeling from "../components/unhappy/Feeling"
-import Thinking from "../components/unhappy/Thinking"
-import Doing from "../components/unhappy/Doing"
+import Question from "../components/unhappy/Question"
+import Answer from "../components/Answer"
+import Buttons from "../components/Buttons"
 import "./Unhappy.css"
 
 const Unhappy = (props) => {
-    if (props.location.state.page === "feeling") {
-        return <Feeling 
-                    props= {props}
-                    page= "feeling"
-        />
-    } else if (props.location.state.page === "doing") {
-        return <Doing 
-                    props= {props}
-                    page= "doing"
-        />
-    } else if (props.location.state.page === "thinking") {
-        return <Thinking 
-                    props= {props}
-                    page= "thinking"
-        />
-    } else if (props.location.state.page === "want") {
-        return <Want 
-                    props= {props}
-                    page= "want"
-        />
+    let page = "thinking"
+    let isAnswer= false;
+
+    const doing_list = localStorage.getItem('doing_happy_algorithm')
+    const think_list = localStorage.getItem('thinking_happy_algorithm')
+    const feel_list = localStorage.getItem('feeling_happy_algorithm')
+    const want_list = localStorage.getItem('want_happy_algorithm')
+
+    const things = [doing_list, think_list, feel_list, want_list]
+
+    if (things[0] !== null || things[1] !== null || things[2] !== null || things[3] !== null) {
+        isAnswer = true;
     } else {
-        return (
-            <Thinking 
-                    props= {props}
-                    page= "thinking"
-            />
-        )
+        isAnswer = false;
     }
+
+    if (props.location.state.page === "feeling") {
+        page = "feeling"
+    } else if (props.location.state.page === "doing") {
+        page = "doing"
+    } else if (props.location.state.page === "thinking") {
+        page = "thinking"
+    } else if (props.location.state.page === "want") {
+        page = "want"
+    } 
+
+    return (
+        <div className="main-container">
+            <Question
+                props= {props}
+                page= {page}
+            />
+            {isAnswer
+            ?<Answer 
+                props= {props}
+                page= {page}
+            />
+            : null}
+            <Buttons 
+                props= {props}
+                page= {page}
+            />
+        </div>
+        )
 }
 
 export default Unhappy;
