@@ -1,53 +1,55 @@
-import React, {useState} from "react"
-import { useHistory } from "react-router";
+import React, { useEffect } from "react"
 import "./When.css"
 
-function useInput(defaultValue) {
-    const [value, setValue] = useState(defaultValue);
+function When({props, page}) {
 
-    const onChange = e => {
-        const {
-            target: { value }
-        } = e;
-        setValue(value);
-    };
-
-    return { value, onChange };
-}
-
-function When({props}) {
-    const history = useHistory();
-    function handleEnter(e) {
-        localStorage.setItem('when_happy_algoritm', e.target.value)
-        history.push({
-            pathname: "/happy",
-            state: {
-                what: true
-            }
-        })
+    function clearInputContainer() {
+        const inputContainer = document.querySelector(".inputContainer")
+        inputContainer.innerHTML = ""
     }
 
-    function backBtn(e, {props}) {
-        props.history.goBack()
+    function addAnswer(e, props) {
+        const input = document.createElement("input")
+        const inputContainer = document.querySelector(".inputContainer")
+        
+        input.classList.add("questionInput")
+        inputContainer.appendChild(input)                
     }
-    
-    const name = useInput("")
+
+    function reloadBtn(e) {
+        clearInputContainer()
+        addAnswer()
+    }
+
+    useEffect(() => {
+        clearInputContainer()
+        addAnswer()
+    })
+
     return (
-        <div>
-            <label htmlFor="name">언제 행복한가요?</label><br/>
-            <input {...name} placeholder="언제 행복한가요?" onKeyPress={e => handleEnter(e)}/>
-            <hr />
-            <div>{ localStorage.getItem('want_happy_algoritm')
-                    ?<div>
-                        <span>내 머릿 속 생각 : { localStorage.getItem('thinking_happy_algoritm') }</span><br />
-                        <span>해야할 일 : { localStorage.getItem('doing_happy_algoritm') }</span><br />
-                        <span>느끼고 있는 것 : { localStorage.getItem('feeling_happy_algoritm') }</span><br />
-                        <span>내가 원하고 있는 것 : { localStorage.getItem('want_happy_algoritm') }</span>
-                    </div>
-                    : null
-                }</div>
-            <button onClick={(e) => backBtn(e, {props})}>뒤로 돌아가기</button>
-        </div>
+        <div className="main-container">
+            <h4 className="questionTitle">
+                {page === "thinking"
+                ?"지금 어떤 생각을 하나요?"
+                :page === "feeling"
+                ?"지금 어떤 감정을 느끼고 있나요?"
+                :page === "doing"
+                ?"지금 해야하는데 하지 않고 있는 일이 있나요?"
+                :page === "want"
+                ?"바라고 있는 것이 있나요?"
+                :null}
+            </h4>
+            <div className="questionBody">
+                <span className="notice__span">적을 수 있는만큼 다 적어보세요.</span>
+                <div className="inputContainer">
+                </div>
+                <hr style={{width: "100%"}}/>
+                <div>
+                    <button className="addAnswerBtn btn" onClick={(e) => addAnswer(e, props)}>빈칸 추가하기</button>
+                    <button className="addAnswerBtn btn" onClick={(e) => reloadBtn(e)}>전체 지우기</button>
+                </div>
+            </div>    
+        </div> 
     )
 }
 
