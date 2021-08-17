@@ -10,6 +10,7 @@ const Container = styled.div`
     bottom: 0;
     height: 80px;
     width: 100%;
+    z-index: 3;
 `;
 const NavComponent = styled.div`
     border: 1px solid black;

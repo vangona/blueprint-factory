@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './components/App';
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
+import "./styles.css";
 
 const GlobalStyles = createGlobalStyle`
     ${reset};

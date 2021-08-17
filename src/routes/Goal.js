@@ -4,6 +4,7 @@ import Target from "../components/Target";
 import TargetFinding from "../components/TargetFinding";
 
 const Container = styled.div`
+    position: absolute;
     display: flex;
     flex-direction: column;
     width: 100%;
