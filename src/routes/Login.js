@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import { useSpring, animated, config } from "react-spring";
+import { authService } from "../fBase";
 
 const Container = styled.div`
     display: flex;

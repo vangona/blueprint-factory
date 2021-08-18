@@ -10,16 +10,18 @@ const Container = styled.div`
     bottom: 0;
     height: 80px;
     width: 100%;
-    z-index: 3;
+    z-index: 1;
 `;
 const NavComponent = styled.div`
     border: 1px solid black;
     width: 25%;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: gray;
     color: white;
+    z-index: 1;
     :hover {cursor: pointer;}
     :active {transform: scale(0.98)}
 `;

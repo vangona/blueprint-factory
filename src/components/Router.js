@@ -9,11 +9,10 @@ import Profile from "../routes/Profile";
 import Register from "../routes/Register";
 import Navigation from "./Navigation";
 
-const AppRouter = () => {
+const AppRouter = ({ isLoggedIn, userObj }) => {
     return (
         <Router>
             <Route render={({ location }) => {
-                console.log(location)
                 return (
                         <TransitionGroup className="transition-group">
                             <CSSTransition key={location.pathname} timeout={500} classNames="fade">
@@ -24,7 +23,6 @@ const AppRouter = () => {
                                     <Route exact path="/login">
                                         <Login />
                                     </Route>
-                                    <Navigation />
                                 </Switch>
                             </CSSTransition>
                         </TransitionGroup>
@@ -36,18 +34,30 @@ const AppRouter = () => {
                         <TransitionGroup className="transition-group">
                             <CSSTransition key={location.pathname} timeout={500} classNames="fade">
                                 <Switch location={location}>
-                                    <Route exact path="/">
-                                        <Home />
-                                    </Route>
-                                    <Route exact path="/goal">
-                                        <Goal />
-                                    </Route>
-                                    <Route exact path="/community">
-                                        <Community />
-                                    </Route>
-                                    <Route exact path="/profile">
-                                        <Profile />
-                                    </Route>
+                                    {isLoggedIn ? (
+                                    <>
+                                        <Route exact path="/">
+                                            <Home />
+                                        </Route>
+                                        <Route exact path="/goal">
+                                            <Goal />
+                                        </Route>
+                                        <Route exact path="/community">
+                                            <Community />
+                                        </Route>
+                                        <Route exact path="/profile">
+                                            <Profile />
+                                        </Route>
+                                        <Navigation />
+                                    </> 
+                                    ) : ( 
+                                    <>
+                                        <Route exact path="/">
+                                            <Register />
+                                        </Route>
+                                        <Redirect from="*" to="/" />       
+                                    </>
+                                    )}
                                 </Switch>
                             </CSSTransition>
                         </TransitionGroup>

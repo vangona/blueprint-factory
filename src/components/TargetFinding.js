@@ -7,8 +7,14 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100vh;
+    height: 30vh;
     background-color: wheat;
+`;
+
+const Dream = styled.h1`
+    margin: 15px;
+    font-size: 25px;
+    font-weight: bold;
 `;
 
 const Question = styled.span`
@@ -20,7 +26,7 @@ const AnswerContainer = styled.div`
     display: flex;
 `;
 
-const TargetFinding = () => {
+const TargetFinding = ({dream}) => {
     const [goalFindingState, setGoalFindingState] = useState(false);
 
     const clickFindingGoal = (e) => {
@@ -34,6 +40,7 @@ const TargetFinding = () => {
 
     return (
         <Container>
+            <Dream>{dream && `내 꿈은 ${dream}`}</Dream>
             {!goalFindingState && (
                 <>
                     <Question>목표를 찾고 있나요?</Question>
