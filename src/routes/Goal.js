@@ -13,7 +13,12 @@ const Container = styled.div`
     height: 100vh;
 `;
 
-const Targets = styled.div``;
+const Targets = styled.div`
+    display:flex;
+    justify-content: center;
+    width: 100%;
+    align-items: center;;
+`;
 
 const Goal = () => {
     const [dream, setDream] = useState("");

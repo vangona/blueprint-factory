@@ -3,12 +3,19 @@ import styled from "styled-components";
 import TodoList from "./TodoList";
 
 const Container = styled.div`
+    justify-content: center;
+    align-items: center;
     background-color: wheat;
     height: 70vh;
     width: 100vw;
 `;
 
-const TargetComponent = styled.div``;
+const TargetComponent = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
 
 const TargetName = styled.h1`
     font-size: 18px;

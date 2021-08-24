@@ -1,6 +1,7 @@
 import React from "react";
 import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
+import CheerRegister from "../routes/CheerRegister";
 import Community from "../routes/Community";
 import Goal from "../routes/Goal";
 import Home from "../routes/Home";
@@ -22,6 +23,9 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
                                     </Route>
                                     <Route exact path="/login">
                                         <Login />
+                                    </Route>
+                                    <Route exact path="/cheerregister">
+                                        <CheerRegister />
                                     </Route>
                                 </Switch>
                             </CSSTransition>

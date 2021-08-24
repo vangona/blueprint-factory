@@ -26,6 +26,10 @@ const AnswerContainer = styled.div`
     display: flex;
 `;
 
+const AnswerInput = styled.input``;
+
+const AnswerBtn = styled.button``;
+
 const TargetFinding = ({dream}) => {
     const [goalFindingState, setGoalFindingState] = useState(false);
 
@@ -45,8 +49,8 @@ const TargetFinding = ({dream}) => {
                 <>
                     <Question>목표를 찾고 있나요?</Question>
                     <AnswerContainer>
-                        <button onClick={clickFindingGoal}>예</button>
-                        <button onClick={clickFindingGoal}>아니요</button>
+                        <AnswerBtn onClick={clickFindingGoal}>예</AnswerBtn>
+                        <AnswerBtn onClick={clickFindingGoal}>아니요</AnswerBtn>
                     </AnswerContainer>
                 </>
             )}
@@ -54,8 +58,9 @@ const TargetFinding = ({dream}) => {
                 <>
                     <Question>목표가 있나요?</Question>
                     <AnswerContainer>
-                        <button onClick={clickFindingGoal}>예</button>
-                        <button onClick={clickFindingGoal}>아니요</button>
+                        <AnswerInput type="text" />
+                        <AnswerBtn onClick={clickFindingGoal}>예</AnswerBtn>
+                        <AnswerBtn onClick={clickFindingGoal}>아니요</AnswerBtn>
                     </AnswerContainer>
                 </>
             )}
