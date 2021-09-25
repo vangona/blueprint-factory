@@ -5,9 +5,6 @@ import TodoList from "./TodoList";
 const Container = styled.div`
     justify-content: center;
     align-items: center;
-    background-color: wheat;
-    height: 70vh;
-    width: 100vw;
 `;
 
 const TargetComponent = styled.div`
@@ -26,8 +23,8 @@ const Target = () => {
     return (
         <Container>
             <TargetComponent>
-                <TargetName>붕어빵틀 사기</TargetName>
-                <TodoList />
+                {/* <TargetName>붕어빵틀 사기</TargetName>
+                <TodoList /> */}
             </TargetComponent>
         </Container>
     )

@@ -7,10 +7,10 @@ const Container = styled.div`
     position: absolute;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
-    height: 100vh;
+    height: 100%;
 `;
 
 const Targets = styled.div`
@@ -20,7 +20,7 @@ const Targets = styled.div`
     align-items: center;;
 `;
 
-const Goal = () => {
+const Goal = ({userObj}) => {
     const [dream, setDream] = useState("");
     useEffect(() => {
         if(localStorage.getItem("dream")) {
@@ -29,7 +29,7 @@ const Goal = () => {
     }, [])
     return (
         <Container>
-            <TargetFinding dream={dream}>
+            <TargetFinding userObj={userObj}>
             </TargetFinding>
             <Targets>
                 <Target></Target>

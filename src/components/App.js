@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { authService } from "../fBase";
 import AppRouter from "./Router";
+import "../css/styles.css"
+import Loading from "./Loading";
 
 const App = () => {
     const [init, setInit] = useState(false)
@@ -17,7 +19,7 @@ const App = () => {
     }, [])
     return (
         <>
-        {init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={ userObj } /> : "Loading..."}
+        {init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={ userObj } /> : <Loading />}
         </>
     )
 };
