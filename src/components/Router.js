@@ -9,6 +9,7 @@ import Login from "../routes/Login";
 import Profile from "../routes/Profile";
 import Register from "../routes/Register";
 import Navigation from "./Navigation";
+import Signout from "./Signout";
 
 const AppRouter = ({ isLoggedIn, userObj }) => {
     return (
@@ -51,6 +52,9 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
                                         </Route>
                                         <Route exact path="/profile">
                                             <Profile />
+                                        </Route>
+                                        <Route exact path="/signout">
+                                            <Signout />
                                         </Route>
                                         <Navigation />
                                     </> 

@@ -15,6 +15,7 @@ const Container = styled.div`
 const Question = styled.span`
     font-size: 1rem;
     margin-bottom: 20px;
+    line-height: 140%;
 `;
 
 const BtnContainer = styled.div`
@@ -103,7 +104,7 @@ const TargetFinding = ({userObj}) => {
             {!step && (
                 <>
                     <Question>하고 싶은 것이 있나요?</Question>
-                    <AnswerInput onChange={onChange} name="want" type="text" />
+                    <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
                     </BtnContainer>
@@ -113,7 +114,7 @@ const TargetFinding = ({userObj}) => {
                 <>
                     <Question>하고 싶은걸 하기 위해 필요한 것이 있나요?</Question>
                     <span>(ex. 부자 되기 : 돈)</span><br />
-                    <AnswerInput onChange={onChange} name="need" type="text" />
+                    <AnswerInput onChange={onChange} name="need" value={need} type="text" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
                         <AnswerNextBtn name="need" onClick={onClick}>다음으로</AnswerNextBtn>
@@ -123,12 +124,13 @@ const TargetFinding = ({userObj}) => {
             {step === 2 && (
                 <>
                     <Question>
-                        필요한 것을 숫자로 표현해보세요. <br />
+                        필요한 것을 숫자 혹은 <br /> 
+                        구체적인 행동으로 표현해보세요. <br />
                         안된다면, 이전으로 돌아가서 <br />
                         필요한 것을 수정해보세요.
                     </Question>
-                    <span>(ex. 부자되기 {'>'} 돈 : 월 수입 500만원)</span><br />
-                    <AnswerInput onChange={onChange} name="value" type="text" />
+                    <Question>(ex. 부자되기 {'>'} 월 수입 500만원 <br /> or 매 끼니 가격 안보고 메뉴 시키기)</Question><br />
+                    <AnswerInput onChange={onChange} name="value"  value={numericValue} type="text" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
                         <AnswerNextBtn name="value" onClick={onClick}>다음으로</AnswerNextBtn>
@@ -139,7 +141,7 @@ const TargetFinding = ({userObj}) => {
                 <>
                     <Question>필요한 것을 달성할 기간을 정해보세요.</Question>
                     <span></span><br />
-                    <AnswerInput onChange={onChange} name="date" type="date" />
+                    <AnswerInput onChange={onChange} name="date"  value={date} type="date" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
                             이전으로
@@ -178,7 +180,7 @@ const TargetFinding = ({userObj}) => {
                     </BtnContainer>
                 </TargetContainer>
             )}
-            {!step === 4 && 
+            {!(step === 4) && 
             <TargetContainer>
                 <TargetContent>
                     {want && `원하는 것 : ${want}`}

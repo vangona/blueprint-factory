@@ -1,22 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useState } from "react/cjs/react.development";
 import styled from "styled-components";
 import Loading from "../components/Loading";
 import { authService, dbService } from "../fBase";
 
 const Contaier = styled.div`
     display: flex;
-    flex-direction: center;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
+    margin-top: 30px;
 `;
 
-const TargetContainer = styled.div``;
+const TargetContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
 
-const TargetContent = styled.div``;
+const TargetContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 80%;
+    word-break: keep-all;
+    margin: 15px;
+`;
+
+const TargetWant = styled.h3``;
+
+const TargetNeed = styled.div``;
+
+const TargetDate = styled.div``;
 
 const Home = ({userObj}) => {
     const [targets, setTargets] = useState([]);
@@ -45,7 +63,15 @@ const Home = ({userObj}) => {
                 <TargetContainer>
                     {targets.map(target => 
                     <TargetContent key={target.targetId}>
-                        {target.want}
+                        <TargetWant>
+                            {target.want}
+                        </TargetWant>
+                        <TargetDate>
+                            {target.date}까지
+                        </TargetDate>
+                        <TargetNeed>
+                            {target.need} : {target.numericValue}
+                        </TargetNeed>
                     </TargetContent>)
                     }
                 </TargetContainer>
