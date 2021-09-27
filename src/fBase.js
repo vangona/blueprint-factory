@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
+import "firebase/messaging"
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQ8ykklh7rB2m3VlXwgXXkM_BcN3XZbB4",
@@ -17,6 +18,8 @@ firebase.initializeApp(firebaseConfig);
 
 export const firebaseInstance = firebase;
 
+export const messaging = firebase.messaging();
 export const authService = firebase.auth();
 export const dbService = firebase.firestore();
 export const storageService = firebase.storage();
+

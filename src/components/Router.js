@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 import CheerRegister from "../routes/CheerRegister";
 import Community from "../routes/Community";
