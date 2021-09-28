@@ -22,18 +22,17 @@ const Targets = styled.div`
 
 const Goal = ({userObj}) => {
     const [dream, setDream] = useState("");
+
     useEffect(() => {
         if(localStorage.getItem("dream")) {
             setDream(localStorage.getItem("dream"))
         }
     }, [])
+    
     return (
         <Container>
             <TargetFinding userObj={userObj}>
             </TargetFinding>
-            <Targets>
-                <Target></Target>
-            </Targets>
         </Container>
     )
 }

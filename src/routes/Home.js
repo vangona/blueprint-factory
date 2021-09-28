@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../components/Loading";
+import Target from "../components/Target";
 import { authService, dbService } from "../fBase";
 
 const Contaier = styled.div`
@@ -12,6 +13,9 @@ const Contaier = styled.div`
     width: 100%;
     height: 100%;
     margin-top: 30px;
+    color: white;
+    font-family: serif;
+    line-height: 120%;
 `;
 
 const TargetContainer = styled.div`
@@ -19,26 +23,14 @@ const TargetContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 90%;
 `;
-
-const TargetContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 80%;
-    word-break: keep-all;
-    margin: 15px;
-`;
-
-const TargetWant = styled.h3``;
-
-const TargetNeed = styled.div``;
-
-const TargetDate = styled.div``;
 
 const Home = ({userObj}) => {
+    const history = useHistory();
     const [targets, setTargets] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+
 
     const getTargets = async () => {
         await dbService.collection(`${userObj.uid}`).where("type", "==", "target").get()
@@ -51,7 +43,8 @@ const Home = ({userObj}) => {
         })
     }
 
-    const history = useHistory();
+
+
     useEffect(() => {
         getTargets();
     })
@@ -61,18 +54,9 @@ const Home = ({userObj}) => {
             ?
             <Contaier>
                 <TargetContainer>
-                    {targets.map(target => 
-                    <TargetContent key={target.targetId}>
-                        <TargetWant>
-                            {target.want}
-                        </TargetWant>
-                        <TargetDate>
-                            {target.date}까지
-                        </TargetDate>
-                        <TargetNeed>
-                            {target.need} : {target.numericValue}
-                        </TargetNeed>
-                    </TargetContent>)
+                    {targets.filter(target => target.state === "ongoing").map(target => 
+                        <Target target={target} userObj={userObj} />
+                    )
                     }
                 </TargetContainer>
                 <button onClick={()=>{

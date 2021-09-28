@@ -88,7 +88,10 @@ const TargetFinding = ({userObj}) => {
             numericValue,
             date,
             type: "target",
-            registeredTime: Date.now()
+            state: "ongoing",
+            registeredTime: Date.now(),
+            cancelReason : '',
+            completeFeeling: '',
         }
         await dbService.collection(`${userObj.uid}`).doc(targetId).set(targetObj)
         alert("성공적으로 설정되었습니다!")
