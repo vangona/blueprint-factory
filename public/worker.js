@@ -48,3 +48,20 @@ self.addEventListener('activate', event => {
         })
     );
 });
+// Push alert
+self.addEventListener('push', (event) => {
+    let payload = event.data.json();
+    const title = payload.title;
+    const options = {
+        body: payload.body,
+        vibrate: [200, 100, 200, 100, 200, 100, 400],
+        dota : payload.params
+    };
+    event.waitUntil( self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', (event) => {
+    let data = event.notification.data;
+    event.notification.close();
+    event.waitUntil( clients.openWindow( data.url ));
+})

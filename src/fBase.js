@@ -1,8 +1,8 @@
-import firebase from "firebase/app";
+import firebase from "firebase";
 import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
-import "firebase/messaging"
+import "firebase/messaging";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQ8ykklh7rB2m3VlXwgXXkM_BcN3XZbB4",
@@ -14,7 +14,12 @@ const firebaseConfig = {
   measurementId: "G-FZ1E56E1BS"
 };
 
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();
+}
+
 
 export const firebaseInstance = firebase;
 
