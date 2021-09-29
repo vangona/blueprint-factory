@@ -24,10 +24,7 @@ const App = () => {
             setInit(true)
         })
         requestToken();
-        window.addEventListener("RemoteMessage", (payload) => {
-            console.log(payload)
-        })
-    }, [])
+    })
     return (
         <>
         {init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={ userObj } /> : <Loading />}

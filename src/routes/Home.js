@@ -55,14 +55,10 @@ const Home = ({userObj}) => {
             <Contaier>
                 <TargetContainer>
                     {targets.filter(target => target.state === "ongoing").map(target => 
-                        <Target target={target} userObj={userObj} />
+                        <Target key={target.targetId} target={target} userObj={userObj} />
                     )
                     }
                 </TargetContainer>
-                <button onClick={()=>{
-                    authService.signOut();
-                    history.push("/")
-                    }}>Log Out</button>
             </Contaier>
             : <Loading />
         }

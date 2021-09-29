@@ -7,13 +7,17 @@ export const setToken = async () => {
     }
 
     const messaging = firebase.messaging();
-    const token = await messaging.requestPermission()
-    .then(() => {
-        return messaging.getToken();
-    })
+    const token = await messaging.getToken()
+    .then(token => 
+        token
+    )
     .catch((err) => {
         console.log('error : ', err);
         return null;
+    })
+
+    messaging.onMessage(payload => {
+        console.log(payload)
     })
 
     console.log('token : ', token)

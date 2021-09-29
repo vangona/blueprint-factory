@@ -20,7 +20,6 @@ if (!firebase.apps.length) {
   firebase.app();
 }
 
-
 export const firebaseInstance = firebase;
 
 export const messaging = firebase.messaging();
