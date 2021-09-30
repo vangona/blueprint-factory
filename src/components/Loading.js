@@ -16,6 +16,8 @@ const float = keyframes`
 
 const Container = styled.div`
     display: flex;
+    flex-direction: column;
+    position: fixed;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -23,10 +25,16 @@ const Container = styled.div`
 `;
 
 const Icon = styled.div`
-    animation: ${float} 0.6s infinite;
+    animation: ${float} 1s infinite;
     font-size: 100px;
     color: white;
     
+`;
+
+const Phrases = styled.span`
+    color: white;
+    font-size: 14px;
+    font-family: Kyobo Handwriting;
 `;
 
 const Loading = () => {
@@ -35,6 +43,7 @@ const Loading = () => {
             <Icon>
                 <AiFillCloud />
             </Icon>
+            <Phrases>뜬구름으로 솜사탕 만드는 중...</Phrases>
         </Container>
     )
 }

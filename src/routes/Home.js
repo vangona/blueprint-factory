@@ -26,11 +26,15 @@ const TargetContainer = styled.div`
     width: 90%;
 `;
 
+const Notice = styled.span`
+    text-align: center;
+    line-height: 160%;
+`;
+
 const Home = ({userObj}) => {
     const history = useHistory();
     const [targets, setTargets] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
 
     const getTargets = async () => {
         await dbService.collection(`${userObj.uid}`).where("type", "==", "target").get()
@@ -43,8 +47,6 @@ const Home = ({userObj}) => {
         })
     }
 
-
-
     useEffect(() => {
         getTargets();
     })
@@ -54,9 +56,21 @@ const Home = ({userObj}) => {
             ?
             <Contaier>
                 <TargetContainer>
-                    {targets.filter(target => target.state === "ongoing").map(target => 
-                        <Target key={target.targetId} target={target} userObj={userObj} />
-                    )
+                    {targets.filter(target => target.state === "ongoing").length !== 0 
+                    ?
+                    <>
+                        {targets.filter(target => target.state === "ongoing").map(target => 
+                            <Target key={target.targetId} target={target} userObj={userObj} />
+                        )
+                        }
+                    </>
+                    : 
+                    <Notice>
+                        현재 진행중인 목표가 없어요. <br /> 목표를 찾아보세요. <br/>
+                        <button onClick={() => {
+                            history.push("/goal")
+                        }}>목표 찾기</button>
+                    </Notice>
                     }
                 </TargetContainer>
             </Contaier>
