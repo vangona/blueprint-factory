@@ -87,7 +87,7 @@ const LongtermFinding = ({userObj}) => {
             need,
             numericValue,
             date,
-            type: "target",
+            type: "longterm",
             state: "ongoing",
             registeredTime: Date.now(),
             cancelReason : '',

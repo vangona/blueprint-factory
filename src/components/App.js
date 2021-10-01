@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { authService, messaging } from "../fBase";
+import { authService, dbService, messaging } from "../fBase";
 import AppRouter from "./Router";
 import "../css/styles.css"
 import Loading from "./Loading";
 import { setToken } from "./Messaginginit";
 
 const App = () => {
-    const [init, setInit] = useState(false)
-    const [userObj, setUserObj] = useState(null);
+    const [init, setInit] = useState(false);
+    const [userObj, setUserObj] = useState(null); 
 
     const requestToken = async () => {
         let token = await setToken();

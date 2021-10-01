@@ -10,6 +10,8 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: 50px;
+    color: white;
+    font-family: Kyobo Handwriting;
 `;
 
 const Question = styled.span`
@@ -25,9 +27,23 @@ const BtnContainer = styled.div`
 
 const AnswerInput = styled.input``;
 
-const AnswerNextBtn = styled.button``;
+const AnswerNextBtn = styled.button`
+    margin-top: 10px;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 0.5px white solid;
+    background-color: rgba(255,255,255,0.1);
+`;
 
-const AnswerPrevBtn = styled.button``;
+const AnswerPrevBtn = styled.button`
+    margin-top: 10px;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 0.5px white solid;
+    background-color: rgba(255,255,255,0.1);
+`;
 
 const Cheer = styled.div`
     text-align: center;
@@ -87,7 +103,7 @@ const ShortermFinding = ({userObj}) => {
             need,
             numericValue,
             date,
-            type: "target",
+            type: "shortterm",
             state: "ongoing",
             registeredTime: Date.now(),
             cancelReason : '',
@@ -106,7 +122,7 @@ const ShortermFinding = ({userObj}) => {
         <Container>
             {!step && (
                 <>
-                    <Question>1년 내에 싶은 것이 있나요?</Question>
+                    <Question>1년 내에 하고 싶은 것이 있나요?</Question>
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>

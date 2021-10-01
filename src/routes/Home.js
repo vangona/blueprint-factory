@@ -11,10 +11,11 @@ const Contaier = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100%;
+    height: 80vh;
     margin-top: 30px;
     color: white;
-    font-family: serif;
+    font-family: Kyobo Handwriting;
+    font-size: 18px;
     line-height: 120%;
 `;
 
@@ -31,13 +32,22 @@ const Notice = styled.span`
     line-height: 160%;
 `;
 
+const FindBtn = styled.button`
+    margin-top: 10px;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 10px;
+    border: 0.5px white solid;
+    background-color: rgba(255,255,255,0.1);
+`;
+
 const Home = ({userObj}) => {
     const history = useHistory();
     const [targets, setTargets] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const getTargets = async () => {
-        await dbService.collection(`${userObj.uid}`).where("type", "==", "target").get()
+        await dbService.collection(`${userObj.uid}`).where("type", "==", "shortterm").get()
         .then(querySnapshot => {
             const targetData = querySnapshot.docs.map(snapshot => ({
                 ...snapshot.data()
@@ -67,9 +77,9 @@ const Home = ({userObj}) => {
                     : 
                     <Notice>
                         현재 진행중인 목표가 없어요. <br /> 목표를 찾아보세요. <br/>
-                        <button onClick={() => {
+                        <FindBtn onClick={() => {
                             history.push("/goal")
-                        }}>목표 찾기</button>
+                        }}>목표 찾기</FindBtn>
                     </Notice>
                     }
                 </TargetContainer>

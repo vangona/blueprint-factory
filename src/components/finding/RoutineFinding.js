@@ -87,7 +87,7 @@ const RoutineFinding = ({userObj}) => {
             need,
             numericValue,
             date,
-            type: "target",
+            type: "routine",
             state: "ongoing",
             registeredTime: Date.now(),
             cancelReason : '',

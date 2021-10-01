@@ -87,7 +87,7 @@ const DreamFinding = ({userObj, sendGoalState}) => {
             need,
             numericValue,
             date,
-            type: "target",
+            type: "dream",
             state: "ongoing",
             registeredTime: Date.now(),
             cancelReason : '',

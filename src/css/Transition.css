@@ -4,6 +4,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   width: 100%;
+  height: auto;
   position: relative;
 }
 
