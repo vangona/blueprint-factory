@@ -27,6 +27,11 @@ const TargetContainer = styled.div`
     width: 90%;
 `;
 
+const TargetTitle = styled.div`
+    font-size: 20px;
+    margin-bottom: 5px;
+`;
+
 const Notice = styled.span`
     text-align: center;
     line-height: 160%;
@@ -41,20 +46,22 @@ const FindBtn = styled.button`
     background-color: rgba(255,255,255,0.1);
 `;
 
-const Home = ({userObj}) => {
+const Home = ({userObj, targets}) => {
     const history = useHistory();
-    const [targets, setTargets] = useState([]);
+    const [dreams, setDreams] = useState([]);
+    const [longterms, setLongterms] = useState([]);
+    const [shortterms, setShortterms] = useState([]);
+    const [plans, setPlans] = useState([]);
+    const [routines, setRoutines] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const getTargets = async () => {
-        await dbService.collection(`${userObj.uid}`).where("type", "==", "shortterm").get()
-        .then(querySnapshot => {
-            const targetData = querySnapshot.docs.map(snapshot => ({
-                ...snapshot.data()
-            }))
-            setTargets(targetData)
+            setDreams(targets.filter(target => target.state === "ongoing" && target.type === "dream"))
+            setLongterms(targets.filter(target => target.state === "ongoing" && target.type === "longterm"))
+            setShortterms(targets.filter(target => target.state === "ongoing" && target.type === "shortterm"))
+            setPlans(targets.filter(target => target.state === "ongoing" && target.type === "plan"))
+            setRoutines(targets.filter(target => target.state === "ongoing" && target.type === "routine"))
             setIsLoading(false);
-        })
     }
 
     useEffect(() => {
@@ -69,10 +76,46 @@ const Home = ({userObj}) => {
                     {targets.filter(target => target.state === "ongoing").length !== 0 
                     ?
                     <>
-                        {targets.filter(target => target.state === "ongoing").map(target => 
+                        {dreams.length !== 0 && 
+                        <>
+                            <TargetTitle>꿈</TargetTitle>
+                            {dreams.map(target => 
                             <Target key={target.targetId} target={target} userObj={userObj} />
-                        )
+                            )}
+                        </>
                         }
+                        {longterms.length !== 0 && 
+                        <>
+                            <TargetTitle>장기 목표</TargetTitle>
+                            {longterms.map(target => 
+                            <Target key={target.targetId} target={target} userObj={userObj} />
+                            )}
+                        </>
+                        }
+                        {shortterms.length !== 0 && 
+                        <>
+                            <TargetTitle>단기 목표</TargetTitle>
+                            {shortterms.map(target => 
+                            <Target key={target.targetId} target={target} userObj={userObj} />
+                            )}
+                        </>
+                        }
+                        {plans.length !== 0 && 
+                        <>
+                            <TargetTitle>계획</TargetTitle>
+                            {plans.map(target => 
+                            <Target key={target.targetId} target={target} userObj={userObj} />
+                            )}
+                        </>
+                        }
+                        {routines.length !== 0 && 
+                        <>
+                            <TargetTitle>루틴</TargetTitle>
+                            {routines.map(target => 
+                            <Target key={target.targetId} target={target} userObj={userObj} />
+                            )}
+                        </>
+                        }                                               
                     </>
                     : 
                     <Notice>

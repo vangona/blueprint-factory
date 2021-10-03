@@ -6,9 +6,16 @@ import { dbService } from "../fBase";
 
 const Container = styled.div`
     display: flex;
+    flex-direction: column;
     width: 90%;
     justify-content: center;
     align-items: center;
+`;
+
+const Line = styled.hr`
+    width: 90%;
+    border: white 1px solid;
+    margin: 15px;
 `;
 
 const ReasonInput = styled.input``;
@@ -101,6 +108,7 @@ const Target = ({target, userObj}) => {
 
     return (
         <Container>
+            <Line />
             <TargetContent key={target.targetId}>
                 <TargetWant>
                     {target.want}

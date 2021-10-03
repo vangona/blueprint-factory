@@ -88,6 +88,7 @@ const RoutineFinding = ({userObj}) => {
             numericValue,
             date,
             type: "routine",
+            queryType: "target",
             state: "ongoing",
             registeredTime: Date.now(),
             cancelReason : '',

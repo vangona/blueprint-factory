@@ -88,6 +88,7 @@ const DreamFinding = ({userObj, sendGoalState}) => {
             numericValue,
             date,
             type: "dream",
+            queryType: "target",
             state: "ongoing",
             registeredTime: Date.now(),
             cancelReason : '',
@@ -106,7 +107,7 @@ const DreamFinding = ({userObj, sendGoalState}) => {
         <Container>
             {!step && (
                 <>
-                    <Question>꿈이 있나요?</Question>
+                    <Question>되고 싶은 무언가가 있었나요?</Question>
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>

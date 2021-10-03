@@ -11,7 +11,7 @@ import Register from "../routes/Register";
 import Navigation from "./Navigation";
 import Signout from "./Signout";
 
-const AppRouter = ({ isLoggedIn, userObj }) => {
+const AppRouter = ({ isLoggedIn, userObj, targets }) => {
     return (
         <Router>
             <Route render={({ location }) => {
@@ -42,7 +42,7 @@ const AppRouter = ({ isLoggedIn, userObj }) => {
                                     {isLoggedIn ? (
                                     <>
                                         <Route exact path="/">
-                                            <Home userObj={userObj} />
+                                            <Home userObj={userObj} targets={targets} />
                                         </Route>
                                         <Route exact path="/goal">
                                             <Goal userObj={userObj} />

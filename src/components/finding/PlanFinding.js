@@ -88,6 +88,7 @@ const PlanFinding = ({userObj}) => {
             numericValue,
             date,
             type: "plan",
+            queryType: "target",
             state: "ongoing",
             registeredTime: Date.now(),
             cancelReason : '',

@@ -104,6 +104,7 @@ const ShortermFinding = ({userObj}) => {
             numericValue,
             date,
             type: "shortterm",
+            queryType: "target",
             state: "ongoing",
             registeredTime: Date.now(),
             cancelReason : '',
