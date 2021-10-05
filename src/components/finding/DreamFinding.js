@@ -18,6 +18,12 @@ const Question = styled.span`
     line-height: 140%;
 `;
 
+const Error = styled.span`
+    font-size: 12px;
+    opacity: 80%;
+    margin: 10px;
+`;
+
 const BtnContainer = styled.div`
     display: flex;
     margin-bottom: 20px;
@@ -46,22 +52,23 @@ const TargetContainer = styled.div`
 const TargetContent = styled.div``;
 
 const DreamFinding = ({userObj, sendGoalState}) => {
-    const [want, setWant] = useState('');
+    const [isDream, setIsDream] = useState(false);
+    const [isReal, setIsReal] = useState(false);
+    const [isHappy, setIsHappy] = useState(false);
+    const [dream, setDream] = useState('');
     const [need, setNeed] = useState('');
-    const [numericValue, setNumericValue] = useState('');
-    const [date, setDate] = useState('');
-    const [step, setStep] = useState('');
+    const [desire, setDesire] = useState('');
+    const [step, setStep] = useState(0);
+    const [error, setError] = useState('');
 
     const onChange = (e) => {
         const name = e.target.getAttribute("name")
-        if (name === "want") {
-            setWant(e.target.value)
+        if (name === "dream") {
+            setDream(e.target.value)
         } else if (name === "need") {
             setNeed(e.target.value)
-        } else if (name === "value") {
-            setNumericValue(e.target.value)
-        } else if (name === "date") {
-            setDate(e.target.value)
+        } else if (name === "desire") {
+            setDesire(e.target.value)
         }
     }
 
@@ -70,10 +77,43 @@ const DreamFinding = ({userObj, sendGoalState}) => {
         setStep(step-1);
     }
 
-    const onClick = e => {
+    const onClickYes = e => {
+        e.preventDefault();
         const name = e.target.getAttribute("name")
-        if (name === "want" && want) {
-            setStep(1)
+        if (name === "dream") {
+            if (dream) {
+                setIsDream(true);
+                setStep(step + 1);
+            } else {
+                setError("삶에서 이루고자 하는 것을 적어주세요.")
+            }
+        } else if (name === "happy") {
+            setIsHappy(true)
+            setStep(step + 1)
+        } else if (name === "real") {
+            setIsReal(true)
+            setStep(step + 1)
+        }
+    }
+
+    const onClickNo = e => {
+        e.preventDefault();
+        const name = e.target.getAttribute("name")
+        if (name === "dream") {
+            setIsDream(false);
+            setStep(step + 1);
+        } else if (name === "happy") {
+            setIsHappy(false)
+            setStep(step - 1)
+        } else if (name === "real") {
+            setIsReal(false);
+            setStep(step + 1);
+        }
+    }
+
+    const onClick = e => {
+        if (!isDream) {
+            setIsDream(true)
         } else {
             setStep(step + 1)
         }
@@ -83,10 +123,9 @@ const DreamFinding = ({userObj, sendGoalState}) => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
-            want,
+            dream,
             need,
-            numericValue,
-            date,
+            desire,
             type: "dream",
             queryType: "target",
             state: "ongoing",
@@ -96,81 +135,114 @@ const DreamFinding = ({userObj, sendGoalState}) => {
         }
         await dbService.collection(`${userObj.uid}`).doc(targetId).set(targetObj)
         alert("성공적으로 설정되었습니다!")
-        setWant('')
+        setDream('')
         setNeed('')
-        setNumericValue('');
-        setDate('');
+        setDesire('');
         setStep('');
     }
 
     return (
         <Container>
-            {!step && (
+            {step === 0 && (
                 <>
-                    <Question>되고 싶은 무언가가 있었나요?</Question>
-                    <AnswerInput onChange={onChange} name="want" value={want} type="text" />
+                    <Question>삶에서 이루고 싶은 무언가가 있나요?</Question>
+                    <AnswerInput onChange={onChange} name="dream" value={dream} type="text" />
+                    <Error>{error}</Error>
                     <BtnContainer>
-                        <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
+                        <AnswerNextBtn onClick={onClickYes} name="dream">네</AnswerNextBtn>
+                        <AnswerNextBtn onClick={onClickNo} name="dream">아니요</AnswerNextBtn>
                     </BtnContainer>
                 </>
             )}
-            {step === 1 && (
+            {step === 1 && isDream && (
                 <>
-                    <Question>하고 싶은걸 하기 위해 필요한 것이 있나요?</Question>
-                    <span>(ex. 부자 되기 : 돈)</span><br />
+                    <Question>이루고 싶은걸 위해 필요한 것이 있나요?</Question>
+                    <span>추상적이어도 괜찮으니, 적어주세요.</span>
                     <AnswerInput onChange={onChange} name="need" value={need} type="text" />
+                    <Error>{error}</Error>
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
-                        <AnswerNextBtn name="need" onClick={onClick}>다음으로</AnswerNextBtn>
-                    </BtnContainer>
-                </>
-            )}
-            {step === 2 && (
-                <>
-                    <Question>
-                        필요한 것을 숫자 혹은 <br /> 
-                        구체적인 행동으로 표현해보세요. <br />
-                        안된다면, 이전으로 돌아가서 <br />
-                        필요한 것을 수정해보세요.
-                    </Question>
-                    <Question>(ex. 부자되기 {'>'} 월 수입 500만원 <br /> or 매 끼니 가격 안보고 메뉴 시키기)</Question><br />
-                    <AnswerInput onChange={onChange} name="value"  value={numericValue} type="text" />
-                    <BtnContainer>
-                        <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
-                        <AnswerNextBtn name="value" onClick={onClick}>다음으로</AnswerNextBtn>
+                        <AnswerNextBtn name="need" onClick={() => {
+                            need &&
+                            onClick()}
+                            }>다음으로</AnswerNextBtn>
                     </BtnContainer>
                 </>
             )}     
+            {step === 1 && !isDream && (
+                <>
+                <Question>언젠가 가졌던 꿈을 적어보세요.</Question>
+                <AnswerInput onChange={onChange} name="dream" value={dream} type="text" />
+                <Error>{error}</Error>
+                <BtnContainer>
+                        <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
+                        <AnswerNextBtn onClick={() => {
+                            dream 
+                            ? onClick()
+                            : setError("꿈을 적어주세요.")
+                            }}>다음으로</AnswerNextBtn>
+                </BtnContainer>
+            </>
+            )}    
+            {step === 2 && (
+                <>
+                    <Question>그 꿈이 이뤄지면, 행복할까요?</Question>
+                    <span></span><br />
+                    <BtnContainer>
+                        <AnswerNextBtn onClick={onClickYes} name="happy">네</AnswerNextBtn>
+                        <AnswerNextBtn onClick={onClickNo} name="happy">아니요</AnswerNextBtn>
+                    </BtnContainer>
+                </>
+            )}  
             {step === 3 && (
                 <>
-                    <Question>필요한 것을 달성할 기간을 정해보세요.</Question>
+                    <Question>그 꿈은 현실적인가요?</Question>
                     <span></span><br />
-                    <AnswerInput onChange={onChange} name="date"  value={date} type="date" />
                     <BtnContainer>
-                        <AnswerPrevBtn onClick={onClickPrev}>
-                            이전으로
-                        </AnswerPrevBtn>
-                        <AnswerNextBtn name="date" onClick={onClick}>
-                            다음으로
-                        </AnswerNextBtn>
+                        <AnswerNextBtn onClick={onClickYes} name="real">네</AnswerNextBtn>
+                        <AnswerNextBtn onClick={onClickNo} name="real">아니요</AnswerNextBtn>
                     </BtnContainer>
-                    <Cheer>
-                        <CheerMent>
-                            {Cheers.value}
-                        </CheerMent>
-                    </Cheer>
                 </>
-            )}         
-            {step === 4 && (
+            )}          
+            {step === 4 && isReal && (
+                <>
+                    <Question>이루고 싶은걸 위해 필요한 것이 있나요?</Question>
+                    <AnswerInput onChange={onChange} name="need" value={need} type="text" />
+                    <Error>{error}</Error>
+                    <BtnContainer>
+                        <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
+                        <AnswerNextBtn name="need" onClick={() => {
+                            need &&
+                            onClick()}
+                            }>다음으로</AnswerNextBtn>
+                    </BtnContainer>
+                </>
+            )}     
+            {step === 4 && !isReal && (
+                <>
+                <Question>그 꿈의 이면에는 어떤 욕망이 있나요?</Question>
+                <AnswerInput onChange={onChange} name="dream" value={dream} type="text" />
+                <Error>{error}</Error>
+                <BtnContainer>
+                        <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
+                        <AnswerNextBtn onClick={() => {
+                            dream 
+                            ? onClick()
+                            : setError("욕망을 적어주세요.")
+                            }}>다음으로</AnswerNextBtn>
+                </BtnContainer>
+            </>
+            )}       
+            {step === 5 && (
                 <TargetContainer>
                     <TargetContent>
-                        목표 : {want}
+                        꿈 : {dream}
                     </TargetContent>
                     <TargetContent>
-                        필요한 것 : {need}, {numericValue}
+                        필요한 것 : {need}
                     </TargetContent>
                     <TargetContent>
-                        달성 기한 : {date}까지
+                        아래의 욕망 : {desire}
                     </TargetContent>
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
@@ -187,16 +259,13 @@ const DreamFinding = ({userObj, sendGoalState}) => {
             {!(step === 4) && 
             <TargetContainer>
                 <TargetContent>
-                    {want && `원하는 것 : ${want}`}
+                    {dream && `꿈 : ${dream}`}
                 </TargetContent>
                 <TargetContent>
                     {need && `필요한 것 : ${need}`}
                 </TargetContent>
                 <TargetContent>
-                    {numericValue && `수치화된 값 : ${numericValue}`}
-                </TargetContent>
-                <TargetContent>
-                    {date && `달성 기간 : ${date}`}
+                    {desire && `이면의 욕망 : ${desire}`}
                 </TargetContent>
             </TargetContainer>
             }

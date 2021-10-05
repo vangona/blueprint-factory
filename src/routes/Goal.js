@@ -24,7 +24,10 @@ const GoalStateBtn = styled.button`
     padding: 3px;
     color: white;
     background-color: transparent;
-    margin: 5px;
+    margin: 10px;
+    :hover {
+        cursor: pointer;
+    }
 `;
 
 const PrevBtn = styled.button``;
