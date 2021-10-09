@@ -32,7 +32,7 @@ const GoalStateBtn = styled.button`
 
 const PrevBtn = styled.button``;
 
-const Goal = ({userObj}) => {
+const Goal = ({userObj, targets}) => {
     const [goalState, setGoalState] = useState("");
 
     const sendGoalState = (state) => {
@@ -95,7 +95,7 @@ const Goal = ({userObj}) => {
             }
             {goalState === "plan" &&
             <>
-            <PlanFinding userObj={userObj} sendGoalState={sendGoalState} />
+            <PlanFinding targets={targets}  userObj={userObj} sendGoalState={sendGoalState} />
             <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
             </>
             }

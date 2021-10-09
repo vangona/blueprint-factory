@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { dbService } from "../../fBase";
@@ -36,6 +36,18 @@ const Cheer = styled.div`
 
 const CheerMent = styled.span``;
 
+const ShorttermContainer = styled.div``;
+
+const ShorttermTitle = styled.div`
+    border: 1px solid white;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
+
 const TargetContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -45,12 +57,15 @@ const TargetContainer = styled.div`
 
 const TargetContent = styled.div``;
 
-const PlanFinding = ({userObj}) => {
+const PlanFinding = ({userObj, targets}) => {
+    const [selection, setSelection] = useState('');
     const [want, setWant] = useState('');
     const [need, setNeed] = useState('');
     const [numericValue, setNumericValue] = useState('');
     const [date, setDate] = useState('');
     const [step, setStep] = useState('');
+    const [shortterms, setShortterms] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const onChange = (e) => {
         const name = e.target.getAttribute("name")
@@ -79,6 +94,10 @@ const PlanFinding = ({userObj}) => {
         }
     }
 
+    const onClickSelection = e => {
+        setSelection(e.target.getAttribute("value"))
+    }
+
     const onSubmit = async () => {
         const targetId = uuidv4();
         const targetObj = {
@@ -103,11 +122,30 @@ const PlanFinding = ({userObj}) => {
         setStep('');
     }
 
+    const getShortterm = () => {
+        setShortterms(targets.filter(target => target.state === "ongoing" && target.type === "shortterm"))
+        setIsLoading(false);
+    }
+
+    useEffect(() => {
+        getShortterm();
+    }, []);
+
     return (
         <Container>
-            {!step && (
+            {!isLoading &&
+            <>
+            {!selection &&
+            <>  
+                <Question>나의 단기 목표들</Question>
+                <ShorttermContainer>{shortterms.map(target => 
+                    <ShorttermTitle onClick={onClickSelection} value={target.want}>{target.want}</ShorttermTitle>
+                )}</ShorttermContainer>
+            </>
+            }
+            {selection && !step && (
                 <>
-                    <Question>계획을 세워봅시다.</Question>
+                    <Question>{selection}에 대한 계획을 세워봅시다.</Question>
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
@@ -199,6 +237,8 @@ const PlanFinding = ({userObj}) => {
                     {date && `달성 기간 : ${date}`}
                 </TargetContent>
             </TargetContainer>
+            }
+            </>
             }
         </Container>
     )

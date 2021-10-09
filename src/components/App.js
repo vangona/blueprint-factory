@@ -36,7 +36,7 @@ const App = () => {
             setInit(true)
         })
         requestToken();
-    })
+    }, [])
     return (
         <>
         {init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={ userObj } targets={targets} /> : <Loading />}

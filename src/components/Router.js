@@ -45,7 +45,7 @@ const AppRouter = ({ isLoggedIn, userObj, targets }) => {
                                             <Home userObj={userObj} targets={targets} />
                                         </Route>
                                         <Route exact path="/goal">
-                                            <Goal userObj={userObj} />
+                                            <Goal userObj={userObj} targets={targets} />
                                         </Route>
                                         <Route exact path="/community">
                                             <Community />
