@@ -95,7 +95,7 @@ const PlanFinding = ({userObj, targets}) => {
     }
 
     const onClickSelection = e => {
-        setSelection(e.target.getAttribute("value"))
+        setSelection(JSON.parse(e.target.getAttribute("value")))
     }
 
     const onSubmit = async () => {
@@ -139,17 +139,20 @@ const PlanFinding = ({userObj, targets}) => {
             <>  
                 <Question>나의 단기 목표들</Question>
                 <ShorttermContainer>{shortterms.map(target => 
-                    <ShorttermTitle onClick={onClickSelection} value={target.want}>{target.want}</ShorttermTitle>
+                    <ShorttermTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}</ShorttermTitle>
                 )}</ShorttermContainer>
             </>
             }
             {selection && !step && (
                 <>
-                    <Question>{selection}에 대한 계획을 세워봅시다.</Question>
+                    <Question>{selection.want}에 대한 계획을 세워봅시다.</Question>
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
                     </BtnContainer>
+                    <Question>필요한 것 : {selection.need}</Question>
+                    <Question>수치 : {selection.numericValue}</Question>
+                    <Question>기한 : {selection.date}까지</Question>
                 </>
             )}
             {step === 1 && (
