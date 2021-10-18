@@ -44,6 +44,9 @@ const Goal = ({userObj, targets}) => {
         if (name === "prev") {
             setGoalState("");
         }
+        if (name === "target") {
+            setGoalState("target");
+        }
         if (name === "dream") {
             setGoalState("dream")
         }
@@ -68,11 +71,16 @@ const Goal = ({userObj, targets}) => {
         <Container>
             {!goalState &&
             <>
-                <GoalStateBtn onClick={onClick} name="dream">꿈 찾기</GoalStateBtn>
-                <GoalStateBtn onClick={onClick} name="longterm">장기 목표 설정</GoalStateBtn>
-                <GoalStateBtn onClick={onClick} name="shortterm">단기 목표 설정</GoalStateBtn>
+                <GoalStateBtn onClick={onClick} name="target">목표 세우기</GoalStateBtn>
                 <GoalStateBtn onClick={onClick} name="plan">계획 세우기</GoalStateBtn>
                 <GoalStateBtn onClick={onClick} name="routine">루틴 세우기</GoalStateBtn>
+            </>
+            }
+            {goalState === "target" && 
+            <>
+                <GoalStateBtn onClick={onClick} name="dream">내  삶의 목표, 꿈</GoalStateBtn>
+                <GoalStateBtn onClick={onClick} name="longterm">1년 이상, 장기 목표</GoalStateBtn>
+                <GoalStateBtn onClick={onClick} name="shortterm">1년 이하, 단기 목표</GoalStateBtn>
             </>
             }
             {goalState === "dream" &&

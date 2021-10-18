@@ -57,6 +57,7 @@ const DreamFinding = ({userObj, sendGoalState}) => {
     const [isHappy, setIsHappy] = useState(false);
     const [dream, setDream] = useState('');
     const [need, setNeed] = useState('');
+    const [detail, setDetail] = useState('');
     const [desire, setDesire] = useState('');
     const [step, setStep] = useState(0);
     const [error, setError] = useState('');
@@ -145,7 +146,11 @@ const DreamFinding = ({userObj, sendGoalState}) => {
         <Container>
             {step === 0 && (
                 <>
-                    <Question>삶에서 이루고 싶은 무언가가 있나요?</Question>
+                    <Question>
+                        삶에서 이루고 싶은 무언가가 있나요? <br />
+                        있다면 한 번 적어보세요. <br />
+                        없다면 아니오를 눌러주세요.
+                    </Question>
                     <AnswerInput onChange={onChange} name="dream" value={dream} type="text" />
                     <Error>{error}</Error>
                     <BtnContainer>
@@ -157,7 +162,7 @@ const DreamFinding = ({userObj, sendGoalState}) => {
             {step === 1 && isDream && (
                 <>
                     <Question>이루고 싶은걸 위해 필요한 것이 있나요?</Question>
-                    <span>추상적이어도 괜찮으니, 적어주세요.</span>
+                    <span>먼저, 추상적으로 적어볼까요?</span>
                     <AnswerInput onChange={onChange} name="need" value={need} type="text" />
                     <Error>{error}</Error>
                     <BtnContainer>
@@ -186,6 +191,20 @@ const DreamFinding = ({userObj, sendGoalState}) => {
             )}    
             {step === 2 && (
                 <>
+                    <Question>이제는 추상적인걸 조금 더 구체적으로 적어보세요</Question>
+                    <AnswerInput onChange={onChange} name="need" value={detail} type="text" />
+                    <Error>{error}</Error>
+                    <BtnContainer>
+                        <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
+                        <AnswerNextBtn name="need" onClick={() => {
+                            need &&
+                            onClick()}
+                            }>다음으로</AnswerNextBtn>
+                    </BtnContainer>
+                </>
+            )}  
+            {step === 3 && (
+                <>
                     <Question>그 꿈이 이뤄지면, 행복할까요?</Question>
                     <span></span><br />
                     <BtnContainer>
@@ -194,7 +213,7 @@ const DreamFinding = ({userObj, sendGoalState}) => {
                     </BtnContainer>
                 </>
             )}  
-            {step === 3 && (
+            {step === 4 && (
                 <>
                     <Question>그 꿈은 현실적인가요?</Question>
                     <span></span><br />
@@ -204,9 +223,9 @@ const DreamFinding = ({userObj, sendGoalState}) => {
                     </BtnContainer>
                 </>
             )}          
-            {step === 4 && isReal && (
+            {step === 5 && isReal && (
                 <>
-                    <Question>이루고 싶은걸 위해 필요한 것이 있나요?</Question>
+                    <Question>이루고 싶은걸 위해 부족한 것이 있나요?</Question>
                     <AnswerInput onChange={onChange} name="need" value={need} type="text" />
                     <Error>{error}</Error>
                     <BtnContainer>
