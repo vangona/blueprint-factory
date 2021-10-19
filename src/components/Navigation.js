@@ -34,8 +34,11 @@ const Navigation = () => {
         if (text === "Home") {
             history.push("/")
         }
-        if (text === "Goals") {
+        if (text === "Target") {
             history.push("/goal")
+        }
+        if (text === "Todo") {
+            history.push("/todo")
         }
         if (text === "Community") {
             history.push("/community")
@@ -48,7 +51,8 @@ const Navigation = () => {
     return (
         <Container>
             <NavComponent onClick={clickNav}>Home</NavComponent>
-            <NavComponent onClick={clickNav}>Goals</NavComponent>
+            <NavComponent onClick={clickNav}>Target</NavComponent>
+            <NavComponent onClick={clickNav}>Todo</NavComponent>
             <NavComponent onClick={clickNav}>Community</NavComponent>
             <NavComponent onClick={clickNav}>Profile</NavComponent>
         </Container>

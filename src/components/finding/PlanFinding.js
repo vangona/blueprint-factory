@@ -145,14 +145,14 @@ const PlanFinding = ({userObj, targets}) => {
             }
             {selection && !step && (
                 <>
-                    <Question>{selection.want}에 대한 계획을 세워봅시다.</Question>
+                    <Question>{selection.want} 계획을 세워봅시다.</Question>
+                    <Question>필요한 것 : {selection.need}</Question>
+                    <Question>수치 : {selection.numericValue}</Question>
+                    <Question>기한 : {selection.date}까지</Question>
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
                     </BtnContainer>
-                    <Question>필요한 것 : {selection.need}</Question>
-                    <Question>수치 : {selection.numericValue}</Question>
-                    <Question>기한 : {selection.date}까지</Question>
                 </>
             )}
             {step === 1 && (

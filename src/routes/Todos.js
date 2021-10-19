@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import DreamFinding from "../components/finding/DreamFinding";
-import LongtermFinding from "../components/finding/LongtermFinding";
-import ShorttermFinding from "../components/finding/ShorttermFinding";
 import PlanFinding from "../components/finding/PlanFinding";
 import RoutineFinding from "../components/finding/RoutineFinding";
 
@@ -38,7 +35,7 @@ const GoalStateBtn = styled.button`
 
 const PrevBtn = styled.button``;
 
-const Goal = ({userObj, targets}) => {
+const Todos = ({userObj, targets}) => {
     const [goalState, setGoalState] = useState("");
 
     const sendGoalState = (state) => {
@@ -62,6 +59,12 @@ const Goal = ({userObj, targets}) => {
         if (name === "shortterm") {
             setGoalState("shortterm")
         }
+        if (name === "plan") {
+            setGoalState("plan")
+        }
+        if (name === "routine") {
+            setGoalState("routine")
+        }
     }
 
     useEffect(() => {
@@ -71,35 +74,19 @@ const Goal = ({userObj, targets}) => {
         <Container>
             {!goalState &&
             <>
-                <DreamContainer>
-                    <DreamLabel>내 꿈은 </DreamLabel>
-                    <DreamInput type="text" />
-                </DreamContainer>
-                <GoalStateBtn onClick={onClick} name="target">목표 세우기</GoalStateBtn>
+                <GoalStateBtn onClick={onClick} name="plan">계획 세우기</GoalStateBtn>
+                <GoalStateBtn onClick={onClick} name="routine">루틴 세우기</GoalStateBtn>
             </>
             }
-            {goalState === "target" && 
+            {goalState === "plan" &&
             <>
-                <GoalStateBtn onClick={onClick} name="longterm">1년 이상, 장기 목표</GoalStateBtn>
-                <GoalStateBtn onClick={onClick} name="shortterm">1년 이하, 단기 목표</GoalStateBtn>
-                <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
-            </>
-            }
-            {goalState === "dream" &&
-            <>
-            <DreamFinding userObj={userObj} sendGoalState={sendGoalState} />
+            <PlanFinding targets={targets}  userObj={userObj} sendGoalState={sendGoalState} />
             <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
             </>
             }
-            {goalState === "longterm" &&
+            {goalState === "routine" &&
             <>
-            <LongtermFinding userObj={userObj} sendGoalState={sendGoalState} />
-            <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
-            </>
-            }
-            {goalState === "shortterm" &&
-            <>
-            <ShorttermFinding userObj={userObj} sendGoalState={sendGoalState} />
+            <RoutineFinding userObj={userObj} sendGoalState={sendGoalState} />
             <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
             </>
             }
@@ -107,4 +94,4 @@ const Goal = ({userObj, targets}) => {
     )
 }
 
-export default Goal;
+export default Todos;

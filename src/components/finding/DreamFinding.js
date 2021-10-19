@@ -57,7 +57,7 @@ const DreamFinding = ({userObj, sendGoalState}) => {
     const [isHappy, setIsHappy] = useState(false);
     const [dream, setDream] = useState('');
     const [need, setNeed] = useState('');
-    const [detail, setDetail] = useState('');
+    const [detailArray, setDetailArray] = useState([]);
     const [desire, setDesire] = useState('');
     const [step, setStep] = useState(0);
     const [error, setError] = useState('');
@@ -118,6 +118,10 @@ const DreamFinding = ({userObj, sendGoalState}) => {
         } else {
             setStep(step + 1)
         }
+    }
+
+    const onClickAdd = e => {
+        setDetailArray(detailArray.push(""));
     }
 
     const onSubmit = async () => {
@@ -192,7 +196,9 @@ const DreamFinding = ({userObj, sendGoalState}) => {
             {step === 2 && (
                 <>
                     <Question>이제는 추상적인걸 조금 더 구체적으로 적어보세요</Question>
-                    <AnswerInput onChange={onChange} name="need" value={detail} type="text" />
+                    {detailArray.map(detail => (
+                        <AnswerInput onChange={onChange} name="detail" value={detail} type="text" />
+                    ))}
                     <Error>{error}</Error>
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>

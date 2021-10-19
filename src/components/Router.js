@@ -8,6 +8,7 @@ import Home from "../routes/Home";
 import Login from "../routes/Login";
 import Profile from "../routes/Profile";
 import Register from "../routes/Register";
+import Todos from "../routes/Todos";
 import Navigation from "./Navigation";
 import Signout from "./Signout";
 
@@ -46,6 +47,9 @@ const AppRouter = ({ isLoggedIn, userObj, targets }) => {
                                         </Route>
                                         <Route exact path="/goal">
                                             <Goal userObj={userObj} targets={targets} />
+                                        </Route>
+                                        <Route exact path="/todo">
+                                            <Todos userObj={userObj} targets={targets} />
                                         </Route>
                                         <Route exact path="/community">
                                             <Community />
