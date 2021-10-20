@@ -12,7 +12,7 @@ import Todos from "../routes/Todos";
 import Navigation from "./Navigation";
 import Signout from "./Signout";
 
-const AppRouter = ({ isLoggedIn, userObj, targets }) => {
+const AppRouter = ({ isLoggedIn, userObj, targets, refreshUser }) => {
     return (
         <Router>
             <Route render={({ location }) => {
@@ -55,7 +55,7 @@ const AppRouter = ({ isLoggedIn, userObj, targets }) => {
                                             <Community />
                                         </Route>
                                         <Route exact path="/profile">
-                                            <Profile />
+                                            <Profile userObj={userObj} refreshUser={refreshUser} />
                                         </Route>
                                         <Route exact path="/signout">
                                             <Signout />

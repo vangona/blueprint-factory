@@ -3,8 +3,6 @@ import styled from "styled-components";
 import DreamFinding from "../components/finding/DreamFinding";
 import LongtermFinding from "../components/finding/LongtermFinding";
 import ShorttermFinding from "../components/finding/ShorttermFinding";
-import PlanFinding from "../components/finding/PlanFinding";
-import RoutineFinding from "../components/finding/RoutineFinding";
 
 const Container = styled.div`
     position: absolute;
@@ -16,12 +14,6 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
 `;
-
-const DreamLabel = styled.label``;
-
-const DreamContainer = styled.div``;
-
-const DreamInput = styled.input``;
 
 const GoalStateBtn = styled.button`
     width: 150px;
@@ -69,16 +61,7 @@ const Goal = ({userObj, targets}) => {
     
     return (
         <Container>
-            {!goalState &&
-            <>
-                <DreamContainer>
-                    <DreamLabel>내 꿈은 </DreamLabel>
-                    <DreamInput type="text" />
-                </DreamContainer>
-                <GoalStateBtn onClick={onClick} name="target">목표 세우기</GoalStateBtn>
-            </>
-            }
-            {goalState === "target" && 
+            {!goalState && 
             <>
                 <GoalStateBtn onClick={onClick} name="longterm">1년 이상, 장기 목표</GoalStateBtn>
                 <GoalStateBtn onClick={onClick} name="shortterm">1년 이하, 단기 목표</GoalStateBtn>

@@ -9,6 +9,7 @@ const App = () => {
     const [init, setInit] = useState(false);
     const [userObj, setUserObj] = useState(null); 
     const [targets, setTargets] = useState([]);
+    const [dream, setDream] = useState('');
 
     const requestToken = async () => {
         let token = await setToken();
@@ -26,9 +27,18 @@ const App = () => {
     }
 
     useEffect(() => {
-        authService.onAuthStateChanged((user) => {
+        authService.onAuthStateChanged(async (user) => {
             if (user) {
-                setUserObj(user)
+                let dream;
+                await dbService.collection(`${user.uid}`).doc("profile").get((doc) => {
+                    dream = doc.data().dream;
+                })
+                setUserObj({
+                    uid: user.uid,
+                    displayName: (user.displayName ? user.displayName : "익명"),
+                    dream,
+                    updateProfile: (args) => user.updateProfile(args),
+                  })
                 getTargets(user);
             } else {
                 setUserObj(null);
@@ -37,9 +47,20 @@ const App = () => {
         })
         requestToken();
     }, [])
+
+    const refreshUser = () => {
+        const user = authService.currentUser;
+        setUserObj({
+          displayName:user.displayName,
+          uid:user.uid,
+          dream,
+          updateProfile: (args) => user.updateProfile(args),
+        });
+      };
+
     return (
         <>
-        {init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={ userObj } targets={targets} /> : <Loading />}
+        {init ? <AppRouter isLoggedIn={Boolean(userObj)} refreshUser={refreshUser} userObj={ userObj } targets={targets} /> : <Loading />}
         </>
     )
 };
