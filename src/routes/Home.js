@@ -13,7 +13,7 @@ const Contaier = styled.div`
     width: 100%;
     height: 80vh;
     margin-top: 30px;
-    color: white;
+    color: black;
     font-family: Kyobo Handwriting;
     font-size: 18px;
     line-height: 120%;

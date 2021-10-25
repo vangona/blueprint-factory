@@ -26,7 +26,7 @@ const Title = styled.h1`
 const LoginContainer = styled(animated.div)`
     display: flex;
     flex-direction: column;
-    color: white;
+    color: black;
     justify-content: center;
     align-items: center;
 `;

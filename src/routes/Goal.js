@@ -20,7 +20,7 @@ const GoalStateBtn = styled.button`
     border: white 1px solid;
     border-radius: 15px;
     padding: 3px;
-    color: white;
+    color: black;
     background-color: transparent;
     margin: 10px;
     :hover {

@@ -1,60 +1,136 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
+import { faBullseye, faCalendar, faHome, faUserCircle, faUserFriends } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
     margin: 0;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     position: fixed;
-    bottom: 0;
-    height: 80px;
+    top: 0;
+    height: 100px;
     width: 100%;
+    background-color: #b7d7e8;
     z-index: 1;
 `;
+
+const NavHeader = styled.div`
+    display: flex;
+    color: white;
+    width: 100%;
+    height: 50%;
+    justify-content: center;
+    align-items: center;
+    font-family: Kyobo Handwriting;
+`;
+
+const NavComponentContainer = styled.div`
+    display: flex;
+    height: 50%;
+    width: 100%;
+`;
+
 const NavComponent = styled.div`
-    border: 1px solid black;
     width: 25%;
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: gray;
     color: white;
     z-index: 1;
     :hover {cursor: pointer;}
     :active {transform: scale(0.98)}
 `;
 
+const Bar = styled.div`
+    margin-top: 5px;
+    height: 3px;
+    width: 40%;
+    background-color: white;
+`;
+
+const Logo = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    margin: 10px;
+    color: white;
+    font-family: Kyobo Handwriting;
+`;
+
+const LogoImg = styled.img`
+    width: 30px;
+    height: 30px;
+`;
+
 const Navigation = () => {
+    const [locationName, setLocationName] = useState("/");
+    const location = useLocation();
     const history = useHistory();
 
     const clickNav = (e) => {
-        const text = e.target.innerHTML
-        if (text === "Home") {
+        const name = e.target.getAttribute("name")
+        if (name === "home") {
             history.push("/")
         }
-        if (text === "Target") {
+        if (name === "target") {
             history.push("/goal")
         }
-        if (text === "Todo") {
+        if (name === "todo") {
             history.push("/todo")
         }
-        if (text === "Community") {
+        if (name === "community") {
             history.push("/community")
         }
-        if (text === "Profile") {
+        if (name === "profile") {
             history.push("/profile")
         }
     }
 
+    const getLocation = () => {
+        setLocationName(location.pathname)
+    }
+
+    useEffect(() => {
+        getLocation();
+    }, [])
+
     return (
         <Container>
-            <NavComponent onClick={clickNav}>Home</NavComponent>
-            <NavComponent onClick={clickNav}>Target</NavComponent>
-            <NavComponent onClick={clickNav}>Todo</NavComponent>
-            <NavComponent onClick={clickNav}>Community</NavComponent>
-            <NavComponent onClick={clickNav}>Profile</NavComponent>
+            <NavHeader>
+                내 꿈은 행복한 사람
+            </NavHeader>
+            <NavComponentContainer>
+                <NavComponent name="home" onClick={clickNav}>
+                    <FontAwesomeIcon icon={faHome} />
+                    {locationName === "/" && <Bar />}
+                </NavComponent>
+                <NavComponent name="community" onClick={clickNav}>
+                    <FontAwesomeIcon icon={faUserFriends} />
+                    {locationName === "/community" && <Bar />}
+                </NavComponent>
+                <NavComponent name="target" onClick={clickNav}>
+                    <FontAwesomeIcon icon={faBullseye} />
+                    {locationName === "/goal" && <Bar />}
+                </NavComponent>
+                <NavComponent name="todo" onClick={clickNav}>
+                    <FontAwesomeIcon icon={faCalendar} />
+                    {locationName === "/todo" && <Bar />}
+                </NavComponent>
+                <NavComponent name="profile" onClick={clickNav}>
+                    <FontAwesomeIcon icon={faUserCircle} />
+                    {locationName === "/profile" && <Bar />}
+                </NavComponent>
+            </NavComponentContainer>
+            <Logo>
+                <LogoImg src="/logo192.png"/>
+                Cloud
+            </Logo>
         </Container>
     )
 }
