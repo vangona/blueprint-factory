@@ -3,6 +3,7 @@ import styled from "styled-components";
 import DreamFinding from "../components/finding/DreamFinding";
 import LongtermFinding from "../components/finding/LongtermFinding";
 import ShorttermFinding from "../components/finding/ShorttermFinding";
+import TargetMindmap from "../components/TargetMindmap";
 
 const Container = styled.div`
     position: absolute;
@@ -68,6 +69,7 @@ const Goal = ({userObj, targets}) => {
                 <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
             </>
             }
+            <TargetMindmap />
             {goalState === "dream" &&
             <>
             <DreamFinding userObj={userObj} sendGoalState={sendGoalState} />
