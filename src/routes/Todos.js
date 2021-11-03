@@ -7,25 +7,19 @@ const Container = styled.div`
     position: absolute;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     margin-top: 50px;
     align-items: center;
     width: 100%;
-    height: 100%;
+    height: 100vh;
 `;
-
-const DreamLabel = styled.label``;
-
-const DreamContainer = styled.div``;
-
-const DreamInput = styled.input``;
 
 const GoalStateBtn = styled.button`
     width: 150px;
-    border: white 1px solid;
+    border: black 1px solid;
     border-radius: 15px;
     padding: 3px;
-    color: white;
+    color: black;
     background-color: transparent;
     margin: 10px;
     :hover {
@@ -73,10 +67,10 @@ const Todos = ({userObj, targets}) => {
     return (
         <Container>
             {!goalState &&
-            <>
-                <GoalStateBtn onClick={onClick} name="plan">계획 세우기</GoalStateBtn>
-                <GoalStateBtn onClick={onClick} name="routine">루틴 세우기</GoalStateBtn>
-            </>
+                <>
+                    <GoalStateBtn onClick={onClick} name="plan">계획 세우기</GoalStateBtn>
+                    <GoalStateBtn onClick={onClick} name="routine">루틴 세우기</GoalStateBtn>
+                </>
             }
             {goalState === "plan" &&
             <>

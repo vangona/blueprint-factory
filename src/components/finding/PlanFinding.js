@@ -39,8 +39,8 @@ const CheerMent = styled.span``;
 const ShorttermContainer = styled.div``;
 
 const ShorttermTitle = styled.div`
-    border: 1px solid white;
-    color: white;
+    border: 1px solid black;
+    color: black;
     padding: 10px 15px;
     border-radius: 10px;
     :hover {

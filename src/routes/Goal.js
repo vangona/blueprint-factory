@@ -65,11 +65,11 @@ const Goal = ({userObj, targets}) => {
             {!goalState && 
             <>
                 <GoalStateBtn onClick={onClick} name="longterm">1년 이상, 장기 목표</GoalStateBtn>
+                <TargetMindmap />
                 <GoalStateBtn onClick={onClick} name="shortterm">1년 이하, 단기 목표</GoalStateBtn>
                 <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
             </>
             }
-            <TargetMindmap />
             {goalState === "dream" &&
             <>
             <DreamFinding userObj={userObj} sendGoalState={sendGoalState} />
