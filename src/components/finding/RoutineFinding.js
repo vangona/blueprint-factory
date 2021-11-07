@@ -128,12 +128,9 @@ const RoutineFinding = ({userObj}) => {
             {step === 2 && (
                 <>
                     <Question>
-                        필요한 것을 숫자 혹은 <br /> 
-                        구체적인 행동으로 표현해보세요. <br />
-                        안된다면, 이전으로 돌아가서 <br />
-                        필요한 것을 수정해보세요.
+                        필요한 것을 얻기위해 꾸준히 할 일이 있나요?
                     </Question>
-                    <Question>(ex. 부자되기 {'>'} 월 수입 500만원 <br /> or 매 끼니 가격 안보고 메뉴 시키기)</Question><br />
+                    <Question>ex) 운동</Question><br />
                     <AnswerInput onChange={onChange} name="value"  value={numericValue} type="text" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
@@ -143,7 +140,9 @@ const RoutineFinding = ({userObj}) => {
             )}     
             {step === 3 && (
                 <>
-                    <Question>필요한 것을 달성할 기간을 정해보세요.</Question>
+                    <Question>
+                        할 일은 언제 한번씩은 해야하나요?
+                    </Question>
                     <span></span><br />
                     <AnswerInput onChange={onChange} name="date"  value={date} type="date" />
                     <BtnContainer>

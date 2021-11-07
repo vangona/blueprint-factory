@@ -180,7 +180,7 @@ const DreamFinding = ({userObj, sendGoalState}) => {
             )}     
             {step === 1 && !isDream && (
                 <>
-                <Question>언젠가 가졌던 꿈을 적어보세요.</Question>
+                <Question>어릴적 가졌던 꿈을 적어보세요.</Question>
                 <AnswerInput onChange={onChange} name="dream" value={dream} type="text" />
                 <Error>{error}</Error>
                 <BtnContainer>
