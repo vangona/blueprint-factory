@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import LongtermFinding from "../components/finding/LongtermFinding";
+import ShorttermFinding from "../components/finding/ShorttermFinding";
 import PlanFinding from "../components/finding/PlanFinding";
 import RoutineFinding from "../components/finding/RoutineFinding";
 
@@ -68,10 +70,24 @@ const Todos = ({userObj, targets}) => {
         <Container>
             {!goalState &&
                 <>
+                    <GoalStateBtn onClick={onClick} name="longterm">장기 목표 세우기</GoalStateBtn>
+                    <GoalStateBtn onClick={onClick} name="shortterm">단기 목표 세우기</GoalStateBtn>
                     <GoalStateBtn onClick={onClick} name="plan">계획 세우기</GoalStateBtn>
                     <GoalStateBtn onClick={onClick} name="routine">루틴 세우기</GoalStateBtn>
                 </>
             }
+            {goalState === "longterm" &&
+            <>
+            <LongtermFinding targets={targets}  userObj={userObj} sendGoalState={sendGoalState} />
+            <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
+            </>
+            }      
+            {goalState === "shortterm" &&
+            <>
+            <ShorttermFinding targets={targets} userObj={userObj} />
+            <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
+            </>
+            }                       
             {goalState === "plan" &&
             <>
             <PlanFinding targets={targets}  userObj={userObj} sendGoalState={sendGoalState} />

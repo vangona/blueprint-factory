@@ -10,7 +10,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: 50px;
-    color: white;
+    color: black;
     font-family: Kyobo Handwriting;
 `;
 
@@ -29,19 +29,19 @@ const AnswerInput = styled.input``;
 
 const AnswerNextBtn = styled.button`
     margin-top: 10px;
-    color: white;
+    color: black;
     padding: 3px 10px;
     border-radius: 10px;
-    border: 0.5px white solid;
+    border: 0.5px black solid;
     background-color: rgba(255,255,255,0.1);
 `;
 
 const AnswerPrevBtn = styled.button`
     margin-top: 10px;
-    color: white;
+    color: black;
     padding: 3px 10px;
     border-radius: 10px;
-    border: 0.5px white solid;
+    border: 0.5px black solid;
     background-color: rgba(255,255,255,0.1);
 `;
 

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { dbService } from "../../fBase";
 import { Cheers } from "../CheerDB";
+import Loading from "../Loading";
 
 const Container = styled.div`
     display: flex;
@@ -45,10 +46,13 @@ const TargetContainer = styled.div`
 
 const TargetContent = styled.div``;
 
-const RoutineFinding = ({userObj}) => {
+const RoutineFinding = ({userObj, targets}) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [want, setWant] = useState('');
     const [need, setNeed] = useState('');
     const [numericValue, setNumericValue] = useState('');
+    const [shortterms, setShortterms] = useState([]);
+    const [plans, setPlans] = useState([]);
     const [date, setDate] = useState('');
     const [step, setStep] = useState('');
 
@@ -103,8 +107,24 @@ const RoutineFinding = ({userObj}) => {
         setStep('');
     }
 
+    const getShortterm = () => {
+        const filteredPlans = targets.filter(target => target.state === "ongoing" && target.type === "plan");
+        const filteredShortterms = targets.filter(target => target.state === "ongoing" && target.type === "shortterm");
+        setPlans(filteredPlans)
+        setShortterms(filteredShortterms);
+
+        setIsLoading(false);
+    }
+
+    useEffect(() => {
+        getShortterm();
+    }, [])
+
     return (
         <Container>
+            {isLoading 
+            ? <Loading />
+            : <>
             {!step && (
                 <>
                     <Question>루틴을 세워봅시다.</Question>
@@ -198,6 +218,8 @@ const RoutineFinding = ({userObj}) => {
                     {date && `달성 기간 : ${date}`}
                 </TargetContent>
             </TargetContainer>
+            }
+            </>
             }
         </Container>
     )
