@@ -78,7 +78,7 @@ const Todos = ({userObj, targets}) => {
             }
             {goalState === "longterm" &&
             <>
-            <LongtermFinding targets={targets}  userObj={userObj} sendGoalState={sendGoalState} />
+            <LongtermFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} />
             <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
             </>
             }      
@@ -96,7 +96,7 @@ const Todos = ({userObj, targets}) => {
             }
             {goalState === "routine" &&
             <>
-            <RoutineFinding userObj={userObj} sendGoalState={sendGoalState} />
+            <RoutineFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} />
             <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
             </>
             }

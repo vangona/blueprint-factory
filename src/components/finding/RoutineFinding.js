@@ -110,11 +110,10 @@ const RoutineFinding = ({userObj, targets}) => {
     const getShortterm = () => {
         const filteredPlans = targets.filter(target => target.state === "ongoing" && target.type === "plan");
         const filteredShortterms = targets.filter(target => target.state === "ongoing" && target.type === "shortterm");
-        setPlans(filteredPlans)
+        setPlans(filteredPlans);
         setShortterms(filteredShortterms);
-
         setIsLoading(false);
-    }
+    };
 
     useEffect(() => {
         getShortterm();
