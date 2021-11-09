@@ -59,53 +59,48 @@ const TargetContent = styled.div``;
 
 const PlanFinding = ({userObj, targets}) => {
     const [selection, setSelection] = useState('');
-    const [want, setWant] = useState('');
-    const [need, setNeed] = useState('');
-    const [numericValue, setNumericValue] = useState('');
-    const [date, setDate] = useState('');
+    const [level, setLevel] = useState('');
+    const [point, setPoint] = useState('');
+    const [isNow, setIsNow] = useState(false);
     const [step, setStep] = useState('');
     const [shortterms, setShortterms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const onChange = (e) => {
         const name = e.target.getAttribute("name")
-        if (name === "want") {
-            setWant(e.target.value)
-        } else if (name === "need") {
-            setNeed(e.target.value)
-        } else if (name === "value") {
-            setNumericValue(e.target.value)
-        } else if (name === "date") {
-            setDate(e.target.value)
+        if (name === "level") {
+            setLevel(e.target.value);
+        } else if (name === "point") {
+            setPoint(e.target.value);
+        } else if (name === "isNow") {
+            setIsNow(true);
         }
-    }
+    };
 
     const onClickPrev = e => {
         e.preventDefault();
         setStep(step-1);
-    }
+    };
 
     const onClick = e => {
-        const name = e.target.getAttribute("name")
-        if (name === "want" && want) {
-            setStep(1)
+        if (e.target.getAttribute("name") === "plan") {
+            setStep(1);
         } else {
-            setStep(step + 1)
+            setStep(step + 1);
         }
-    }
+    };
 
     const onClickSelection = e => {
         setSelection(JSON.parse(e.target.getAttribute("value")))
-    }
+    };
 
     const onSubmit = async () => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
-            want,
-            need,
-            numericValue,
-            date,
+            level,
+            point,
+            isNow,
             type: "plan",
             queryType: "target",
             state: "ongoing",
@@ -115,11 +110,9 @@ const PlanFinding = ({userObj, targets}) => {
         }
         await dbService.collection(`${userObj.uid}`).doc(targetId).set(targetObj)
         alert("성공적으로 설정되었습니다!")
-        setWant('')
-        setNeed('')
-        setNumericValue('');
-        setDate('');
-        setStep('');
+        setLevel('')
+        setPoint('')
+        setIsNow(false);
     }
 
     const getShortterm = () => {
@@ -145,73 +138,65 @@ const PlanFinding = ({userObj, targets}) => {
             }
             {selection && !step && (
                 <>
-                    <Question>{selection.want} 계획을 세워봅시다.</Question>
+                    <Question>{selection.want}에 대해 기간을 나눠 계획을 세워봅시다.</Question>
                     <Question>필요한 것 : {selection.need}</Question>
                     <Question>수치 : {selection.numericValue}</Question>
                     <Question>기한 : {selection.date}까지</Question>
-                    <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
-                        <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
+                        <AnswerNextBtn onClick={onClick} name="plan">다음으로</AnswerNextBtn>
                     </BtnContainer>
                 </>
             )}
             {step === 1 && (
                 <>
-                    <Question>하고 싶은걸 하기 위해 필요한 것이 있나요?</Question>
-                    <span>(ex. 부자 되기 : 돈)</span><br />
-                    <AnswerInput onChange={onChange} name="need" value={need} type="text" />
+                    <Question>{selection.need}를 단계로 나눈다면 몇 단계로 나눌 수 있을까요?</Question>
+                    <AnswerInput onChange={onChange} name="level" value={level} type="number" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
-                        <AnswerNextBtn name="need" onClick={onClick}>다음으로</AnswerNextBtn>
+                        <AnswerNextBtn name="level" onClick={onClick}>다음으로</AnswerNextBtn>
                     </BtnContainer>
                 </>
             )}
             {step === 2 && (
                 <>
                     <Question>
-                        필요한 것을 숫자 혹은 <br /> 
-                        구체적인 행동으로 표현해보세요. <br />
-                        안된다면, 이전으로 돌아가서 <br />
-                        필요한 것을 수정해보세요.
+                        각 단계별 도달치를 수치로 적어봅시다.
                     </Question>
-                    <Question>(ex. 부자되기 {'>'} 월 수입 500만원 <br /> or 매 끼니 가격 안보고 메뉴 시키기)</Question><br />
-                    <AnswerInput onChange={onChange} name="value"  value={numericValue} type="text" />
+                    <AnswerInput onChange={onChange} name="point"  value={point} type="text" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
-                        <AnswerNextBtn name="value" onClick={onClick}>다음으로</AnswerNextBtn>
+                        <AnswerNextBtn name="point" onClick={onClick}>다음으로</AnswerNextBtn>
                     </BtnContainer>
                 </>
             )}     
             {step === 3 && (
                 <>
-                    <Question>필요한 것을 달성할 기간을 정해보세요.</Question>
+                    <Question>당장 이 계획을 실행해도 문제가 없나요?</Question>
                     <span></span><br />
-                    <AnswerInput onChange={onChange} name="date"  value={date} type="date" />
+                    <AnswerInput onChange={onChange} name="isNow"  value={isNow} type="date" />
                     <BtnContainer>
-                        <AnswerPrevBtn onClick={onClickPrev}>
-                            이전으로
-                        </AnswerPrevBtn>
-                        <AnswerNextBtn name="date" onClick={onClick}>
-                            다음으로
+                        <AnswerNextBtn name="isNow" onClick={onClick}>
+                            예
                         </AnswerNextBtn>
+                        <AnswerPrevBtn onClick={onClickPrev}>
+                            아니오
+                        </AnswerPrevBtn>
                     </BtnContainer>
-                    <Cheer>
-                        <CheerMent>
-                            {Cheers.value}
-                        </CheerMent>
-                    </Cheer>
                 </>
             )}         
             {step === 4 && (
                 <TargetContainer>
                     <TargetContent>
-                        목표 : {want}
+                        목표 : {selection.want}
                     </TargetContent>
                     <TargetContent>
-                        필요한 것 : {need}, {numericValue}
+                        필요한 것 : {selection.need}
                     </TargetContent>
                     <TargetContent>
-                        달성 기한 : {date}까지
+                        {level && `${level}단계 계획`}
+                    </TargetContent>
+                    <TargetContent>
+                        {point && `단계별 수치 : ${point}`}
                     </TargetContent>
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
@@ -228,16 +213,10 @@ const PlanFinding = ({userObj, targets}) => {
             {!(step === 4) && 
             <TargetContainer>
                 <TargetContent>
-                    {want && `원하는 것 : ${want}`}
+                    {level && `${level}단계 계획`}
                 </TargetContent>
                 <TargetContent>
-                    {need && `필요한 것 : ${need}`}
-                </TargetContent>
-                <TargetContent>
-                    {numericValue && `수치화된 값 : ${numericValue}`}
-                </TargetContent>
-                <TargetContent>
-                    {date && `달성 기간 : ${date}`}
+                    {point && `단계별 수치 : ${point}`}
                 </TargetContent>
             </TargetContainer>
             }
