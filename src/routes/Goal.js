@@ -69,6 +69,7 @@ const Goal = ({userObj, targets}) => {
                 <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
             </>
             }
+            <TargetMindmap />
             {goalState === "dream" &&
             <>
             <DreamFinding userObj={userObj} sendGoalState={sendGoalState} />
