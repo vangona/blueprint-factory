@@ -19,6 +19,18 @@ const Question = styled.span`
     line-height: 140%;
 `;
 
+const ShorttermContainer = styled.div``;
+
+const ShorttermTitle = styled.div`
+    border: 1px solid black;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
+
 const BtnContainer = styled.div`
     display: flex;
     margin-bottom: 20px;
@@ -55,6 +67,7 @@ const RoutineFinding = ({userObj, targets}) => {
     const [plans, setPlans] = useState([]);
     const [date, setDate] = useState('');
     const [step, setStep] = useState('');
+    const [selection, setSelection] = useState('');
 
     const onChange = (e) => {
         const name = e.target.getAttribute("name")
@@ -73,6 +86,10 @@ const RoutineFinding = ({userObj, targets}) => {
         e.preventDefault();
         setStep(step-1);
     }
+
+    const onClickSelection = e => {
+        setSelection(JSON.parse(e.target.getAttribute("value")))
+    };
 
     const onClick = e => {
         const name = e.target.getAttribute("name")
@@ -127,6 +144,9 @@ const RoutineFinding = ({userObj, targets}) => {
             {!step && (
                 <>
                     <Question>루틴을 세워봅시다.</Question>
+                    <ShorttermContainer>{shortterms.map(target => 
+                    <ShorttermTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}</ShorttermTitle>
+                    )}</ShorttermContainer>
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
