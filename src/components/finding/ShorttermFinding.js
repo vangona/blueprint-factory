@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { dbService } from "../../fBase";
 import { Cheers } from "../CheerDB";
+import Loading from "../Loading";
+import Selector from "./Selector";
 
 const Container = styled.div`
     display: flex;
@@ -18,6 +20,16 @@ const Question = styled.span`
     font-size: 1rem;
     margin-bottom: 20px;
     line-height: 140%;
+`;
+
+const SelectionTitle = styled.div`
+    border: 1px solid black;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
 `;
 
 const BtnContainer = styled.div`
@@ -61,7 +73,10 @@ const TargetContainer = styled.div`
 
 const TargetContent = styled.div``;
 
-const ShortermFinding = ({userObj}) => {
+const ShortermFinding = ({userObj, targets}) => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [selection, setSelection] = useState('');
+    const [longterm, setLongterm] = useState('');
     const [want, setWant] = useState('');
     const [need, setNeed] = useState('');
     const [numericValue, setNumericValue] = useState('');
@@ -95,6 +110,10 @@ const ShortermFinding = ({userObj}) => {
         }
     }
 
+    const onClickSelection = e => {
+        setSelection(JSON.parse(e.target.getAttribute("value")))
+    };
+
     const onSubmit = async () => {
         const targetId = uuidv4();
         const targetObj = {
@@ -119,11 +138,41 @@ const ShortermFinding = ({userObj}) => {
         setStep('');
     }
 
+    const getLongterm = () => {
+        const filteredLongterms = targets.filter(target => target.state === "ongoing" && target.type === "longterm");
+        setLongterm(filteredLongterms);
+        setIsLoading(false);
+    };
+    
+    const getSelection = (data) => {
+        setSelection(data);
+    };
+
+    useEffect(() => {
+        getLongterm();
+    }, [])
+
     return (
         <Container>
-            {!step && (
+            {isLoading ? "Loading..."
+            : 
+            <>
+            {!selection 
+            ? 
+            <>
+                <Question>단기 목표가 장기 목표를 위한 것인가요?</Question>
+                <Selector targets={longterm} getSelection={getSelection} />
+                <SelectionTitle onClick={() => {setSelection(1)}}>새로운 단기 목표 만들기</SelectionTitle>
+            </>
+            : 
+            <>
+                {!step && (
                 <>
-                    <Question>1년 내에 하고 싶은 것이 있나요?</Question>
+                    <Question>
+                        {selection && selection !== 1
+                        ? `${selection.want}을(를) 위해 1년 내에 해야하는 것이 있나요?`
+                        : '1년 내에 하고 싶은 것이 있나요?' }
+                    </Question>
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
@@ -215,6 +264,10 @@ const ShortermFinding = ({userObj}) => {
                     {date && `달성 기간 : ${date}`}
                 </TargetContent>
             </TargetContainer>
+            }
+            </>
+            }
+            </>
             }
         </Container>
     )

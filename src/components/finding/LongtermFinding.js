@@ -107,7 +107,7 @@ const LongtermFinding = ({userObj}) => {
         <Container>
             {!step && (
                 <>
-                    <Question>하고 싶거나 되고 싶은 것이 있나요?</Question>
+                    <Question>해내고 싶거나 되고 싶은 것이 있나요?</Question>
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
@@ -187,13 +187,10 @@ const LongtermFinding = ({userObj}) => {
             {!(step === 4) && 
             <TargetContainer>
                 <TargetContent>
-                    {want && `원하는 것 : ${want}`}
+                    {want && `목표 : ${want}`}
                 </TargetContent>
                 <TargetContent>
-                    {need && `필요한 것 : ${need}`}
-                </TargetContent>
-                <TargetContent>
-                    {numericValue && `수치화된 값 : ${numericValue}`}
+                    {need && `필요한 것 : ${need}, ${numericValue}`}
                 </TargetContent>
                 <TargetContent>
                     {date && `달성 기간 : ${date}`}
