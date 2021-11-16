@@ -11,12 +11,11 @@ const Container = styled.div`
 const SavedDiagram = styled.textarea``;
 
 const TargetMindmap = () => {
-    let diagram;
 
     const initDiagram = () => {
         const $ = go.GraphObject.make;
 
-        diagram =
+        const myDiagram =
             $(go.Diagram, 
                 {
                     "commandHandler.copiesTree": true,
@@ -30,18 +29,18 @@ const TargetMindmap = () => {
                         })
                 });
 
-        diagram.addDiagramListener("Modified", function(e) {
+        myDiagram.addDiagramListener("Modified", function(e) {
             var button = document.getElementById("SaveButton");
-            if (button) button.disabled = !diagram.isModified;
+            if (button) button.disabled = !myDiagram.isModified;
             var idx = document.title.indexOf("*");
-            if (diagram.isModified) {
+            if (myDiagram.isModified) {
                 if (idx < 0) document.title += "*";
             } else {
                 if (idx >= 0) document.title = document.title.substr(0, idx);
             }
             });
 
-        diagram.nodeTemplate =
+            myDiagram.nodeTemplate =
             $(go.Node, 'Vertical',
                 { selectionObjectName: "TEXT" },
 
@@ -76,7 +75,7 @@ const TargetMindmap = () => {
             })
             );
 
-            diagram.nodeTemplate.selectionAdornmentTemplate = 
+            myDiagram.nodeTemplate.selectionAdornmentTemplate = 
                 $(go.Adornment, "Spot",
                     $(go.Panel, "Auto",
                         $(go.Shape, { fill: null, stroke: "dodgerblue", strokeWidth: 3 }),
@@ -94,7 +93,7 @@ const TargetMindmap = () => {
                             )
                         );
 
-            diagram.nodeTemplate.contextMenu =
+            myDiagram.nodeTemplate.contextMenu =
             $("ContextMenu",
                 $("ContextMenuButton",
                     $(go.TextBlock, "Bigger"),
@@ -130,7 +129,7 @@ const TargetMindmap = () => {
                 )
             );
 
-            diagram.linkTemplate = 
+            myDiagram.linkTemplate = 
                 $(go.Link,
                     {
                         curve: go.Link.Bezier,
@@ -147,7 +146,7 @@ const TargetMindmap = () => {
                     )
                   );
 
-            diagram.contextMenu =
+            myDiagram.contextMenu =
             $("ContextMenu",
               $("ContextMenuButton",
                 $(go.TextBlock, "Paste"),
@@ -169,9 +168,9 @@ const TargetMindmap = () => {
                 { click: function(e, obj) { load(); } })
             );
 
-            diagram.addDiagramListener("SelectionMoved", function(e) {
-              var rootX = diagram.findNodeForKey(0).location.x;
-              diagram.selection.each(function(node) {
+            myDiagram.addDiagramListener("SelectionMoved", function(e) {
+              var rootX = myDiagram.findNodeForKey(0).location.x;
+              myDiagram.selection.each(function(node) {
                 if (node.data.parent !== 0) return; // Only consider nodes connected to the root
                 var nodeX = node.location.x;
                 if (rootX < nodeX && node.data.dir !== "right") {
@@ -182,16 +181,13 @@ const TargetMindmap = () => {
                 layoutTree(node);
               });
             });
-
-            load();
-          };
-
-          function spotConverter(dir, from) {
+          
+            function spotConverter(dir, from) {
               if (dir === "left") {
                 return (from ? go.Spot.Left : go.Spot.Right);
               } else {
                 return (from ? go.Spot.Right : go.Spot.Left);
-              }
+              }  
             }
 
           function changeTextSize(obj, factor) {
@@ -219,7 +215,7 @@ const TargetMindmap = () => {
           }
 
           function updateNodeDirection(node, dir) {
-            diagram.model.setDataProperty(node.data, "dir", dir);
+            myDiagram.model.setDataProperty(node.data, "dir", dir);
             // recursively update the direction of the child nodes
             var chl = node.findTreeChildrenNodes(); // gives us an iterator of the child nodes related to this particular node
             while (chl.next()) {
@@ -267,9 +263,9 @@ const TargetMindmap = () => {
           }
       
           function layoutAll() {
-            var root = diagram.findNodeForKey(0);
+            var root = myDiagram.findNodeForKey(0);
             if (root === null) return;
-            diagram.startTransaction("Layout");
+            myDiagram.startTransaction("Layout");
             // split the nodes and links into two collections
             var rightward = new go.Set(/*go.Part*/);
             var leftward = new go.Set(/*go.Part*/);
@@ -288,16 +284,21 @@ const TargetMindmap = () => {
             // do one layout and then the other without moving the shared root node
             layoutAngle(rightward, 0);
             layoutAngle(leftward, 180);
-            diagram.commitTransaction("Layout");
+            myDiagram.commitTransaction("Layout");
           }
 
           function save() {
-            document.getElementById("mySavedModel").value = diagram.model.toJson();
-            diagram.isModified = false;
+            document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+            myDiagram.isModified = false;
           }
           function load() {
-            diagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+            myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
           }
+
+          return myDiagram;
+
+          };
+
 
     const handleModelChange = (changes) => {
         console.log('GoJS Model changed!');
