@@ -11,8 +11,8 @@ const Contaier = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 80vh;
-    margin-top: 30px;
+    height: 100vh;
+    margin-top: 100px;
     color: black;
     font-family: Kyobo Handwriting;
     font-size: 18px;
@@ -22,14 +22,30 @@ const Contaier = styled.div`
 const TargetContainer = styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    max-height: 100%;
+    overflow: auto;
+`;
+
+const TargetSubContainer = styled.div`
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 90%;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 20px;
 `;
 
 const TargetTitle = styled.div`
     font-size: 20px;
     margin-bottom: 5px;
+`;
+
+const Contour = styled.hr`
+    width: 80%;
 `;
 
 const Notice = styled.span`
@@ -48,7 +64,6 @@ const FindBtn = styled.button`
 
 const Home = ({userObj, targets}) => {
     const history = useHistory();
-    const [dreams, setDreams] = useState([]);
     const [longterms, setLongterms] = useState([]);
     const [shortterms, setShortterms] = useState([]);
     const [plans, setPlans] = useState([]);
@@ -56,7 +71,6 @@ const Home = ({userObj, targets}) => {
     const [isLoading, setIsLoading] = useState(true);
 
     const getTargets = async () => {
-            setDreams(targets.filter(target => target.state === "ongoing" && target.type === "dream"))
             setLongterms(targets.filter(target => target.state === "ongoing" && target.type === "longterm"))
             setShortterms(targets.filter(target => target.state === "ongoing" && target.type === "shortterm"))
             setPlans(targets.filter(target => target.state === "ongoing" && target.type === "plan"))
@@ -76,45 +90,41 @@ const Home = ({userObj, targets}) => {
                     {targets.filter(target => target.state === "ongoing").length !== 0 
                     ?
                     <>
-                        {dreams.length !== 0 && 
-                        <>
-                            <TargetTitle>꿈</TargetTitle>
-                            {dreams.map(target => 
-                            <Target key={target.targetId} target={target} userObj={userObj} />
-                            )}
-                        </>
-                        }
                         {longterms.length !== 0 && 
-                        <>
+                        <TargetSubContainer>
                             <TargetTitle>장기 목표</TargetTitle>
                             {longterms.map(target => 
                             <Target key={target.targetId} target={target} userObj={userObj} />
                             )}
-                        </>
+                            <Contour />
+                        </TargetSubContainer>
                         }
                         {shortterms.length !== 0 && 
-                        <>
+                        <TargetSubContainer>
                             <TargetTitle>단기 목표</TargetTitle>
                             {shortterms.map(target => 
                             <Target key={target.targetId} target={target} userObj={userObj} />
                             )}
-                        </>
+                            <Contour />                            
+                        </TargetSubContainer>
                         }
                         {plans.length !== 0 && 
-                        <>
+                        <TargetSubContainer>
                             <TargetTitle>계획</TargetTitle>
                             {plans.map(target => 
                             <Target key={target.targetId} target={target} userObj={userObj} />
                             )}
-                        </>
+                            <Contour />
+                        </TargetSubContainer>
                         }
                         {routines.length !== 0 && 
-                        <>
+                        <TargetSubContainer>
                             <TargetTitle>루틴</TargetTitle>
                             {routines.map(target => 
                             <Target key={target.targetId} target={target} userObj={userObj} />
                             )}
-                        </>
+                            <Contour />
+                        </TargetSubContainer>
                         }                                               
                     </>
                     : 

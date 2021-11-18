@@ -14,7 +14,7 @@ const Container = styled.div`
     height: 100px;
     width: 100%;
     background-color: #b7d7e8;
-    z-index: 1;
+    z-index: 9;
 `;
 
 const NavHeader = styled.div`
