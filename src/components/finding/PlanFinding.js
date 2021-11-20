@@ -23,6 +23,12 @@ const BtnContainer = styled.div`
     margin-bottom: 20px;
 `;
 
+const AnswerContainer = styled.div``;
+
+const AnswerBox = styled.div``;
+
+const AnswerLabel = styled.label``;
+
 const AnswerInput = styled.input``;
 
 const AnswerNextBtn = styled.button``;
@@ -60,6 +66,7 @@ const TargetContent = styled.div``;
 const PlanFinding = ({userObj, targets}) => {
     const [selection, setSelection] = useState('');
     const [level, setLevel] = useState('');
+    const [levelArr, setLevelArr] = useState([]);
     const [point, setPoint] = useState('');
     const [isNow, setIsNow] = useState(false);
     const [step, setStep] = useState('');
@@ -70,6 +77,11 @@ const PlanFinding = ({userObj, targets}) => {
         const name = e.target.getAttribute("name")
         if (name === "level") {
             setLevel(e.target.value);
+            const arr = [];
+            for (let i = 1; i <= e.target.value; i++) {
+                arr.push(i);
+            }
+            setLevelArr(arr);
         } else if (name === "point") {
             setPoint(e.target.value);
         } else if (name === "isNow") {
@@ -149,8 +161,7 @@ const PlanFinding = ({userObj, targets}) => {
             )}
             {step === 1 && (
                 <>
-                    <Question>{selection.need}를 단계로 나눈다면 몇 단계로 나눌 수 있을까요?</Question>
-                    <AnswerInput onChange={onChange} name="level" value={level} type="number" />
+                    <Question>{selection.need}를 단계로 나눈다면 몇 단계로 나눌 수 있을까요?</Question>                    <AnswerInput onChange={onChange} name="level" value={level} type="number" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
                         <AnswerNextBtn name="level" onClick={onClick}>다음으로</AnswerNextBtn>
@@ -162,7 +173,14 @@ const PlanFinding = ({userObj, targets}) => {
                     <Question>
                         각 단계별 도달치를 수치로 적어봅시다.
                     </Question>
-                    <AnswerInput onChange={onChange} name="point"  value={point} type="text" />
+                    <AnswerContainer>
+                        {levelArr.map(el => (
+                            <AnswerBox>
+                                <AnswerLabel>{el}단계 : </AnswerLabel>
+                                <AnswerInput onChange={onChange} name="point" value={point} id="el" type="text" />
+                            </AnswerBox>                       
+                        ))}
+                    </AnswerContainer>
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
                         <AnswerNextBtn name="point" onClick={onClick}>다음으로</AnswerNextBtn>
