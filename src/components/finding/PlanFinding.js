@@ -23,11 +23,18 @@ const BtnContainer = styled.div`
     margin-bottom: 20px;
 `;
 
-const AnswerContainer = styled.div``;
+const AnswerContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+`;
 
-const AnswerBox = styled.div``;
+const AnswerBox = styled.div`
+`;
 
-const AnswerLabel = styled.label``;
+const AnswerLabel = styled.label`
+`;
 
 const AnswerInput = styled.input``;
 
@@ -67,7 +74,9 @@ const PlanFinding = ({userObj, targets}) => {
     const [selection, setSelection] = useState('');
     const [level, setLevel] = useState('');
     const [levelArr, setLevelArr] = useState([]);
-    const [point, setPoint] = useState('');
+    const [levelContentArr, setLevelContentArr] = useState([]);
+    const [pointArr, setPointArr] = useState([]);
+    const [dateArr, setDateArr] = useState([]);
     const [isNow, setIsNow] = useState(false);
     const [step, setStep] = useState('');
     const [shortterms, setShortterms] = useState([]);
@@ -79,11 +88,10 @@ const PlanFinding = ({userObj, targets}) => {
             setLevel(e.target.value);
             const arr = [];
             for (let i = 1; i <= e.target.value; i++) {
-                arr.push(i);
+                arr[i - 1] = [i];
             }
             setLevelArr(arr);
         } else if (name === "point") {
-            setPoint(e.target.value);
         } else if (name === "isNow") {
             setIsNow(true);
         }
@@ -97,6 +105,40 @@ const PlanFinding = ({userObj, targets}) => {
     const onClick = e => {
         if (e.target.getAttribute("name") === "plan") {
             setStep(1);
+        } else if (e.target.getAttribute("name") === "levelContent") {
+            const levelarr = levelArr;
+            const arr = [];
+            const contents = document.querySelectorAll("input[name='levelContent']")
+            contents.forEach((content, index) => {
+                levelarr[index].push(content.value);
+                arr[index] = content.value;
+            })
+            setLevelArr(levelarr);
+            setLevelContentArr(arr);
+            setStep(step + 1);
+        } else if (e.target.getAttribute("name") === "point") {
+            const levelarr = levelArr;
+            const arr = [];
+            const contents = document.querySelectorAll("input[name='point']")
+            contents.forEach((content, index) => {
+                levelarr[index].push(content.value);
+                arr[index] = content.value;
+            })
+            setLevelArr(levelarr);
+            setPointArr(arr);
+            setStep(step + 1);
+        } else if (e.target.getAttribute("name") === "date") {
+            const levelarr = levelArr;
+            const arr = [];
+            const contents = document.querySelectorAll("input[name='date']")
+            contents.forEach((content, index) => {
+                levelarr[index].push(content.value);
+                arr[index] = content.value;
+            })
+            console.log(levelarr);
+            setLevelArr(levelarr);
+            setDateArr(arr);
+            setStep(step + 1);            
         } else {
             setStep(step + 1);
         }
@@ -111,7 +153,9 @@ const PlanFinding = ({userObj, targets}) => {
         const targetObj = {
             targetId,
             level,
-            point,
+            levelContentArr,
+            pointArr,
+            dateArr,
             isNow,
             type: "plan",
             queryType: "target",
@@ -123,7 +167,10 @@ const PlanFinding = ({userObj, targets}) => {
         await dbService.collection(`${userObj.uid}`).doc(targetId).set(targetObj)
         alert("성공적으로 설정되었습니다!")
         setLevel('')
-        setPoint('')
+        setLevelArr([]);
+        setLevelContentArr([]);
+        setPointArr([])
+        setDateArr([]);
         setIsNow(false);
     }
 
@@ -161,7 +208,8 @@ const PlanFinding = ({userObj, targets}) => {
             )}
             {step === 1 && (
                 <>
-                    <Question>{selection.need}를 단계로 나눈다면 몇 단계로 나눌 수 있을까요?</Question>                    <AnswerInput onChange={onChange} name="level" value={level} type="number" />
+                    <Question>{selection.need}를 단계로 나눈다면 몇 단계로 나눌 수 있을까요?</Question>                    
+                    <AnswerInput onChange={onChange} name="level" value={level} type="number" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
                         <AnswerNextBtn name="level" onClick={onClick}>다음으로</AnswerNextBtn>
@@ -171,13 +219,32 @@ const PlanFinding = ({userObj, targets}) => {
             {step === 2 && (
                 <>
                     <Question>
-                        각 단계별 도달치를 수치로 적어봅시다.
+                        각 단계를 적어봅시다.
                     </Question>
                     <AnswerContainer>
                         {levelArr.map(el => (
                             <AnswerBox>
                                 <AnswerLabel>{el}단계 : </AnswerLabel>
-                                <AnswerInput onChange={onChange} name="point" value={point} id="el" type="text" />
+                                <AnswerInput onChange={onChange} class="levelContent" name="levelContent" id="el" type="text" />
+                            </AnswerBox>                       
+                        ))}
+                    </AnswerContainer>
+                    <BtnContainer>
+                        <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
+                        <AnswerNextBtn name="levelContent" onClick={onClick}>다음으로</AnswerNextBtn>
+                    </BtnContainer>
+                </>
+            )}     
+            {step === 3 && (
+                <>
+                    <Question>
+                        각 단계의 목표치를 적어봅시다.
+                    </Question>
+                    <AnswerContainer>
+                        {levelArr.map(el => (
+                            <AnswerBox>
+                                <AnswerLabel>{el[1]} : </AnswerLabel>
+                                <AnswerInput class="point" name="point" id="el" type="text" />
                             </AnswerBox>                       
                         ))}
                     </AnswerContainer>
@@ -187,14 +254,28 @@ const PlanFinding = ({userObj, targets}) => {
                     </BtnContainer>
                 </>
             )}     
-            {step === 3 && (
+            {step === 4 && (
+                <>
+                    <Question>도달별 마감일을 정해보세요</Question>
+                    <AnswerContainer>
+                        {levelArr.map(el => (
+                            <AnswerBox>
+                                <AnswerLabel>{el[2]} : </AnswerLabel>
+                                <AnswerInput class="date" name="date" id="el" type="date" />
+                            </AnswerBox>                       
+                        ))}
+                    </AnswerContainer>
+                    <BtnContainer>
+                        <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
+                        <AnswerNextBtn name="date" onClick={onClick}>다음으로</AnswerNextBtn>
+                    </BtnContainer>
+                </>
+            )}
+            {step === 5 && (
                 <>
                     <Question>당장 이 계획을 실행해도 문제가 없나요?</Question>
-                    <span></span><br />
-                    <AnswerInput onChange={onChange} name="isNow"  value={isNow} type="date" />
                     <BtnContainer>
-                        <AnswerNextBtn name="isNow" onClick={onClick}>
-                            예
+                        <AnswerNextBtn name="isNow" onClick={onClick}>예
                         </AnswerNextBtn>
                         <AnswerPrevBtn onClick={onClickPrev}>
                             아니오
@@ -202,7 +283,7 @@ const PlanFinding = ({userObj, targets}) => {
                     </BtnContainer>
                 </>
             )}         
-            {step === 4 && (
+            {step === 6 && (
                 <TargetContainer>
                     <TargetContent>
                         목표 : {selection.want}
@@ -213,9 +294,11 @@ const PlanFinding = ({userObj, targets}) => {
                     <TargetContent>
                         {level && `${level}단계 계획`}
                     </TargetContent>
+                    {levelArr && levelArr.map(levelContent => 
                     <TargetContent>
-                        {point && `단계별 수치 : ${point}`}
+                        {levelContent[1]} {levelContent[2] && `: ${levelContent[2]}`} {levelContent[2] && `${levelContent[3]}까지`}
                     </TargetContent>
+                )}
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
                             수정하기
@@ -228,14 +311,19 @@ const PlanFinding = ({userObj, targets}) => {
                     </BtnContainer>
                 </TargetContainer>
             )}
-            {!(step === 4) && 
+            {!(step === 6) && 
             <TargetContainer>
                 <TargetContent>
                     {level && `${level}단계 계획`}
                 </TargetContent>
-                <TargetContent>
-                    {point && `단계별 수치 : ${point}`}
-                </TargetContent>
+                {levelArr && levelArr.map(levelContent => 
+                    <TargetContent>
+                        {levelContent[0] && `${levelContent[0]}단계 `} 
+                        {levelContent[1] && ` ${levelContent[1]}`} 
+                        {levelContent[2] && `, ${levelContent[2]}`} 
+                        {levelContent[3] && ` : ${levelContent[3]}까지`}
+                    </TargetContent>
+                )}
             </TargetContainer>
             }
             </>
