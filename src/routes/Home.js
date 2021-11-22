@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../components/Loading";
+import Plan from "../components/Plan";
 import Target from "../components/Target";
 import { authService, dbService } from "../fBase";
 
@@ -112,7 +113,7 @@ const Home = ({userObj, targets}) => {
                         <TargetSubContainer>
                             <TargetTitle>계획</TargetTitle>
                             {plans.map(target => 
-                            <Target key={target.targetId} target={target} userObj={userObj} />
+                            <Plan key={target.targetId} target={target} userObj={userObj} />
                             )}
                             <Contour />
                         </TargetSubContainer>

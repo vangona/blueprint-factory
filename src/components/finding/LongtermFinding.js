@@ -23,7 +23,15 @@ const BtnContainer = styled.div`
     margin-bottom: 20px;
 `;
 
+const AnswerBox = styled.div`
+    display: flex;
+`;
+
+const AnswerLabel = styled.label``;
+
 const AnswerInput = styled.input``;
+
+const AnswerInputPlus = styled.button``;
 
 const AnswerNextBtn = styled.button``;
 
@@ -48,20 +56,22 @@ const TargetContent = styled.div``;
 const LongtermFinding = ({userObj}) => {
     const [want, setWant] = useState('');
     const [need, setNeed] = useState('');
-    const [numericValue, setNumericValue] = useState('');
+    const [needArr, setNeedArr] = useState([]);
     const [date, setDate] = useState('');
+    const [hashtags, setHashtags] = useState('');
+    const [hashtagArr, setHashtagArr] = useState([]);
     const [step, setStep] = useState('');
 
     const onChange = (e) => {
         const name = e.target.getAttribute("name")
         if (name === "want") {
-            setWant(e.target.value)
+            setWant(e.target.value);
         } else if (name === "need") {
-            setNeed(e.target.value)
-        } else if (name === "value") {
-            setNumericValue(e.target.value)
+            setNeed(e.target.value);
         } else if (name === "date") {
-            setDate(e.target.value)
+            setDate(e.target.value);
+        } else if (name === "hashtags") {
+            setHashtags(e.target.value);
         }
     }
 
@@ -79,13 +89,17 @@ const LongtermFinding = ({userObj}) => {
         }
     }
 
+    const onClickPlus = e => {
+        setNeedArr([...needArr, need]);
+        setNeed('');
+    }
+
     const onSubmit = async () => {
         const targetId = uuidv4();
-        const targetObj = {
+        const targetObj = {   
             targetId,
             want,
-            need,
-            numericValue,
+            needArr,
             date,
             type: "longterm",
             queryType: "target",
@@ -97,8 +111,7 @@ const LongtermFinding = ({userObj}) => {
         await dbService.collection(`${userObj.uid}`).doc(targetId).set(targetObj)
         alert("성공적으로 설정되었습니다!")
         setWant('')
-        setNeed('')
-        setNumericValue('');
+        setNeedArr([])
         setDate('');
         setStep('');
     }
@@ -107,7 +120,7 @@ const LongtermFinding = ({userObj}) => {
         <Container>
             {!step && (
                 <>
-                    <Question>해내고 싶거나 되고 싶은 것이 있나요?</Question>
+                    <Question>적어도 1년 뒤 되고 싶거나 해내고 싶은 것이 있나요?</Question>
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
@@ -118,7 +131,10 @@ const LongtermFinding = ({userObj}) => {
                 <>
                     <Question>하고 싶은걸 하기 위해 필요한 것이 있나요?</Question>
                     <span>(ex. 부자 되기 : 돈)</span><br />
-                    <AnswerInput onChange={onChange} name="need" value={need} type="text" />
+                    <AnswerBox>
+                        <AnswerInput onChange={onChange} value={need} name="need" type="text" />
+                        <AnswerInputPlus onClick={onClickPlus}>추가하기</AnswerInputPlus>
+                    </AnswerBox>
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
                         <AnswerNextBtn name="need" onClick={onClick}>다음으로</AnswerNextBtn>
@@ -126,22 +142,6 @@ const LongtermFinding = ({userObj}) => {
                 </>
             )}
             {step === 2 && (
-                <>
-                    <Question>
-                        필요한 것을 숫자 혹은 <br /> 
-                        구체적인 행동으로 표현해보세요. <br />
-                        안된다면, 이전으로 돌아가서 <br />
-                        필요한 것을 수정해보세요.
-                    </Question>
-                    <Question>(ex. 부자되기 {'>'} 월 수입 500만원 <br /> or 매 끼니 가격 안보고 메뉴 시키기)</Question><br />
-                    <AnswerInput onChange={onChange} name="value"  value={numericValue} type="text" />
-                    <BtnContainer>
-                        <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
-                        <AnswerNextBtn name="value" onClick={onClick}>다음으로</AnswerNextBtn>
-                    </BtnContainer>
-                </>
-            )}     
-            {step === 3 && (
                 <>
                     <Question>필요한 것을 달성할 기간을 정해보세요.</Question>
                     <span></span><br />
@@ -161,17 +161,36 @@ const LongtermFinding = ({userObj}) => {
                     </Cheer>
                 </>
             )}         
+            {step === 3 && (
+                <>
+                <Question>
+                    장기 목표를 해시태그로 소개해주세요.
+                </Question>
+                <AnswerInput onChange={onChange} name="hashtags" value={hashtags} type="text" />
+                <BtnContainer>
+                    <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
+                    <AnswerNextBtn name="hashtags" onClick={onClick}>다음으로</AnswerNextBtn>
+                </BtnContainer>
+            </>
+            )}
             {step === 4 && (
                 <TargetContainer>
                     <TargetContent>
                         목표 : {want}
                     </TargetContent>
+                    {needArr && needArr.map(content => 
                     <TargetContent>
-                        필요한 것 : {need}, {numericValue}
+                        필요한 것 : {content}
                     </TargetContent>
+                    )}
                     <TargetContent>
                         달성 기한 : {date}까지
                     </TargetContent>
+                    {hashtagArr && hashtagArr.map(hashtag => 
+                        <TargetContent>
+                            {hashtag}
+                        </TargetContent>
+                    )}
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
                             수정하기
@@ -189,12 +208,19 @@ const LongtermFinding = ({userObj}) => {
                 <TargetContent>
                     {want && `목표 : ${want}`}
                 </TargetContent>
-                <TargetContent>
-                    {need && `필요한 것 : ${need}, ${numericValue}`}
-                </TargetContent>
+                {needArr && needArr.map(content => 
+                    <TargetContent>
+                        필요한 것 : {content}
+                    </TargetContent>
+                )}
                 <TargetContent>
                     {date && `달성 기간 : ${date}`}
                 </TargetContent>
+                {hashtagArr && hashtagArr.map(hashtag => 
+                    <TargetContent>
+                        {hashtag}
+                    </TargetContent>
+                )}
             </TargetContainer>
             }
         </Container>
