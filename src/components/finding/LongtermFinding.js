@@ -8,8 +8,9 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin-top: 50px;
+    justify-content: flex-start;
+    margin-top: 150px;
+    font-family: Kyobo Handwriting;
 `;
 
 const Question = styled.span`
@@ -18,24 +19,37 @@ const Question = styled.span`
     line-height: 140%;
 `;
 
-const BtnContainer = styled.div`
-    display: flex;
-    margin-bottom: 20px;
-`;
-
 const AnswerBox = styled.div`
     display: flex;
 `;
 
-const AnswerLabel = styled.label``;
-
 const AnswerInput = styled.input``;
 
-const AnswerInputPlus = styled.button``;
+const AnswerInputPlus = styled.button`
+`;
 
-const AnswerNextBtn = styled.button``;
+const BtnContainer = styled.div`
+    display: flex;
+    margin: 20px;
+`;
 
-const AnswerPrevBtn = styled.button``;
+const AnswerNextBtn = styled.button`
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
+
+const AnswerPrevBtn = styled.button`
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
 
 const Cheer = styled.div`
     text-align: center;
@@ -51,9 +65,27 @@ const TargetContainer = styled.div`
     margin-top: 20px;
 `;
 
-const TargetContent = styled.div``;
+const TargetContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 10px;
+`;
 
-const LongtermFinding = ({userObj}) => {
+const TargetNeed = styled.div``;
+
+const HashtagTitle = styled.h3``;
+
+const HashtagContainer = styled.div`
+    display: flex;
+    gap: 5px;
+`;
+
+const Hashtag = styled.span``;
+
+const HomeBtn = styled.button``;
+
+const LongtermFinding = ({userObj, goHome}) => {
     const [want, setWant] = useState('');
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);
@@ -84,6 +116,11 @@ const LongtermFinding = ({userObj}) => {
         const name = e.target.getAttribute("name")
         if (name === "want" && want) {
             setStep(1)
+        } else if (name === "hashtags") {
+            const str = hashtags;
+            const strArr = str.split('#').map(el => el.trim()).filter(Boolean);
+            setHashtagArr(strArr);
+            setStep(step + 1);
         } else {
             setStep(step + 1)
         }
@@ -101,6 +138,7 @@ const LongtermFinding = ({userObj}) => {
             want,
             needArr,
             date,
+            hashtagArr,
             type: "longterm",
             queryType: "target",
             state: "ongoing",
@@ -129,7 +167,10 @@ const LongtermFinding = ({userObj}) => {
             )}
             {step === 1 && (
                 <>
-                    <Question>하고 싶은걸 하기 위해 필요한 것이 있나요?</Question>
+                    <Question>
+                        하고 싶은걸 하기 위해 필요한 것이 있나요?
+                    </Question>
+                    <span>장기목표이니 크게 잡으셔도 좋습니다.</span><br />
                     <span>(ex. 부자 되기 : 돈)</span><br />
                     <AnswerBox>
                         <AnswerInput onChange={onChange} value={need} name="need" type="text" />
@@ -143,7 +184,7 @@ const LongtermFinding = ({userObj}) => {
             )}
             {step === 2 && (
                 <>
-                    <Question>필요한 것을 달성할 기간을 정해보세요.</Question>
+                    <Question>장기 목표를 달성할 기간을 정해보세요.</Question>
                     <span></span><br />
                     <AnswerInput onChange={onChange} name="date"  value={date} type="date" />
                     <BtnContainer>
@@ -154,11 +195,6 @@ const LongtermFinding = ({userObj}) => {
                             다음으로
                         </AnswerNextBtn>
                     </BtnContainer>
-                    <Cheer>
-                        <CheerMent>
-                            {Cheers.value}
-                        </CheerMent>
-                    </Cheer>
                 </>
             )}         
             {step === 3 && (
@@ -178,22 +214,33 @@ const LongtermFinding = ({userObj}) => {
                     <TargetContent>
                         목표 : {want}
                     </TargetContent>
-                    {needArr && needArr.map(content => 
                     <TargetContent>
-                        필요한 것 : {content}
+                        {needArr && needArr.map((content, index) => 
+                        <TargetNeed>
+                            필요한 것 {index+1} : {content}
+                        </TargetNeed>
+                        )}
                     </TargetContent>
-                    )}
                     <TargetContent>
                         달성 기한 : {date}까지
                     </TargetContent>
-                    {hashtagArr && hashtagArr.map(hashtag => 
-                        <TargetContent>
-                            {hashtag}
-                        </TargetContent>
-                    )}
+                    {hashtagArr.length !== 0 && 
+                    <TargetContent>
+                        <HashtagTitle>
+                            목표 소개
+                        </HashtagTitle>
+                        <HashtagContainer>
+                        {hashtagArr.map(hashtag =>
+                            <Hashtag> 
+                                #{hashtag}
+                            </Hashtag>
+                        )}
+                        </HashtagContainer>
+                    </TargetContent>
+                    }
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
-                            수정하기
+                            이전으로
                         </AnswerPrevBtn>
                         <AnswerNextBtn onClick={() => {
                             if (window.confirm("목표가 마음에 드시나요?")) { onSubmit() }
@@ -208,21 +255,35 @@ const LongtermFinding = ({userObj}) => {
                 <TargetContent>
                     {want && `목표 : ${want}`}
                 </TargetContent>
-                {needArr && needArr.map(content => 
-                    <TargetContent>
-                        필요한 것 : {content}
+                <TargetContent>
+                        {needArr && needArr.map((content, index) => 
+                        <TargetNeed>
+                            필요한 것 {index+1} : {content}
+                        </TargetNeed>
+                        )}
                     </TargetContent>
-                )}
                 <TargetContent>
                     {date && `달성 기간 : ${date}`}
                 </TargetContent>
-                {hashtagArr && hashtagArr.map(hashtag => 
-                    <TargetContent>
-                        {hashtag}
-                    </TargetContent>
-                )}
+                {hashtagArr.length !== 0 && 
+                <TargetContent>
+                    <HashtagTitle>
+                        목표 소개
+                    </HashtagTitle>
+                    <HashtagContainer>
+                    {hashtagArr.map(hashtag =>
+                        <Hashtag> 
+                            #{hashtag}
+                        </Hashtag>
+                    )}
+                    </HashtagContainer>
+                </TargetContent>
+                }
             </TargetContainer>
             }
+            <HomeBtn onClick={goHome}>
+                홈으로 돌아가기
+            </HomeBtn>
         </Container>
     )
 }

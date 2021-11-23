@@ -29,8 +29,6 @@ const GoalStateBtn = styled.button`
     }
 `;
 
-const PrevBtn = styled.button``;
-
 const Todos = ({userObj, targets}) => {
     const [goalState, setGoalState] = useState("");
 
@@ -40,9 +38,6 @@ const Todos = ({userObj, targets}) => {
 
     const onClick = (e) => {
         const name = e.target.getAttribute("name")
-        if (name === "prev") {
-            setGoalState("");
-        }
         if (name === "target") {
             setGoalState("target");
         }
@@ -63,6 +58,10 @@ const Todos = ({userObj, targets}) => {
         }
     }
 
+    const goHome = () => {
+        setGoalState("");
+    }
+
     useEffect(() => {
     }, [])
     
@@ -78,26 +77,22 @@ const Todos = ({userObj, targets}) => {
             }
             {goalState === "longterm" &&
             <>
-            <LongtermFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} />
-            <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
+            <LongtermFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} goHome={goHome} />
             </>
             }      
             {goalState === "shortterm" &&
             <>
-            <ShorttermFinding targets={targets} userObj={userObj} />
-            <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
+            <ShorttermFinding targets={targets} userObj={userObj} goHome={goHome} />
             </>
             }                       
             {goalState === "plan" &&
             <>
-            <PlanFinding targets={targets}  userObj={userObj} sendGoalState={sendGoalState} />
-            <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
+            <PlanFinding targets={targets}  userObj={userObj} sendGoalState={sendGoalState} goHome={goHome} />
             </>
             }
             {goalState === "routine" &&
             <>
-            <RoutineFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} />
-            <PrevBtn name="prev" onClick={onClick}>홈으로</PrevBtn>
+            <RoutineFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} goHome={goHome} />
             </>
             }
         </Container>
