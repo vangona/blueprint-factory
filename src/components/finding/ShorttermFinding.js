@@ -32,12 +32,34 @@ const SelectionTitle = styled.div`
     }
 `;
 
+const NeedContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 15px;
+`;
+
+const NeedBtn = styled.button`
+    background-color: white;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    :hover {
+        cursor: pointer;
+    }
+`;
+
 const BtnContainer = styled.div`
     display: flex;
     margin-bottom: 20px;
 `;
 
+const AnswerBox = styled.div``;
+
+const AnswerLabel = styled.label``;
+
 const AnswerInput = styled.input``;
+
+const AnswerInputPlus = styled.button``;
 
 const AnswerNextBtn = styled.button`
     margin-top: 10px;
@@ -46,6 +68,9 @@ const AnswerNextBtn = styled.button`
     border-radius: 10px;
     border: 0.5px black solid;
     background-color: rgba(255,255,255,0.1);
+    :hover {
+        cursor: pointer;
+    }
 `;
 
 const AnswerPrevBtn = styled.button`
@@ -55,7 +80,19 @@ const AnswerPrevBtn = styled.button`
     border-radius: 10px;
     border: 0.5px black solid;
     background-color: rgba(255,255,255,0.1);
+    :hover {
+        cursor: pointer;
+    }
 `;
+
+const HashtagTitle = styled.h3``;
+
+const HashtagContainer = styled.div`
+    display: flex;
+    gap: 5px;
+`;
+
+const Hashtag = styled.span``;
 
 const Cheer = styled.div`
     text-align: center;
@@ -73,13 +110,26 @@ const TargetContainer = styled.div`
 
 const TargetContent = styled.div``;
 
-const ShortermFinding = ({userObj, targets}) => {
+const TargetNeed = styled.div``;
+
+const HomeBtn = styled.button`
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
+
+const ShortermFinding = ({userObj, targets, goHome}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [selection, setSelection] = useState('');
     const [longterm, setLongterm] = useState('');
+    const [shorttermArr, setShorttermArr] = useState([]);
     const [want, setWant] = useState('');
     const [need, setNeed] = useState('');
-    const [numericValue, setNumericValue] = useState('');
+    const [needArr, setNeedArr] = useState([]);
+    const [numericValueArr, setNumericValueArr] = useState([]);
     const [date, setDate] = useState('');
     const [step, setStep] = useState('');
 
@@ -89,8 +139,6 @@ const ShortermFinding = ({userObj, targets}) => {
             setWant(e.target.value)
         } else if (name === "need") {
             setNeed(e.target.value)
-        } else if (name === "value") {
-            setNumericValue(e.target.value)
         } else if (name === "date") {
             setDate(e.target.value)
         }
@@ -101,26 +149,45 @@ const ShortermFinding = ({userObj, targets}) => {
         setStep(step-1);
     }
 
+    const onClickPlus = e => {
+        const arr = [...shorttermArr];
+        arr.push([need])
+        setShorttermArr(arr);
+        setNeedArr([...needArr, need]);
+        setNeed('');
+    }
+
     const onClick = e => {
         const name = e.target.getAttribute("name")
         if (name === "want" && want) {
             setStep(1)
+        } else if (e.target.getAttribute("name") === "numericValue") {
+            const shorttermarr = shorttermArr;
+            const arr = [];
+            const contents = document.querySelectorAll("input[name='numericValue']")
+            contents.forEach((content, index) => {
+                shorttermarr[index].push(content.value);
+                arr[index] = content.value;
+            })
+            setShorttermArr(shorttermarr);
+            setNumericValueArr(arr);
+            setStep(step + 1)            
         } else {
             setStep(step + 1)
         }
     }
 
-    const onClickSelection = e => {
-        setSelection(JSON.parse(e.target.getAttribute("value")))
-    };
+    const onClickNeed = e => {
+        setWant(e.target.innerHTML);
+    }
 
     const onSubmit = async () => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
             want,
-            need,
-            numericValue,
+            needArr,
+            numericValueArr,
             date,
             type: "shortterm",
             queryType: "target",
@@ -133,9 +200,10 @@ const ShortermFinding = ({userObj, targets}) => {
         alert("성공적으로 설정되었습니다!")
         setWant('')
         setNeed('')
-        setNumericValue('');
+        setNumericValueArr([]);
         setDate('');
         setStep('');
+        setSelection('');
     }
 
     const getLongterm = () => {
@@ -169,10 +237,19 @@ const ShortermFinding = ({userObj, targets}) => {
                 {!step && (
                 <>
                     <Question>
-                        {selection && selection !== 1
+                        {selection !== 1
                         ? `${selection.want}을(를) 위해 1년 내에 해야하는 것이 있나요?`
                         : '1년 내에 하고 싶은 것이 있나요?' }
                     </Question>
+                    {selection !== 1 &&
+                    <NeedContainer>
+                        {selection.needArr.map(needData => 
+                            <NeedBtn onClick={onClickNeed}>
+                                {needData}
+                            </NeedBtn>    
+                        )}
+                    </NeedContainer>
+                    }
                     <AnswerInput onChange={onChange} name="want" value={want} type="text" />
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
@@ -183,7 +260,10 @@ const ShortermFinding = ({userObj, targets}) => {
                 <>
                     <Question>하고 싶은걸 하기 위해 필요한 것이 있나요?</Question>
                     <span>(ex. 부자 되기 : 돈)</span><br />
-                    <AnswerInput onChange={onChange} name="need" value={need} type="text" />
+                    <AnswerBox>
+                        <AnswerInput onChange={onChange} value={need} name="need" type="text" />
+                        <AnswerInputPlus onClick={onClickPlus}>추가하기</AnswerInputPlus>
+                    </AnswerBox>
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
                         <AnswerNextBtn name="need" onClick={onClick}>다음으로</AnswerNextBtn>
@@ -199,16 +279,27 @@ const ShortermFinding = ({userObj, targets}) => {
                         필요한 것을 수정해보세요.
                     </Question>
                     <Question>(ex. 부자되기 {'>'} 월 수입 500만원 <br /> or 매 끼니 가격 안보고 메뉴 시키기)</Question><br />
-                    <AnswerInput onChange={onChange} name="value"  value={numericValue} type="text" />
+                    {shorttermArr.map(content => 
+                    <AnswerBox>
+                        <AnswerLabel>{content} : </AnswerLabel>
+                        <AnswerInput name="numericValue" type="text" />
+                    </AnswerBox>                        
+                    )}
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
-                        <AnswerNextBtn name="value" onClick={onClick}>다음으로</AnswerNextBtn>
+                        <AnswerNextBtn name="numericValue" onClick={onClick}>다음으로</AnswerNextBtn>
                     </BtnContainer>
                 </>
             )}     
             {step === 3 && (
                 <>
-                    <Question>필요한 것을 달성할 기간을 정해보세요.</Question>
+                    <Question>
+                        {selection !== 1
+                            ? `${want}을(를) 달성할 기간을 정해보세요`
+                            : '목표를 달성할 기간을 정해보세요.' 
+                        }
+
+                    </Question>
                     <span></span><br />
                     <AnswerInput onChange={onChange} name="date"  value={date} type="date" />
                     <BtnContainer>
@@ -231,11 +322,13 @@ const ShortermFinding = ({userObj, targets}) => {
                     <TargetContent>
                         목표 : {want}
                     </TargetContent>
+                    {shorttermArr && shorttermArr.map((content, index) => 
                     <TargetContent>
-                        필요한 것 : {need}, {numericValue}
+                        필요한 것 {index+1} : {content[0]} {content[1] && `, ${content[1]}`} {content[2] && `: ${content[2]}까지`}
                     </TargetContent>
+                    )}
                     <TargetContent>
-                        달성 기한 : {date}까지
+                        {date && `달성 기한 : ${date}까지`}
                     </TargetContent>
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
@@ -254,14 +347,13 @@ const ShortermFinding = ({userObj, targets}) => {
                 <TargetContent>
                     {want && `원하는 것 : ${want}`}
                 </TargetContent>
+                {shorttermArr && shorttermArr.map((content, index) => 
+                    <TargetContent>
+                        필요한 것 {index+1} : {content[0]}{content[1] && `, ${content[1]}`} {content[2] && `: ${content[2]}까지`}
+                    </TargetContent>
+                )}
                 <TargetContent>
-                    {need && `필요한 것 : ${need}`}
-                </TargetContent>
-                <TargetContent>
-                    {numericValue && `수치화된 값 : ${numericValue}`}
-                </TargetContent>
-                <TargetContent>
-                    {date && `달성 기간 : ${date}`}
+                    {date && `달성 기한 : ${date}까지`}
                 </TargetContent>
             </TargetContainer>
             }
@@ -269,6 +361,9 @@ const ShortermFinding = ({userObj, targets}) => {
             }
             </>
             }
+            <HomeBtn onClick={goHome}>
+                홈으로
+            </HomeBtn>
         </Container>
     )
 }

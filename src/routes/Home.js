@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "../components/Loading";
+import Longterm from "../components/Longterm";
 import Plan from "../components/Plan";
-import Target from "../components/Target";
+import Routine from "../components/Routine";
+import Shortterm from "../components/Shortterm";
 import { authService, dbService } from "../fBase";
 
 const Contaier = styled.div`
@@ -95,7 +97,7 @@ const Home = ({userObj, targets}) => {
                         <TargetSubContainer>
                             <TargetTitle>장기 목표</TargetTitle>
                             {longterms.map(target => 
-                            <Target key={target.targetId} target={target} userObj={userObj} />
+                            <Longterm key={target.targetId} target={target} userObj={userObj} />
                             )}
                             <Contour />
                         </TargetSubContainer>
@@ -104,7 +106,7 @@ const Home = ({userObj, targets}) => {
                         <TargetSubContainer>
                             <TargetTitle>단기 목표</TargetTitle>
                             {shortterms.map(target => 
-                            <Target key={target.targetId} target={target} userObj={userObj} />
+                            <Shortterm key={target.targetId} target={target} userObj={userObj} />
                             )}
                             <Contour />                            
                         </TargetSubContainer>
@@ -122,7 +124,7 @@ const Home = ({userObj, targets}) => {
                         <TargetSubContainer>
                             <TargetTitle>루틴</TargetTitle>
                             {routines.map(target => 
-                            <Target key={target.targetId} target={target} userObj={userObj} />
+                            <Routine key={target.targetId} target={target} userObj={userObj} />
                             )}
                             <Contour />
                         </TargetSubContainer>

@@ -68,9 +68,8 @@ const LogoImg = styled.img`
     height: 30px;
 `;
 
-const Navigation = () => {
+const Navigation = ({userObj}) => {
     const [locationName, setLocationName] = useState("/");
-    const location = useLocation();
     const history = useHistory();
 
     const clickNav = (e) => {
@@ -92,38 +91,30 @@ const Navigation = () => {
         }
     }
 
-    const getLocation = () => {
-        setLocationName(location.pathname)
-    }
-
-    useEffect(() => {
-        getLocation();
-    }, [])
-
     return (
         <Container>
             <NavHeader>
-                내 꿈은 행복한 사람
+                내 꿈은 {userObj.dream}한 사람
             </NavHeader>
             <NavComponentContainer>
                 <NavComponent name="home" onClick={clickNav}>
-                    <FontAwesomeIcon icon={faHome} />
+                    <FontAwesomeIcon name="home" icon={faHome} />
                     {locationName === "/" && <Bar />}
                 </NavComponent>
                 <NavComponent name="community" onClick={clickNav}>
-                    <FontAwesomeIcon icon={faUserFriends} />
+                    <FontAwesomeIcon name="community" icon={faUserFriends} />
                     {locationName === "/community" && <Bar />}
                 </NavComponent>
                 <NavComponent name="target" onClick={clickNav}>
-                    <FontAwesomeIcon icon={faBullseye} />
+                    <FontAwesomeIcon name="target" icon={faBullseye} />
                     {locationName === "/goal" && <Bar />}
                 </NavComponent>
                 <NavComponent name="todo" onClick={clickNav}>
-                    <FontAwesomeIcon icon={faCalendar} />
+                    <FontAwesomeIcon name="todo" icon={faCalendar} />
                     {locationName === "/todo" && <Bar />}
                 </NavComponent>
                 <NavComponent name="profile" onClick={clickNav}>
-                    <FontAwesomeIcon icon={faUserCircle} />
+                    <FontAwesomeIcon name="profile" icon={faUserCircle} />
                     {locationName === "/profile" && <Bar />}
                 </NavComponent>
             </NavComponentContainer>

@@ -11,6 +11,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: 50px;
+    font-family: Kyobo Handwriting;
 `;
 
 const Question = styled.span`
@@ -19,9 +20,9 @@ const Question = styled.span`
     line-height: 140%;
 `;
 
-const ShorttermContainer = styled.div``;
+const ThingsContainer = styled.div``;
 
-const ShorttermTitle = styled.div`
+const TargetTitle = styled.div`
     border: 1px solid black;
     color: black;
     padding: 10px 15px;
@@ -36,11 +37,36 @@ const BtnContainer = styled.div`
     margin-bottom: 20px;
 `;
 
+const WantContainer = styled.div`
+    margin: 20px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
+const WantLabel = styled.label``;
+
 const AnswerInput = styled.input``;
 
-const AnswerNextBtn = styled.button``;
+const AnswerNextBtn = styled.button`
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
 
-const AnswerPrevBtn = styled.button``;
+const AnswerPrevBtn = styled.button`
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
 
 const Cheer = styled.div`
     text-align: center;
@@ -58,11 +84,22 @@ const TargetContainer = styled.div`
 
 const TargetContent = styled.div``;
 
-const RoutineFinding = ({userObj, targets}) => {
+const HomeBtn = styled.button`
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
+
+const RoutineFinding = ({userObj, targets, goHome}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [want, setWant] = useState('');
     const [need, setNeed] = useState('');
+    const [prize, setPrize] = useState('');
     const [numericValue, setNumericValue] = useState('');
+    const [longterms, setLongterms] = useState([]);
     const [shortterms, setShortterms] = useState([]);
     const [plans, setPlans] = useState([]);
     const [date, setDate] = useState('');
@@ -72,13 +109,15 @@ const RoutineFinding = ({userObj, targets}) => {
     const onChange = (e) => {
         const name = e.target.getAttribute("name")
         if (name === "want") {
-            setWant(e.target.value)
+            setWant(e.target.value);
+            setSelection(e.target.value);
+            setStep(1);
         } else if (name === "need") {
-            setNeed(e.target.value)
-        } else if (name === "value") {
-            setNumericValue(e.target.value)
+            setNeed(e.target.value);
         } else if (name === "date") {
-            setDate(e.target.value)
+            setDate(e.target.value);
+        } else if (name === "prize") {
+            setPrize(e.target.value);
         }
     }
 
@@ -88,7 +127,8 @@ const RoutineFinding = ({userObj, targets}) => {
     }
 
     const onClickSelection = e => {
-        setSelection(JSON.parse(e.target.getAttribute("value")))
+        setSelection(e.target.getAttribute("value"))
+        setStep(1);
     };
 
     const onClick = e => {
@@ -104,10 +144,10 @@ const RoutineFinding = ({userObj, targets}) => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
-            want,
+            want : selection,
             need,
-            numericValue,
             date,
+            prize,
             type: "routine",
             queryType: "target",
             state: "ongoing",
@@ -117,18 +157,20 @@ const RoutineFinding = ({userObj, targets}) => {
         }
         await dbService.collection(`${userObj.uid}`).doc(targetId).set(targetObj)
         alert("성공적으로 설정되었습니다!")
-        setWant('')
-        setNeed('')
-        setNumericValue('');
+        setWant('');
+        setNeed('');
         setDate('');
+        setPrize('');
         setStep('');
     }
 
     const getShortterm = () => {
-        const filteredPlans = targets.filter(target => target.state === "ongoing" && target.type === "plan");
+        const filteredLongterms = targets.filter(target => target.state === "ongoing" && target.type === "longterm");
         const filteredShortterms = targets.filter(target => target.state === "ongoing" && target.type === "shortterm");
-        setPlans(filteredPlans);
+        const filteredPlans = targets.filter(target => target.state === "ongoing" && target.type === "plan");
+        setLongterms(filteredLongterms);
         setShortterms(filteredShortterms);
+        setPlans(filteredPlans);
         setIsLoading(false);
     };
 
@@ -143,19 +185,35 @@ const RoutineFinding = ({userObj, targets}) => {
             : <>
             {!step && (
                 <>
-                    <Question>루틴을 세워봅시다.</Question>
-                    <ShorttermContainer>{shortterms.map(target => 
-                    <ShorttermTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}</ShorttermTitle>
-                    )}</ShorttermContainer>
-                    <AnswerInput onChange={onChange} name="want" value={want} type="text" />
-                    <BtnContainer>
-                        <AnswerNextBtn onClick={onClick} name="want">다음으로</AnswerNextBtn>
-                    </BtnContainer>
+                    <Question>무엇을 위한 루틴인가요?</Question>
+                    <ThingsContainer>
+                        {longterms.map(target => 
+                            <TargetTitle onClick={onClickSelection} value={target.want}>{target.want}
+                        </TargetTitle>
+                        )}
+                    </ThingsContainer>
+                    <ThingsContainer>
+                        {shortterms.map(target => 
+                            <TargetTitle onClick={onClickSelection} value={target.want}>{target.want}
+                        </TargetTitle>
+                        )}
+                    </ThingsContainer>
+                    <ThingsContainer>
+                        {plans.map(target => 
+                            <TargetTitle onClick={onClickSelection} value={target.target}>{target.target}
+                        </TargetTitle>
+                        )}
+                    </ThingsContainer>
+                    <WantContainer>
+                        <WantLabel>새로운 목표</WantLabel>
+                        <AnswerInput onChange={onChange} name="want" value={want} type="text" />
+                        <AnswerNextBtn onClick={onClick} name="want">을 위한 루틴</AnswerNextBtn>
+                    </WantContainer>
                 </>
             )}
             {step === 1 && (
                 <>
-                    <Question>하고 싶은걸 하기 위해 필요한 것이 있나요?</Question>
+                    <Question>{selection}을 위해 반복해야하는 것이 있나요?</Question>
                     <span>(ex. 부자 되기 : 돈)</span><br />
                     <AnswerInput onChange={onChange} name="need" value={need} type="text" />
                     <BtnContainer>
@@ -167,23 +225,10 @@ const RoutineFinding = ({userObj, targets}) => {
             {step === 2 && (
                 <>
                     <Question>
-                        필요한 것을 얻기위해 꾸준히 할 일이 있나요?
-                    </Question>
-                    <Question>ex) 운동</Question><br />
-                    <AnswerInput onChange={onChange} name="value"  value={numericValue} type="text" />
-                    <BtnContainer>
-                        <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
-                        <AnswerNextBtn name="value" onClick={onClick}>다음으로</AnswerNextBtn>
-                    </BtnContainer>
-                </>
-            )}     
-            {step === 3 && (
-                <>
-                    <Question>
-                        할 일은 언제 한번씩은 해야하나요?
+                        일 단위 반복 주기는 어떤가요?
                     </Question>
                     <span></span><br />
-                    <AnswerInput onChange={onChange} name="date"  value={date} type="date" />
+                    <AnswerInput onChange={onChange} name="date"  value={date} type="number" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
                             이전으로
@@ -192,32 +237,47 @@ const RoutineFinding = ({userObj, targets}) => {
                             다음으로
                         </AnswerNextBtn>
                     </BtnContainer>
-                    <Cheer>
-                        <CheerMent>
-                            {Cheers.value}
-                        </CheerMent>
-                    </Cheer>
                 </>
             )}         
+            {step === 3 && (
+                <>
+                    <Question>
+                        루틴을 이뤄낸 나에게 줄 수 있는 보상이 있을까요?
+                    </Question>
+                    <span></span><br />
+                    <AnswerInput onChange={onChange} name="prize"  value={prize} type="text" />
+                    <BtnContainer>
+                        <AnswerPrevBtn onClick={onClickPrev}>
+                            이전으로
+                        </AnswerPrevBtn>
+                        <AnswerNextBtn name="prize" onClick={onClick}>
+                            다음으로
+                        </AnswerNextBtn>
+                    </BtnContainer>
+                </>
+            )}    
             {step === 4 && (
                 <TargetContainer>
                     <TargetContent>
-                        목표 : {want}
+                        목표 : {selection}
                     </TargetContent>
                     <TargetContent>
-                        필요한 것 : {need}, {numericValue}
+                        필요한 것 : {need}
                     </TargetContent>
                     <TargetContent>
-                        달성 기한 : {date}까지
+                        반복 주기 : {date}일에 한 번
+                    </TargetContent>
+                    <TargetContent>
+                        {prize && `보상 : ${prize}`}
                     </TargetContent>
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
                             수정하기
                         </AnswerPrevBtn>
                         <AnswerNextBtn onClick={() => {
-                            if (window.confirm("목표가 마음에 드시나요?")) { onSubmit() }
+                            if (window.confirm("루틴이 마음에 드시나요?")) { onSubmit() }
                         }}>
-                            목표 설정하기
+                            루틴 설정하기
                         </AnswerNextBtn>
                     </BtnContainer>
                 </TargetContainer>
@@ -225,21 +285,24 @@ const RoutineFinding = ({userObj, targets}) => {
             {!(step === 4) && 
             <TargetContainer>
                 <TargetContent>
-                    {want && `원하는 것 : ${want}`}
+                    {selection && `목표 : ${selection}`}
                 </TargetContent>
                 <TargetContent>
                     {need && `필요한 것 : ${need}`}
                 </TargetContent>
                 <TargetContent>
-                    {numericValue && `수치화된 값 : ${numericValue}`}
+                    {date && `반복 주기 : ${date}일에 한 번`}
                 </TargetContent>
                 <TargetContent>
-                    {date && `달성 기간 : ${date}`}
+                    {prize && `보상 : ${prize}`}
                 </TargetContent>
             </TargetContainer>
             }
             </>
             }
+            <HomeBtn onClick={goHome}>
+                홈으로
+            </HomeBtn>
         </Container>
     )
 }

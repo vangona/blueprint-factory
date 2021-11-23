@@ -15,67 +15,49 @@ import Signout from "./Signout";
 const AppRouter = ({ isLoggedIn, userObj, targets, refreshUser }) => {
     return (
         <Router>
-            <Route render={({ location }) => {
-                return (
-                        <TransitionGroup className="transition-group">
-                            <CSSTransition key={location.pathname} timeout={500} classNames="fade">
-                                <Switch location={location}>
-                                    <Route exact path="/register">
-                                        <Register />
-                                    </Route>
-                                    <Route exact path="/login">
-                                        <Login />
-                                    </Route>
-                                    <Route exact path="/cheerregister">
-                                        <CheerRegister />
-                                    </Route>
-                                </Switch>
-                            </CSSTransition>
-                        </TransitionGroup>
-                    );
-                }}>
-            </Route>
-            <Route render={({ location }) => {
-                return (
-                        <TransitionGroup className="transition-group">
-                            <CSSTransition key={location.pathname} timeout={500} classNames="fade">
-                                <Switch location={location}>
-                                    {isLoggedIn ? (
-                                    <>
-                                        <Route exact path="/">
-                                            <Home userObj={userObj} targets={targets} />
-                                        </Route>
-                                        <Route exact path="/goal">
-                                            <Goal userObj={userObj} targets={targets} />
-                                        </Route>
-                                        <Route exact path="/todo">
-                                            <Todos userObj={userObj} targets={targets} />
-                                        </Route>
-                                        <Route exact path="/community">
-                                            <Community />
-                                        </Route>
-                                        <Route exact path="/profile">
-                                            <Profile userObj={userObj} refreshUser={refreshUser} />
-                                        </Route>
-                                        <Route exact path="/signout">
-                                            <Signout />
-                                        </Route>
-                                        <Navigation />
-                                    </> 
-                                    ) : ( 
-                                    <>
-                                        <Route exact path="/">
-                                            <Register />
-                                        </Route>
-                                        <Redirect from="*" to="/" />       
-                                    </>
-                                    )}
-                                </Switch>
-                            </CSSTransition>
-                        </TransitionGroup>
-                    );
-                }}>
-            </Route>
+            <Switch>
+                <Route exact path="/register">
+                    <Register />
+                </Route>
+                <Route exact path="/login">
+                    <Login />
+                </Route>
+                <Route exact path="/cheerregister">
+                    <CheerRegister />
+                </Route>
+            </Switch>
+            <Switch>
+                {isLoggedIn ? (
+                <>
+                    <Route exact path="/">
+                        <Home userObj={userObj} targets={targets} />
+                    </Route>
+                    <Route exact path="/goal">
+                        <Goal userObj={userObj} targets={targets} />
+                    </Route>
+                    <Route exact path="/todo">
+                        <Todos userObj={userObj} targets={targets} />
+                    </Route>
+                    <Route exact path="/community">
+                        <Community />
+                    </Route>
+                    <Route exact path="/profile">
+                        <Profile userObj={userObj} refreshUser={refreshUser} />
+                    </Route>
+                    <Route exact path="/signout">
+                        <Signout />
+                    </Route>
+                    <Navigation userObj={userObj} />
+                </> 
+                ) : ( 
+                <>
+                    <Route exact path="/">
+                        <Register />
+                    </Route>
+                    <Redirect from="*" to="/" />       
+                </>
+                )}
+            </Switch>
         </Router>
     )
 }

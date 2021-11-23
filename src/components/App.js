@@ -9,7 +9,6 @@ const App = () => {
     const [init, setInit] = useState(false);
     const [userObj, setUserObj] = useState(null); 
     const [targets, setTargets] = useState([]);
-    const [dream, setDream] = useState('');
 
     const requestToken = async () => {
         let token = await setToken();
@@ -30,8 +29,8 @@ const App = () => {
         authService.onAuthStateChanged(async (user) => {
             if (user) {
                 let dream;
-                await dbService.collection(`${user.uid}`).doc("profile").get((doc) => {
-                    dream = doc.data().dream;
+                await dbService.collection(`${user.uid}`).doc("profile").get().then(data => {
+                    dream = data.data().dream;
                 })
                 setUserObj({
                     uid: user.uid,
@@ -48,8 +47,12 @@ const App = () => {
         requestToken();
     }, [])
 
-    const refreshUser = () => {
+    const refreshUser = async () => {
+        let dream;
         const user = authService.currentUser;
+        await dbService.collection(`${user.uid}`).doc("profile").get().then(data => {
+            dream = data.data().dream;
+        })
         setUserObj({
           displayName:user.displayName,
           uid:user.uid,

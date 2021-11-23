@@ -83,7 +83,14 @@ const HashtagContainer = styled.div`
 
 const Hashtag = styled.span``;
 
-const HomeBtn = styled.button``;
+const HomeBtn = styled.button`
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
 
 const LongtermFinding = ({userObj, goHome}) => {
     const [want, setWant] = useState('');
@@ -256,12 +263,12 @@ const LongtermFinding = ({userObj, goHome}) => {
                     {want && `목표 : ${want}`}
                 </TargetContent>
                 <TargetContent>
-                        {needArr && needArr.map((content, index) => 
+                    {needArr && needArr.map((content, index) => 
                         <TargetNeed>
                             필요한 것 {index+1} : {content}
                         </TargetNeed>
-                        )}
-                    </TargetContent>
+                    )}
+                </TargetContent>
                 <TargetContent>
                     {date && `달성 기간 : ${date}`}
                 </TargetContent>

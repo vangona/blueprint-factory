@@ -32,9 +32,9 @@ const TargetContent = styled.div`
 
 const TargetWant = styled.h3``;
 
-const TargetNeed = styled.div``;
+const TargetRoutine = styled.div``;
 
-const TargetDate = styled.div``;
+const TargetPrize = styled.div``;
 
 const TargetBtnContainer = styled.div`
     display: flex;
@@ -53,7 +53,7 @@ const TargetCancelBtn = styled.button`
     color: red;
 `;
 
-const Target = ({target, userObj}) => {
+const Routine = ({target, userObj}) => {
     const [btnState, setBtnState] = useState(``);
     const [completeFeeling, setCompleteFeeling] = useState('');
     const [cancelReason, setCancelReason] = useState('');
@@ -111,14 +111,11 @@ const Target = ({target, userObj}) => {
             <Line />
             <TargetContent key={target.targetId}>
                 <TargetWant>
-                    {target.want}
+                    {target.want}를 위해
                 </TargetWant>
-                <TargetDate>
-                    {target.date}까지
-                </TargetDate>
-                <TargetNeed>
-                    {target.need} : {target.numericValue}
-                </TargetNeed>
+                <TargetRoutine>
+                    {target.date}일 1{target.need}
+                </TargetRoutine>
                 {btnState === "complete" && 
                 <ReasonInput onChange={onChange} type="text" name="complete" />
                 }
@@ -138,4 +135,4 @@ const Target = ({target, userObj}) => {
     )
 }
 
-export default Target;
+export default Routine;

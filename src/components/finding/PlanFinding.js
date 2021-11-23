@@ -10,6 +10,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     margin-top: 50px;
+    font-family: Kyobo Handwriting;
 `;
 
 const Question = styled.span`
@@ -70,7 +71,16 @@ const TargetContainer = styled.div`
 
 const TargetContent = styled.div``;
 
-const PlanFinding = ({userObj, targets}) => {
+const HomeBtn = styled.button`
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    :hover {
+        cursor: pointer;
+    }
+`;
+
+const PlanFinding = ({userObj, targets, goHome}) => {
     const [selection, setSelection] = useState('');
     const [level, setLevel] = useState('');
     const [levelArr, setLevelArr] = useState([]);
@@ -189,10 +199,13 @@ const PlanFinding = ({userObj, targets}) => {
             <>
             {!selection &&
             <>  
-                <Question>나의 단기 목표들</Question>
-                <ShorttermContainer>{shortterms.map(target => 
-                    <ShorttermTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}</ShorttermTitle>
-                )}</ShorttermContainer>
+                <Question>계획의 목표는 무엇인가요?</Question>
+                <ShorttermContainer>
+                    {shortterms.map(target => 
+                        <ShorttermTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}
+                    </ShorttermTitle>
+                    )}
+                </ShorttermContainer>
             </>
             }
             {selection && !step && (
@@ -298,7 +311,7 @@ const PlanFinding = ({userObj, targets}) => {
                     <TargetContent>
                         {levelContent[1]} {levelContent[2] && `: ${levelContent[2]}`} {levelContent[2] && `${levelContent[3]}까지`}
                     </TargetContent>
-                )}
+                    )}
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>
                             수정하기
@@ -328,6 +341,9 @@ const PlanFinding = ({userObj, targets}) => {
             }
             </>
             }
+            <HomeBtn onClick={goHome}>
+                홈으로
+            </HomeBtn>
         </Container>
     )
 }
