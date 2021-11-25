@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { AiOutlineCheck } from "react-icons/ai";
 import { ImCross } from "react-icons/im"
 import { dbService } from "../fBase";
+import CheckLine from "./CheckLine";
 
 const Container = styled.div`
     display: flex;
@@ -40,10 +41,14 @@ const NeedContainer = styled.div`
 
 const NeedLabel = styled.h5`
     font-weight: bold;
-    margin-bottom: 10px;
 `;
 
-const Need = styled.h5``;
+const NeedCheck = styled.input``;
+
+const Need = styled.h5`
+    display: flex;
+    align-items: center;
+`;
 
 const Date = styled.h3``;
 
@@ -51,7 +56,6 @@ const TargetBtnContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
 `;
 
 const TargetCompletehBtn = styled.button`
@@ -127,11 +131,11 @@ const Shortterm = ({target, userObj}) => {
                 <Date>
                     {target.date}까지
                 </Date>
+                <NeedLabel>필요한 것</NeedLabel>
                 <NeedContainer>
-                    <NeedLabel>필요한 것</NeedLabel>
                     {target.needArr.map((need, index) => 
                         <Need>
-                            {need}, {target.numericValueArr[index]}
+                            <CheckLine line={`${need}, ${target.numericValueArr[index]}`} />
                         </Need>    
                     )}
                 </NeedContainer>

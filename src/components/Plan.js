@@ -31,6 +31,8 @@ const PlanColumn = styled.div`
 
 const PlanContent = styled.div``;
 
+const PlanCheck = styled.input``;
+
 const TargetContent = styled.div`
     display: flex;
     flex-direction: column;

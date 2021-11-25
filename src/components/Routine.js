@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { AiOutlineCheck } from "react-icons/ai";
 import { ImCross } from "react-icons/im"
 import { dbService } from "../fBase";
+import CheckLine from "./CheckLine";
 
 const Container = styled.div`
     display: flex;
@@ -32,7 +33,12 @@ const TargetContent = styled.div`
 
 const TargetWant = styled.h3``;
 
-const TargetRoutine = styled.div``;
+const RoutineCheck = styled.input``;
+
+const TargetRoutine = styled.div`
+    display: flex;
+    align-items: center;
+`;
 
 const TargetPrize = styled.div``;
 
@@ -114,7 +120,7 @@ const Routine = ({target, userObj}) => {
                     {target.want}를 위해
                 </TargetWant>
                 <TargetRoutine>
-                    {target.date}일 1{target.need}
+                    <CheckLine line={`${target.date}일 1${target.need}`} />
                 </TargetRoutine>
                 {btnState === "complete" && 
                 <ReasonInput onChange={onChange} type="text" name="complete" />
