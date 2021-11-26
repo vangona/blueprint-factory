@@ -124,6 +124,7 @@ const HomeBtn = styled.button`
 const ShortermFinding = ({userObj, targets, goHome}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [selection, setSelection] = useState('');
+    const [selectionId, setSelectionId] = useState('');
     const [longterm, setLongterm] = useState('');
     const [shorttermArr, setShorttermArr] = useState([]);
     const [want, setWant] = useState('');
@@ -179,6 +180,11 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
 
     const onClickNeed = e => {
         setWant(e.target.innerHTML);
+        if (selection === 1) {
+            setSelectionId(1);
+        } else {
+            setSelectionId([selection.targetId, e.target.innerHTML])
+        }
     }
 
     const onSubmit = async () => {
@@ -189,6 +195,7 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
             needArr,
             numericValueArr,
             date,
+            parentTarget: selectionId,
             type: "shortterm",
             queryType: "target",
             state: "ongoing",
@@ -230,7 +237,10 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
             <>
                 <Question>단기 목표가 장기 목표를 위한 것인가요?</Question>
                 <Selector targets={longterm} getSelection={getSelection} />
-                <SelectionTitle onClick={() => {setSelection(1)}}>새로운 단기 목표 만들기</SelectionTitle>
+                <SelectionTitle onClick={() => {
+                    setSelection(1);
+                    setSelectionId(1);
+                }}>새로운 단기 목표 만들기</SelectionTitle>
             </>
             : 
             <>
