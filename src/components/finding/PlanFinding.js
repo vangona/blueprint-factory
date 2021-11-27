@@ -162,6 +162,8 @@ const PlanFinding = ({userObj, targets, goHome}) => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
+            want: selection.want,
+            parentId: selection.targetId,
             level,
             levelContentArr,
             pointArr,
@@ -211,8 +213,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
             {selection && !step && (
                 <>
                     <Question>{selection.want}에 대해 기간을 나눠 계획을 세워봅시다.</Question>
-                    <Question>필요한 것 : {selection.need}</Question>
-                    <Question>수치 : {selection.numericValue}</Question>
+                    <Question>필요한 것 : {selection.want}</Question>
                     <Question>기한 : {selection.date}까지</Question>
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="plan">다음으로</AnswerNextBtn>
@@ -221,7 +222,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
             )}
             {step === 1 && (
                 <>
-                    <Question>{selection.need}를 단계로 나눈다면 몇 단계로 나눌 수 있을까요?</Question>                    
+                    <Question>{selection.want}를 단계로 나눈다면 몇 단계로 나눌 수 있을까요?</Question>                    
                     <AnswerInput onChange={onChange} name="level" value={level} type="number" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>

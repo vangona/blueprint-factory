@@ -127,7 +127,7 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
     }
 
     const onClickSelection = e => {
-        setSelection(e.target.getAttribute("value"))
+        setSelection(JSON.parse(e.target.getAttribute("value")))
         setStep(1);
     };
 
@@ -144,7 +144,8 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
-            want : selection,
+            want : selection.want,
+            parentId: selection.targetId,
             need,
             date,
             prize,
@@ -188,19 +189,19 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
                     <Question>무엇을 위한 루틴인가요?</Question>
                     <ThingsContainer>
                         {longterms.map(target => 
-                            <TargetTitle onClick={onClickSelection} value={target.want}>{target.want}
+                            <TargetTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}
                         </TargetTitle>
                         )}
                     </ThingsContainer>
                     <ThingsContainer>
                         {shortterms.map(target => 
-                            <TargetTitle onClick={onClickSelection} value={target.want}>{target.want}
+                            <TargetTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}
                         </TargetTitle>
                         )}
                     </ThingsContainer>
                     <ThingsContainer>
                         {plans.map(target => 
-                            <TargetTitle onClick={onClickSelection} value={target.target}>{target.target}
+                            <TargetTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}
                         </TargetTitle>
                         )}
                     </ThingsContainer>
@@ -213,7 +214,7 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
             )}
             {step === 1 && (
                 <>
-                    <Question>{selection}을 위해 반복해야하는 것이 있나요?</Question>
+                    <Question>{selection.want}을 위해 반복해야하는 것이 있나요?</Question>
                     <span>(ex. 부자 되기 : 돈)</span><br />
                     <AnswerInput onChange={onChange} name="need" value={need} type="text" />
                     <BtnContainer>
@@ -259,7 +260,7 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
             {step === 4 && (
                 <TargetContainer>
                     <TargetContent>
-                        목표 : {selection}
+                        목표 : {selection.want}
                     </TargetContent>
                     <TargetContent>
                         필요한 것 : {need}
@@ -285,7 +286,7 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
             {!(step === 4) && 
             <TargetContainer>
                 <TargetContent>
-                    {selection && `목표 : ${selection}`}
+                    {selection && `목표 : ${selection.want}`}
                 </TargetContent>
                 <TargetContent>
                     {need && `필요한 것 : ${need}`}

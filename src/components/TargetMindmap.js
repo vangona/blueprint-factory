@@ -13,7 +13,7 @@ const Container = styled.div`
 `;
 
 const TargetMindmap = ({userObj, targets}) => {
-
+  const [models, setModels] = useState([]);
   const [longterms, setLongterms] = useState('');
   const [shortterms, setShortterms] = useState('');
   const [plans, setPlans] = useState('');
@@ -61,47 +61,41 @@ const TargetMindmap = ({userObj, targets}) => {
           $(go.Shape, // the link's path shape
             { strokeWidth: 3, stroke: "#555" })
         );
-      
-      const models = targets.map(target => ({
-        key: `${target.targetId}`, parent: "3", name: `${target.targetId}`, source: "cat1.png"
-      }))
-
-      console.log(1)
 
       // it's best to declare all templates before assigning the model
       myDiagram.model = new go.TreeModel(
         [
-          ...models,
-          { key: "1",              name: "Don Meow",   source: "cat1.png" },
-          { key: "2", parent: "1", name: "Demeter",    source: "cat2.png" },
-          { key: "3", parent: "1", name: "Copricat",   source: "cat3.png" },
-          { key: "4", parent: "3", name: "Jellylorum", source: "cat4.png" },
-          { key: "5", parent: "3", name: "Alonzo",     source: "cat5.png" },
-          { key: "6", parent: "2", name: "Munkustrap", source: "cat6.png" }
+          ...models
         ]);
 
           return myDiagram;
 
       };
-
+      
+    const getModels = () => {
+      const data = targets.map((target, index) => ({
+        key: `${index}`, 
+        parent: `${target.parentId ? target.parentId : 1}`,
+        name: `${target.want}`, 
+        source: "cat1.png"
+      }));
+      setModels([...data]);
+    };
 
     const handleModelChange = (changes) => {
         console.log('GoJS Model changed!');
     };
+
+    useEffect(() => {
+      getModels();
+    })
 
     return (
         <Container> 
             <ReactDiagram
                 initDiagram={initDiagram}
                 divClassName='diagram-component'
-                nodeDataArray={        [
-                  { key: "1",              name: "Don Meow",   source: "cat1.png" },
-                  { key: "2", parent: "1", name: "Demeter",    source: "cat2.png" },
-                  { key: "3", parent: "1", name: "Copricat",   source: "cat3.png" },
-                  { key: "4", parent: "3", name: "Jellylorum", source: "cat4.png" },
-                  { key: "5", parent: "3", name: "Alonzo",     source: "cat5.png" },
-                  { key: "6", parent: "2", name: "Munkustrap", source: "cat6.png" }
-                  ]}
+                nodeDataArray={models}
                 onModelChange={handleModelChange} 
             />
         </Container>

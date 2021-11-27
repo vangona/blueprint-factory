@@ -120,7 +120,7 @@ const Plan = ({target, userObj}) => {
             <Line />
             <TargetContent key={target.targetId}>
                 <TargetName>
-                    {target.target}
+                    {target.want}
                 </TargetName>
                 <PlanContainer>
                     <PlanColumn>
