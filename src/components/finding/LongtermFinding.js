@@ -142,7 +142,7 @@ const LongtermFinding = ({userObj, goHome}) => {
         const targetId = uuidv4();
         const targetObj = {   
             targetId,
-            want,
+            display : want,
             needArr,
             date,
             hashtagArr,
@@ -157,8 +157,9 @@ const LongtermFinding = ({userObj, goHome}) => {
         alert("성공적으로 설정되었습니다!")
         setWant('')
         setNeedArr([])
-        setDate('');
+        setHashtagArr([]);
         setStep('');
+        setDate('');
     }
 
     return (
@@ -191,7 +192,7 @@ const LongtermFinding = ({userObj, goHome}) => {
             )}
             {step === 2 && (
                 <>
-                    <Question>장기 목표를 달성할 기간을 정해보세요.</Question>
+                    <Question>장기 목표의 마감기한을 정해주세요.</Question>
                     <span></span><br />
                     <AnswerInput onChange={onChange} name="date"  value={date} type="date" />
                     <BtnContainer>

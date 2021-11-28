@@ -120,7 +120,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
             const arr = [];
             const contents = document.querySelectorAll("input[name='levelContent']")
             contents.forEach((content, index) => {
-                levelarr[index].push(content.value);
+                levelarr[index][1] = content.value;
                 arr[index] = content.value;
             })
             setLevelArr(levelarr);
@@ -131,7 +131,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
             const arr = [];
             const contents = document.querySelectorAll("input[name='point']")
             contents.forEach((content, index) => {
-                levelarr[index].push(content.value);
+                levelarr[index][2] = content.value;
                 arr[index] = content.value;
             })
             setLevelArr(levelarr);
@@ -142,7 +142,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
             const arr = [];
             const contents = document.querySelectorAll("input[name='date']")
             contents.forEach((content, index) => {
-                levelarr[index].push(content.value);
+                levelarr[index][3] = content.value;
                 arr[index] = content.value;
             })
             console.log(levelarr);
@@ -162,7 +162,9 @@ const PlanFinding = ({userObj, targets, goHome}) => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
-            want: selection.want,
+            want: selection.display,
+            display: `${selection.display}를 위한 계획`,
+            displayArr: levelContentArr.join('\n'),
             parentId: selection.targetId,
             level,
             levelContentArr,
@@ -184,6 +186,8 @@ const PlanFinding = ({userObj, targets, goHome}) => {
         setPointArr([])
         setDateArr([]);
         setIsNow(false);
+        setSelection('');
+        setStep('');
     }
 
     const getShortterm = () => {
@@ -204,7 +208,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
                 <Question>계획의 목표는 무엇인가요?</Question>
                 <ShorttermContainer>
                     {shortterms.map(target => 
-                        <ShorttermTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}
+                        <ShorttermTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.display}
                     </ShorttermTitle>
                     )}
                 </ShorttermContainer>
@@ -212,8 +216,8 @@ const PlanFinding = ({userObj, targets, goHome}) => {
             }
             {selection && !step && (
                 <>
-                    <Question>{selection.want}에 대해 기간을 나눠 계획을 세워봅시다.</Question>
-                    <Question>필요한 것 : {selection.want}</Question>
+                    <Question>{selection.display}에 대해 기간을 나눠 계획을 세워봅시다.</Question>
+                    <Question>필요한 것 : {selection.display}</Question>
                     <Question>기한 : {selection.date}까지</Question>
                     <BtnContainer>
                         <AnswerNextBtn onClick={onClick} name="plan">다음으로</AnswerNextBtn>
@@ -222,7 +226,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
             )}
             {step === 1 && (
                 <>
-                    <Question>{selection.want}를 단계로 나눈다면 몇 단계로 나눌 수 있을까요?</Question>                    
+                    <Question>{selection.display}를 단계로 나눈다면 몇 단계로 나눌 수 있을까요?</Question>                    
                     <AnswerInput onChange={onChange} name="level" value={level} type="number" />
                     <BtnContainer>
                         <AnswerPrevBtn onClick={onClickPrev}>이전으로</AnswerPrevBtn>
@@ -238,8 +242,8 @@ const PlanFinding = ({userObj, targets, goHome}) => {
                     <AnswerContainer>
                         {levelArr.map(el => (
                             <AnswerBox>
-                                <AnswerLabel>{el}단계 : </AnswerLabel>
-                                <AnswerInput onChange={onChange} class="levelContent" name="levelContent" id="el" type="text" />
+                                <AnswerLabel>{el[0]}단계 : </AnswerLabel>
+                                <AnswerInput onChange={onChange} value={el[1] ? el[1] : null} class="levelContent" name="levelContent" id="el" type="text" />
                             </AnswerBox>                       
                         ))}
                     </AnswerContainer>
@@ -258,7 +262,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
                         {levelArr.map(el => (
                             <AnswerBox>
                                 <AnswerLabel>{el[1]} : </AnswerLabel>
-                                <AnswerInput class="point" name="point" id="el" type="text" />
+                                <AnswerInput class="point" name="point" value={el[2] ? el[2] : null} id="el" type="text" />
                             </AnswerBox>                       
                         ))}
                     </AnswerContainer>
@@ -275,7 +279,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
                         {levelArr.map(el => (
                             <AnswerBox>
                                 <AnswerLabel>{el[2]} : </AnswerLabel>
-                                <AnswerInput class="date" name="date" id="el" type="date" />
+                                <AnswerInput class="date" name="date" value={el[3] ? el[3] : null} id="el" type="date" />
                             </AnswerBox>                       
                         ))}
                     </AnswerContainer>
@@ -300,7 +304,7 @@ const PlanFinding = ({userObj, targets, goHome}) => {
             {step === 6 && (
                 <TargetContainer>
                     <TargetContent>
-                        목표 : {selection.want}
+                        목표 : {selection.display}
                     </TargetContent>
                     <TargetContent>
                         필요한 것 : {selection.need}

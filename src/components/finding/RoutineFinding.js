@@ -144,8 +144,9 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
-            want : selection.want,
+            want: selection.display,
             parentId: selection.targetId,
+            display: need,
             need,
             date,
             prize,
@@ -189,19 +190,19 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
                     <Question>무엇을 위한 루틴인가요?</Question>
                     <ThingsContainer>
                         {longterms.map(target => 
-                            <TargetTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}
+                            <TargetTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.display}
                         </TargetTitle>
                         )}
                     </ThingsContainer>
                     <ThingsContainer>
                         {shortterms.map(target => 
-                            <TargetTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}
+                            <TargetTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.display}
                         </TargetTitle>
                         )}
                     </ThingsContainer>
                     <ThingsContainer>
                         {plans.map(target => 
-                            <TargetTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}
+                            <TargetTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.display}
                         </TargetTitle>
                         )}
                     </ThingsContainer>
@@ -214,7 +215,7 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
             )}
             {step === 1 && (
                 <>
-                    <Question>{selection.want}을 위해 반복해야하는 것이 있나요?</Question>
+                    <Question>{selection.display}을 위해 반복해야하는 것이 있나요?</Question>
                     <span>(ex. 부자 되기 : 돈)</span><br />
                     <AnswerInput onChange={onChange} name="need" value={need} type="text" />
                     <BtnContainer>
@@ -260,7 +261,7 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
             {step === 4 && (
                 <TargetContainer>
                     <TargetContent>
-                        목표 : {selection.want}
+                        목표 : {selection.display}
                     </TargetContent>
                     <TargetContent>
                         필요한 것 : {need}
@@ -286,7 +287,7 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
             {!(step === 4) && 
             <TargetContainer>
                 <TargetContent>
-                    {selection && `목표 : ${selection.want}`}
+                    {selection && `목표 : ${selection.display}`}
                 </TargetContent>
                 <TargetContent>
                     {need && `필요한 것 : ${need}`}

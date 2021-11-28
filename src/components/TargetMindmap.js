@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { withTheme } from "styled-components";
 import * as go from 'gojs';
 import { ReactDiagram } from 'gojs-react';
 
@@ -43,12 +43,44 @@ const TargetMindmap = ({userObj, targets}) => {
                       { angle: 90, layerSpacing: 35 })
           });
       
+      function tooltipTextConverter(name) {
+        var str = "";
+        str += name;
+        return str;
+      }
+      
+      var tooltiptemplate =
+      $("ToolTip",
+        { "Border.fill": "whitesmoke", "Border.stroke": "black" },
+        $(go.TextBlock,
+          {
+            font: "bold 8pt Helvetica, bold Arial, sans-serif",
+            wrap: go.TextBlock.WrapFit,
+            margin: 5
+          },
+          new go.Binding("text", "", tooltipTextConverter))
+      );
+
+      function typeColorConverter(type) {
+        if (type === "longterm") return 'blue';
+        if (type === "shortterm") return 'red';
+        if (type === "plan") return 'skyblue';
+        if (type === "routine") return 'orange';
+        return "black";
+      }
+
       myDiagram.nodeTemplate =
-        $(go.Node, "Horizontal",
-          { background: "#44CCFF" },
-          $(go.Picture,
-            { margin: 10, width: 50, height: 50, background: "red" },
-            new go.Binding("source")),
+        $(go.Node, "Auto",
+        { deletable: false, toolTip: tooltiptemplate },
+        new go.Binding("text", "name"),
+          $(go.Shape, "Rectangle",
+          {
+            fill: "lightgray",
+            stroke: null, strokeWidth: 0,
+            stretch: go.GraphObject.Fill,
+            alignment: go.Spot.Center
+          },
+          new go.Binding("fill", "type", typeColorConverter)),
           $(go.TextBlock, "Default Text",
             { margin: 12, stroke: "white", font: "bold 16px sans-serif" },
             new go.Binding("text", "name"))
@@ -73,13 +105,23 @@ const TargetMindmap = ({userObj, targets}) => {
       };
       
     const getModels = () => {
-      const data = targets.map((target, index) => ({
-        key: `${index}`, 
-        parent: `${target.parentId ? target.parentId : 1}`,
-        name: `${target.want}`, 
-        source: "cat1.png"
+      const dream = {
+        key: 'dream',
+        name: `${userObj.dream}한 사람`,
+        type: 'dream',
+      }
+      const data = targets.map((target) => ({
+        key: `${target.targetId}`, 
+        parent: `${target.parentId 
+          ? target.parentId 
+          : target.type === 'longterm'
+          ? 'dream'
+          : 1
+        }`,
+        type: `${target.type}`,
+        name: `${target.display}`
       }));
-      setModels([...data]);
+      setModels([dream, ...data]);
     };
 
     const handleModelChange = (changes) => {

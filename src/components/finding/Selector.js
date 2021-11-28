@@ -21,7 +21,7 @@ const Selector = ({targets, getSelection}) => {
     return (
         <Container>
             {targets.map(target => 
-                    <SelectionTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.want}</SelectionTitle>
+                    <SelectionTitle onClick={onClickSelection} value={JSON.stringify(target)}>{target.display}</SelectionTitle>
                 )}
         </Container>
     )

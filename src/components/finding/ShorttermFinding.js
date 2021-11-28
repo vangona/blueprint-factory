@@ -183,7 +183,7 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
         if (selection === 1) {
             setSelectionId(1);
         } else {
-            setSelectionId([selection.targetId, e.target.innerHTML])
+            setSelectionId(selection.targetId)
         }
     }
 
@@ -191,11 +191,11 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
-            want,
+            display : want,
             needArr,
             numericValueArr,
             date,
-            parentTarget: selectionId,
+            parentId: selectionId,
             type: "shortterm",
             queryType: "target",
             state: "ongoing",
@@ -248,7 +248,7 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
                 <>
                     <Question>
                         {selection !== 1
-                        ? `${selection.want}을(를) 위해 1년 내에 해야하는 것이 있나요?`
+                        ? `${selection.display}을(를) 위해 1년 내에 해야하는 것이 있나요?`
                         : '1년 내에 하고 싶은 것이 있나요?' }
                     </Question>
                     {selection !== 1 &&
