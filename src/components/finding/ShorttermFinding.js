@@ -195,7 +195,7 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
             needArr,
             numericValueArr,
             date,
-            parentId: selectionId,
+            parentId: selectionId ? selectionId : null,
             type: "shortterm",
             queryType: "target",
             state: "ongoing",

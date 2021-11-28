@@ -112,9 +112,11 @@ const TargetMindmap = ({userObj, targets}) => {
       }
       const data = targets.map((target) => ({
         key: `${target.targetId}`, 
-        parent: `${target.parentId 
+        parent: `${target.parentId
           ? target.parentId 
           : target.type === 'longterm'
+          ? 'dream'
+          : target.type === 'shortterm'
           ? 'dream'
           : 1
         }`,
