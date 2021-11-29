@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import TargetMindmap from "../components/TargetMindmap";
 
@@ -16,9 +16,6 @@ const Container = styled.div`
 `;
 
 const Goal = ({userObj, targets}) => {
-
-    useEffect(() => {
-    }, [])
     
     return (
         <Container>

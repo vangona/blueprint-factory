@@ -15,15 +15,15 @@ const App = () => {
         console.log('token === ', token)
     }
 
-    const getTargets = async (user) => {
-        await dbService.collection(`${user.uid}`).where("queryType", "==", "target").get()
-        .then(querySnapshot => {
+    const getTargets = (user) => {
+        dbService.collection(`${user.uid}`).where("queryType", "==", "target").onSnapshot(querySnapshot => {
             const targetData = querySnapshot.docs.map(snapshot => ({
                 ...snapshot.data()
-            }))
-        setTargets(targetData)
-    })
-    }
+            }));
+            setTargets(targetData);
+            setInit(true);
+        });
+    };
 
     useEffect(() => {
         authService.onAuthStateChanged(async (user) => {
@@ -41,8 +41,8 @@ const App = () => {
                 getTargets(user);
             } else {
                 setUserObj(null);
+                setInit(true);
             }
-            setInit(true)
         })
         requestToken();
     }, [])
@@ -63,7 +63,10 @@ const App = () => {
 
     return (
         <>
-        {init ? <AppRouter isLoggedIn={Boolean(userObj)} refreshUser={refreshUser} userObj={ userObj } targets={targets} /> : <Loading />}
+        {init 
+        ? <AppRouter isLoggedIn={Boolean(userObj)} refreshUser={refreshUser} userObj={ userObj } targets={targets} /> 
+        : <Loading />
+        }
         </>
     )
 };

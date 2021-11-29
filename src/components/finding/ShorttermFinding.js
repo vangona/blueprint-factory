@@ -189,15 +189,10 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
 
     const onSubmit = async () => {
         const targetId = uuidv4();
-        const displayContent = needArr.map(need => ({
-            text: need
-            })
-        );
         const targetObj = {
             targetId,
             display : want,
-            needArr,
-            displayContent,
+            displayContent : needArr,
             numericValueArr,
             date,
             parentId: selectionId ? selectionId : null,

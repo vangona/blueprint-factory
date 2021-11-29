@@ -15,10 +15,6 @@ const Container = styled.div`
 
 const TargetMindmap = ({userObj, targets}) => {
   const [models, setModels] = useState([]);
-  const [longterms, setLongterms] = useState('');
-  const [shortterms, setShortterms] = useState('');
-  const [plans, setPlans] = useState('');
-  const [routines, setRoutines] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
     const initDiagram = () => {
@@ -134,13 +130,8 @@ const TargetMindmap = ({userObj, targets}) => {
         );
 
       // it's best to declare all templates before assigning the model
-      myDiagram.model = new go.TreeModel(
-        [
-          ...models
-        ]);
-
+      myDiagram.model = new go.TreeModel(models);
           return myDiagram;
-
       };
       
     const getModels = () => {
@@ -148,8 +139,9 @@ const TargetMindmap = ({userObj, targets}) => {
         key: 'dream',
         name: `${userObj.dream}한 사람`,
         type: 'dream',
-      }
-      const data = targets.map((target) => ({
+      };
+
+      const dataArr = targets.map((target) => ({
         key: `${target.targetId}`, 
         parent: `${target.parentId
           ? target.parentId 
@@ -161,25 +153,19 @@ const TargetMindmap = ({userObj, targets}) => {
         }`,
         type: `${target.type}`,
         name: `${target.display}`,
-        actions: target.needArr && target.needArr.map(need => (
-          {text: need}
+        actions: Array.isArray(target.displayContent) ? target.displayContent.map((need, index) => (
+          {text: `${index + 1} : ${need}`}
           )
         )
+        : target.displayContent && [{text: target.displayContent}]
       }));
-      setModels([dream, ...data]);
+
+      setModels([dream, ...dataArr]);
       setIsLoading(false);
     };
 
-    const getTargets = () => {
-      setLongterms(targets.filter(target => target.state === "ongoing" && target.type === "longterm"))
-      setShortterms(targets.filter(target => target.state === "ongoing" && target.type === "shortterm"))
-      setPlans(targets.filter(target => target.state === "ongoing" && target.type === "plan"))
-      setRoutines(targets.filter(target => target.state === "ongoing" && target.type === "routine"))
-      getModels();
-    }
-
     useEffect(() => {
-      getTargets();
+      getModels();
     }, [])
 
     const handleModelChange = (changes) => {

@@ -144,9 +144,9 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
         const targetId = uuidv4();
         const targetObj = {
             targetId,
-            want: selection.display,
+            display: `${selection.display}(을)를 위한 루틴`,
             parentId: selection.targetId,
-            display: need,
+            displayContent: `${date}일 1${need}`,
             need,
             date,
             prize,

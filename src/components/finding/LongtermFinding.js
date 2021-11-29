@@ -143,7 +143,7 @@ const LongtermFinding = ({userObj, goHome}) => {
         const targetObj = {   
             targetId,
             display : want,
-            needArr,
+            displayContent : needArr,
             date,
             hashtagArr,
             type: "longterm",
