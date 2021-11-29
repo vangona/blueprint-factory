@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled, { withTheme } from "styled-components";
 import * as go from 'gojs';
 import { ReactDiagram } from 'gojs-react';
+import Loading from "./Loading";
 
 const Container = styled.div`
   display: flex;
@@ -18,19 +19,7 @@ const TargetMindmap = ({userObj, targets}) => {
   const [shortterms, setShortterms] = useState('');
   const [plans, setPlans] = useState('');
   const [routines, setRoutines] = useState('');
-  const [isLoading, setIsLoading] = useState('');
-
-  const getTargets = async () => {
-      setLongterms(targets.filter(target => target.state === "ongoing" && target.type === "longterm"))
-      setShortterms(targets.filter(target => target.state === "ongoing" && target.type === "shortterm"))
-      setPlans(targets.filter(target => target.state === "ongoing" && target.type === "plan"))
-      setRoutines(targets.filter(target => target.state === "ongoing" && target.type === "routine"))
-      setIsLoading(false);
-  }
-
-  useEffect(() => {
-    getTargets();
-  }, [])
+  const [isLoading, setIsLoading] = useState(true);
 
     const initDiagram = () => {
       var $ = go.GraphObject.make;
@@ -43,9 +32,9 @@ const TargetMindmap = ({userObj, targets}) => {
                       { angle: 90, layerSpacing: 35 })
           });
       
-      function tooltipTextConverter(name) {
+      function tooltipTextConverter(target) {
         var str = "";
-        str += name;
+        str += JSON.stringify(target.name);
         return str;
       }
       
@@ -69,22 +58,72 @@ const TargetMindmap = ({userObj, targets}) => {
         return "black";
       }
 
+      const actionTemplate = 
+        $(go.Panel, "Horizontal",
+          $(go.TextBlock,
+            { font: "10pt Verdana, sans-serif" },
+            new go.Binding("text")
+          )
+        )
+
       myDiagram.nodeTemplate =
-        $(go.Node, "Auto",
-        { deletable: false, toolTip: tooltiptemplate },
+        $(go.Node, "Vertical",
+        new go.Binding("isTreeExpanded").makeTwoWay(),
+        new go.Binding("wasTreeExpanded").makeTwoWay(),
+        { deletable: false, toolTip: tooltiptemplate, selectionObjectName: "BODY" },
         new go.Binding("text", "name"),
+
+        $(go.Panel, "Auto",
+          { name: "BODY" },
           $(go.Shape, "Rectangle",
-          {
-            fill: "lightgray",
-            stroke: null, strokeWidth: 0,
-            stretch: go.GraphObject.Fill,
-            alignment: go.Spot.Center
-          },
-          new go.Binding("fill", "type", typeColorConverter)),
-          $(go.TextBlock, "Default Text",
-            { margin: 12, stroke: "white", font: "bold 16px sans-serif" },
-            new go.Binding("text", "name"))
-        );
+            new go.Binding("fill", "type", typeColorConverter)
+          ),
+          $(go.Panel, "Vertical",
+            { margin: 10 },
+            $(go.TextBlock,
+                {
+                  stretch: go.GraphObject.Horizontal,
+                  font: "bold 12pt Kyobo Handwriting",
+                  stroke: "white"
+                },
+                new go.Binding("text", "name")
+            ),
+            $(go.Panel, "Vertical",
+                { stretch: go.GraphObject.Horizontal, visible: false },
+                new go.Binding("visible", "actions", function(acts) {
+                  return (Array.isArray(acts) && acts.length > 0);
+                }),
+                $(go.Panel, "Table",
+                  { stretch: go.GraphObject.Horizontal },
+                  $(go.TextBlock, 
+                    {
+                      alignment: go.Spot.Left,
+                      font: "10pt Handwriting, sans-serif"
+                    }
+                  ),
+                  $("PanelExpanderButton", "COLLAPSIBLE",
+                    { column: 1, alignment: go.Spot.Right }
+                  )
+                ),
+                $(go.Panel, "Vertical",
+                    {
+                      name: "COLLAPSIBLE",
+                      padding: 8,
+                      stretch: go.GraphObject.Horizontal,
+                      background: "white",
+                      defaultAlignment: go.Spot.Left,
+                      itemTemplate: actionTemplate
+                    },
+                    new go.Binding("itemArray", "actions")
+                  )
+                )
+              )
+            ),
+            $(go.Panel,
+              { height: 17 },
+              $("TreeExpanderButton")  
+            )
+          );
       
       // define a Link template that routes orthogonally, with no arrowhead
       myDiagram.linkTemplate =
@@ -121,27 +160,42 @@ const TargetMindmap = ({userObj, targets}) => {
           : 1
         }`,
         type: `${target.type}`,
-        name: `${target.display}`
+        name: `${target.display}`,
+        actions: target.needArr && target.needArr.map(need => (
+          {text: need}
+          )
+        )
       }));
       setModels([dream, ...data]);
+      setIsLoading(false);
     };
+
+    const getTargets = () => {
+      setLongterms(targets.filter(target => target.state === "ongoing" && target.type === "longterm"))
+      setShortterms(targets.filter(target => target.state === "ongoing" && target.type === "shortterm"))
+      setPlans(targets.filter(target => target.state === "ongoing" && target.type === "plan"))
+      setRoutines(targets.filter(target => target.state === "ongoing" && target.type === "routine"))
+      getModels();
+    }
+
+    useEffect(() => {
+      getTargets();
+    }, [])
 
     const handleModelChange = (changes) => {
         console.log('GoJS Model changed!');
     };
 
-    useEffect(() => {
-      getModels();
-    })
-
     return (
         <Container> 
-            <ReactDiagram
+            {isLoading
+            ? <Loading />
+            : <ReactDiagram
                 initDiagram={initDiagram}
                 divClassName='diagram-component'
                 nodeDataArray={models}
                 onModelChange={handleModelChange} 
-            />
+            />}
         </Container>
     )
 }
