@@ -71,7 +71,7 @@ const TargetMindmap = ({userObj, targets}) => {
 
         $(go.Panel, "Auto",
           { name: "BODY" },
-          $(go.Shape, "Rectangle",
+          $(go.Shape, "RoundedRectangle",
             new go.Binding("fill", "type", typeColorConverter)
           ),
           $(go.Panel, "Vertical",
@@ -108,7 +108,7 @@ const TargetMindmap = ({userObj, targets}) => {
                       stretch: go.GraphObject.Horizontal,
                       background: "white",
                       defaultAlignment: go.Spot.Left,
-                      itemTemplate: actionTemplate
+                      itemTemplate: actionTemplate,
                     },
                     new go.Binding("itemArray", "actions")
                   )
