@@ -4,6 +4,7 @@ import LongtermFinding from "../components/finding/LongtermFinding";
 import ShorttermFinding from "../components/finding/ShorttermFinding";
 import PlanFinding from "../components/finding/PlanFinding";
 import RoutineFinding from "../components/finding/RoutineFinding";
+import { useLocation } from "react-router-dom";
 
 const Container = styled.div`
     position: absolute;
@@ -30,7 +31,9 @@ const GoalStateBtn = styled.button`
 `;
 
 const Todos = ({userObj, targets}) => {
+    const location = useLocation();
     const [goalState, setGoalState] = useState("");
+    const [parentId, setParentId] = useState("");
 
     const sendGoalState = (state) => {
         setGoalState(state);
@@ -63,6 +66,9 @@ const Todos = ({userObj, targets}) => {
     }
 
     useEffect(() => {
+        if (location.state) {
+            setParentId(location.state.parent);
+        }
     }, [])
     
     return (

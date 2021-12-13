@@ -3,6 +3,7 @@ import styled, { withTheme } from "styled-components";
 import * as go from 'gojs';
 import { ReactDiagram } from 'gojs-react';
 import Loading from "./Loading";
+import { useHistory } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -14,6 +15,7 @@ const Container = styled.div`
 `;
 
 const TargetMindmap = ({userObj, targets}) => {
+  const history = useHistory();
   const [models, setModels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -120,6 +122,24 @@ const TargetMindmap = ({userObj, targets}) => {
               $("TreeExpanderButton")  
             )
           );
+
+      myDiagram.nodeTemplate.contextMenu = 
+        $("ContextMenu",
+              $("ContextMenuButton",
+                $(go.TextBlock, "새로운 목표 추가하기"),
+                {
+                  click: function(e, obj) {
+                    const node = obj.part.adornedPart;
+                    if (node !== null) {
+                      history.push({
+                        pathname: "/todo",
+                        state: {parent: node.data.key}
+                      })
+                    }
+                  }
+                }
+              )
+        )
       
       // define a Link template that routes orthogonally, with no arrowhead
       myDiagram.linkTemplate =

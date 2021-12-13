@@ -135,13 +135,13 @@ const Longterm = ({target, userObj}) => {
                     {target.date}까지
                 </Date>
                 <NeedLabel>필요한 것</NeedLabel>
-                <NeedContainer>
+                {target.needArr.length && <NeedContainer>
                     {target.needArr.map((need) => 
                         <Need>
                             <CheckLine line={need} />
                         </Need>    
                     )}
-                </NeedContainer>
+                </NeedContainer>}
                 {btnState === "complete" && 
                 <ReasonInput onChange={onChange} type="text" name="complete" />
                 }
