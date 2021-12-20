@@ -93,7 +93,7 @@ const HomeBtn = styled.button`
     }
 `;
 
-const RoutineFinding = ({userObj, targets, goHome}) => {
+const RoutineFinding = ({userObj, targets, goHome, parent}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [want, setWant] = useState('');
     const [need, setNeed] = useState('');
@@ -177,8 +177,12 @@ const RoutineFinding = ({userObj, targets, goHome}) => {
     };
 
     useEffect(() => {
+        if (parent) {
+            setSelection(parent);
+            setStep(1);
+        }
         getShortterm();
-    }, [])
+    }, [parent])
 
     return (
         <Container>

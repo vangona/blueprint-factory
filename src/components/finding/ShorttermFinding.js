@@ -121,7 +121,7 @@ const HomeBtn = styled.button`
     }
 `;
 
-const ShortermFinding = ({userObj, targets, goHome}) => {
+const ShortermFinding = ({userObj, targets, goHome, parent}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [selection, setSelection] = useState('');
     const [selectionId, setSelectionId] = useState('');
@@ -195,7 +195,7 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
             displayContent : needArr,
             numericValueArr,
             date,
-            parentId: selectionId ? selectionId : null,
+            parentId: parent ? parent.targetId : null,
             type: "shortterm",
             queryType: "target",
             state: "ongoing",
@@ -224,8 +224,12 @@ const ShortermFinding = ({userObj, targets, goHome}) => {
     };
 
     useEffect(() => {
+        if (parent) {
+            setSelection(parent);
+            setSelectionId(parent.targetId)
+        }
         getLongterm();
-    }, [])
+    }, [parent])
 
     return (
         <Container>

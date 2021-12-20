@@ -80,7 +80,7 @@ const HomeBtn = styled.button`
     }
 `;
 
-const PlanFinding = ({userObj, targets, goHome}) => {
+const PlanFinding = ({userObj, targets, goHome, parent}) => {
     const [selection, setSelection] = useState('');
     const [level, setLevel] = useState('');
     const [levelArr, setLevelArr] = useState([]);
@@ -195,8 +195,11 @@ const PlanFinding = ({userObj, targets, goHome}) => {
     }
 
     useEffect(() => {
+        if (parent) {
+            setSelection(parent);
+        }
         getShortterm();
-    }, []);
+    }, [parent]);
 
     return (
         <Container>

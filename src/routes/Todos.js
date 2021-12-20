@@ -5,6 +5,7 @@ import ShorttermFinding from "../components/finding/ShorttermFinding";
 import PlanFinding from "../components/finding/PlanFinding";
 import RoutineFinding from "../components/finding/RoutineFinding";
 import { useLocation } from "react-router-dom";
+import { dbService } from "../fBase";
 
 const Container = styled.div`
     position: absolute;
@@ -33,7 +34,7 @@ const GoalStateBtn = styled.button`
 const Todos = ({userObj, targets}) => {
     const location = useLocation();
     const [goalState, setGoalState] = useState("");
-    const [parentId, setParentId] = useState("");
+    const [parent, setParent] = useState("");
 
     const sendGoalState = (state) => {
         setGoalState(state);
@@ -65,9 +66,17 @@ const Todos = ({userObj, targets}) => {
         setGoalState("");
     }
 
+    const getParent = (parentId) => {
+        dbService.collection(`${userObj.uid}`).doc(`${parentId}`).get().then((snapshot) => {
+            const data = snapshot.data();
+            setParent(data);
+        })
+    }
+
     useEffect(() => {
         if (location.state) {
-            setParentId(location.state.parent);
+            getParent(location.state.parent);
+            setGoalState(location.state.type);
         }
     }, [])
     
@@ -83,22 +92,22 @@ const Todos = ({userObj, targets}) => {
             }
             {goalState === "longterm" &&
             <>
-            <LongtermFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} goHome={goHome} />
+            <LongtermFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} goHome={goHome} parent={parent} />
             </>
             }      
             {goalState === "shortterm" &&
             <>
-            <ShorttermFinding targets={targets} userObj={userObj} goHome={goHome} />
+            <ShorttermFinding targets={targets} userObj={userObj} goHome={goHome} parent={parent} />
             </>
             }                       
             {goalState === "plan" &&
             <>
-            <PlanFinding targets={targets}  userObj={userObj} sendGoalState={sendGoalState} goHome={goHome} />
+            <PlanFinding targets={targets}  userObj={userObj} sendGoalState={sendGoalState} goHome={goHome} parent={parent} />
             </>
             }
             {goalState === "routine" &&
             <>
-            <RoutineFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} goHome={goHome} />
+            <RoutineFinding targets={targets} userObj={userObj} sendGoalState={sendGoalState} goHome={goHome} parent={parent} />
             </>
             }
         </Container>

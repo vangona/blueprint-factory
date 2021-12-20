@@ -92,7 +92,7 @@ const HomeBtn = styled.button`
     }
 `;
 
-const LongtermFinding = ({userObj, goHome}) => {
+const LongtermFinding = ({userObj, goHome, parent}) => {
     const [want, setWant] = useState('');
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);

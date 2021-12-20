@@ -126,14 +126,56 @@ const TargetMindmap = ({userObj, targets}) => {
       myDiagram.nodeTemplate.contextMenu = 
         $("ContextMenu",
               $("ContextMenuButton",
-                $(go.TextBlock, "새로운 목표 추가하기"),
+                $(go.TextBlock, "장기 목표 만들기"),
                 {
                   click: function(e, obj) {
                     const node = obj.part.adornedPart;
                     if (node !== null) {
                       history.push({
                         pathname: "/todo",
-                        state: {parent: node.data.key}
+                        state: {parent: node.data.key, type: "longterm"}
+                      })
+                    }
+                  }
+                }
+              ),
+              $("ContextMenuButton",
+                $(go.TextBlock, "단기 목표 만들기"),
+                {
+                  click: function(e, obj) {
+                    const node = obj.part.adornedPart;
+                    if (node !== null) {
+                      history.push({
+                        pathname: "/todo",
+                        state: {parent: node.data.key, type: "shortterm"}
+                      })
+                    }
+                  }
+                }
+              ),
+              $("ContextMenuButton",
+                $(go.TextBlock, "계획 세우기"),
+                {
+                  click: function(e, obj) {
+                    const node = obj.part.adornedPart;
+                    if (node !== null) {
+                      history.push({
+                        pathname: "/todo",
+                        state: {parent: node.data.key, type: "plan"}
+                      })
+                    }
+                  }
+                }
+              ),
+              $("ContextMenuButton",
+                $(go.TextBlock, "루틴 만들기"),
+                {
+                  click: function(e, obj) {
+                    const node = obj.part.adornedPart;
+                    if (node !== null) {
+                      history.push({
+                        pathname: "/todo",
+                        state: {parent: node.data.key, type: "routine"}
                       })
                     }
                   }
