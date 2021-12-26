@@ -120,7 +120,8 @@ const TargetMindmap = ({userObj, targets}) => {
             $(go.Panel,
               { height: 17 },
               $("TreeExpanderButton")  
-            )
+            ),
+            $("CheckBox", "",)
           );
 
       myDiagram.nodeTemplate.contextMenu = 
