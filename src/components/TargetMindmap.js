@@ -216,7 +216,7 @@ const TargetMindmap = ({userObj, targets}) => {
         type: `${target.type}`,
         name: `${target.display}`,
         actions: Array.isArray(target.displayContent) ? target.displayContent.map((need, index) => (
-          {text: `${index + 1} : ${need}`}
+          {text: `✔ ${need}`}
           )
         )
         : target.displayContent && [{text: target.displayContent}]

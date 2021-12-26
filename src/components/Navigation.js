@@ -109,10 +109,10 @@ const Navigation = ({userObj}) => {
                     <FontAwesomeIcon name="target" icon={faBullseye} />
                     {locationName === "/goal" && <Bar />}
                 </NavComponent>
-                <NavComponent name="todo" onClick={clickNav}>
+                {/* <NavComponent name="todo" onClick={clickNav}>
                     <FontAwesomeIcon name="todo" icon={faCalendar} />
                     {locationName === "/todo" && <Bar />}
-                </NavComponent>
+                </NavComponent> */}
                 <NavComponent name="profile" onClick={clickNav}>
                     <FontAwesomeIcon name="profile" icon={faUserCircle} />
                     {locationName === "/profile" && <Bar />}
