@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled, { withTheme } from "styled-components";
 import * as go from 'gojs';
 import { ReactDiagram } from 'gojs-react';
-import Loading from "./Loading";
 import { useHistory } from "react-router-dom";
+import Loading from "../Loading";
 
 const Container = styled.div`
   display: flex;
@@ -57,7 +57,7 @@ const TargetMindmap = ({userObj, targets}) => {
       }
 
       const actionTemplate = 
-        $(go.Panel, "Horizontal",
+        $("CheckBox", "Horizontal",
           $(go.TextBlock,
             { font: "10pt Verdana, sans-serif" },
             new go.Binding("text")
@@ -78,13 +78,20 @@ const TargetMindmap = ({userObj, targets}) => {
           ),
           $(go.Panel, "Vertical",
             { margin: 10 },
-            $(go.TextBlock,
-                {
-                  stretch: go.GraphObject.Horizontal,
-                  font: "bold 12pt Kyobo Handwriting",
-                  stroke: "white"
-                },
-                new go.Binding("text", "name")
+            $("Button", 
+              {
+                "ButtonBorder.fill" : null,
+                "ButtonBorder.stroke" : null,
+              },
+              $(go.TextBlock,
+                  {
+                    stretch: go.GraphObject.Horizontal,
+                    font: "bold 12pt Kyobo Handwriting",
+                    stroke: "white",
+                  },
+                  new go.Binding("text", "name")
+              ),
+              { click: (e, obj) => {history.push(`/goal/${obj.part.data.key}`)}, }
             ),
             $(go.Panel, "Vertical",
                 { stretch: go.GraphObject.Horizontal, visible: false },
@@ -121,7 +128,6 @@ const TargetMindmap = ({userObj, targets}) => {
               { height: 17 },
               $("TreeExpanderButton")  
             ),
-            $("CheckBox", "",)
           );
 
       myDiagram.nodeTemplate.contextMenu = 
@@ -217,7 +223,7 @@ const TargetMindmap = ({userObj, targets}) => {
         type: `${target.type}`,
         name: `${target.display}`,
         actions: Array.isArray(target.displayContent) ? target.displayContent.map((need, index) => (
-          {text: `✔ ${need}`}
+          {text: `${need}`}
           )
         )
         : target.displayContent && [{text: target.displayContent}]

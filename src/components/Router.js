@@ -1,14 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 import CheerRegister from "../routes/CheerRegister";
 import Community from "../routes/Community";
-import Goal from "../routes/Goal";
 import Home from "../routes/Home";
 import Login from "../routes/Login";
 import Profile from "../routes/Profile";
 import Register from "../routes/Register";
 import Todos from "../routes/Todos";
+import GoalDetail from "./details/GoalDetail";
 import Navigation from "./Navigation";
 import Signout from "./Signout";
 
@@ -32,8 +31,8 @@ const AppRouter = ({ isLoggedIn, userObj, targets, refreshUser }) => {
                     <Route exact path="/">
                         <Home userObj={userObj} targets={targets} />
                     </Route>
-                    <Route exact path="/goal">
-                        <Goal userObj={userObj} targets={targets} />
+                    <Route exact path="/goal/:id">
+                        <GoalDetail userObj={userObj} />
                     </Route>
                     <Route exact path="/todo">
                         <Todos userObj={userObj} targets={targets} />
