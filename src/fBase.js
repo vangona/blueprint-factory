@@ -5,7 +5,7 @@ import "firebase/storage";
 import "firebase/messaging";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAyWUFvA5F9Kz9WTr6Wfzbt2QYUZLouyr0",
+    apiKey:"AIzaSyAyWUFvA5F9Kz9WTr6Wfzbt2QYUZLouyr0",
     authDomain: "blueprint-maker.firebaseapp.com",
     projectId: "blueprint-maker",
     storageBucket: "blueprint-maker.appspot.com",

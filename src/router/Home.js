@@ -1,10 +1,17 @@
 import React from 'react';
+import styled from 'styled-components';
+import TargetMindmap from '../components/TargetMindmap';
+import { defaultContainer } from '../css/styleConstants';
 
-const Home = () => {
+const Container = styled.div`
+  ${ defaultContainer }
+`;
+
+const Home = ({userObj}) => {
   return (
-    <div>
-      Home
-    </div>
+    <Container>
+      <TargetMindmap userObj={userObj} />
+    </Container>
   );
 }
 
