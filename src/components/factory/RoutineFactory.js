@@ -6,12 +6,12 @@ const Container = styled.div`
     ${defaultContainer}
 `;
 
-const TargetFactory = () => {
+const RoutineFactory = () => {
     return (
         <Container>
-            TargetFactory
+            RoutineFactory
         </Container>
     );
 };
 
-export default TargetFactory;
+export default RoutineFactory;

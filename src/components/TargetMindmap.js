@@ -9,7 +9,7 @@ const Container = styled.div`
   ${defaultContainer}
 `;
 
-const TargetMindmap = ({userObj}) => {
+const TargetMindmap = ({ userObj }) => {
   const navigate = useNavigate();
   const [models, setModels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,15 +44,14 @@ const TargetMindmap = ({userObj}) => {
       );
 
       function typeColorConverter(type) {
-        if (type === "longterm") return 'blue';
-        if (type === "shortterm") return 'red';
+        if (type === "target") return 'blue';
         if (type === "plan") return 'skyblue';
         if (type === "routine") return 'orange';
         return "black";
       }
 
       const actionTemplate = 
-        $("CheckBox", "Horizontal",
+        $(go.Panel,
           $(go.TextBlock,
             { font: "10pt Verdana, sans-serif" },
             new go.Binding("text")
@@ -128,6 +127,20 @@ const TargetMindmap = ({userObj}) => {
       myDiagram.nodeTemplate.contextMenu = 
         $("ContextMenu",
               $("ContextMenuButton",
+                $(go.TextBlock, "목표 수정하기"),
+                {
+                  click: function(e, obj) {
+                    const node = obj.part.adornedPart;
+                    if (node !== null) {
+                      navigate({
+                        pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
+                        state: {type: "edit"}
+                      })
+                    }
+                  }
+                }
+              ),
+              $("ContextMenuButton",
                 $(go.TextBlock, "하위 목표 만들기"),
                 {
                   click: function(e, obj) {
@@ -135,21 +148,7 @@ const TargetMindmap = ({userObj}) => {
                     if (node !== null) {
                       navigate({
                         pathname: `/blueprint/maker/${node.data.key}`,
-                        state: {parent: node.data.key}
-                      })
-                    }
-                  }
-                }
-              ),
-              $("ContextMenuButton",
-                $(go.TextBlock, "목표 수정하기"),
-                {
-                  click: function(e, obj) {
-                    const node = obj.part.adornedPart;
-                    if (node !== null) {
-                      navigate({
-                        pathname: `/blueprint/${node.data.type}/${node.data.key}`,
-                        state: {parent: node.data.key, type: "shortterm"}
+                        state: {type: "targets"}
                       })
                     }
                   }
@@ -162,8 +161,8 @@ const TargetMindmap = ({userObj}) => {
                     const node = obj.part.adornedPart;
                     if (node !== null) {
                       navigate({
-                        pathname: "/blueprint/maker",
-                        state: {parent: node.data.key, type: "plan"}
+                        pathname: `/blueprint/plan/${node.data.key}`,
+                        state: {type : "plan"}
                       })
                     }
                   }
@@ -176,8 +175,8 @@ const TargetMindmap = ({userObj}) => {
                     const node = obj.part.adornedPart;
                     if (node !== null) {
                       navigate({
-                        pathname: "/blueprint/maker",
-                        state: {parent: node.data.key, type: "routine"}
+                        pathname: `/blueprint/routine/${node.data.key}`,
+                        state: {type: "routine"}
                       })
                     }
                   }
@@ -205,34 +204,20 @@ const TargetMindmap = ({userObj}) => {
         type: 'dream',
       };
 
-    //   const dataArr = targets.map((target) => ({
-    //     key: `${target.targetId}`, 
-    //     parent: `${target.parentId
-    //       ? target.parentId 
-    //       : target.type === 'longterm'
-    //       ? 'dream'
-    //       : target.type === 'shortterm'
-    //       ? 'dream'
-    //       : 1
-    //     }`,
-    //     type: `${target.type}`,
-    //     name: `${target.display}`,
-    //     actions: Array.isArray(target.displayContent) ? target.displayContent.map((need, index) => (
-    //       {text: `${need}`}
-    //       )
-    //     )
-    //     : target.displayContent && [{text: target.displayContent}]
-    //   }));
+      const dataArr = userObj.targets.map((target) => ({
+        key: `${target.id}`, 
+        parent: `${target.parentId}`,
+        type: `${target.type}`,
+        name: `${target.name}`,
+        actions: Array.isArray(target.explain) ? target.explain.map((need, index) => (
+          {text: `${need}`}
+          )
+        )
+        : target.explain && [{text: target.explain}],
+        deadline: `${target.deadline}`
+      }));
 
-      const data = {
-        key: 1,
-        parent: "dream",
-        type: "longterm",
-        name: "돈",
-        actions: "100만원"
-      }
-
-      setModels([dream, data]);
+      setModels([dream, ...dataArr]);
       setIsLoading(false);
     };
 

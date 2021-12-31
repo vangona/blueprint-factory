@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import TargetFactory from '../components/targets/TargetFactory';
 import { defaultContainer, defaultTitle } from '../css/styleConstants';
@@ -14,15 +14,16 @@ const Title = styled.div`
     ${defaultTitle};
 `;
 
-const BlueprintMaker = () => {
-    const { id } = useParams();
+const BlueprintMaker = ({userObj}) => {
+    const { id, type } = useParams();
+    const location = useLocation();
 
     return (
         <Container>
             <Title>
                 목표 만들기
             </Title>
-            <TargetFactory parentId={id ? id : null} />
+            <TargetFactory userObj={userObj} parentId={id ? id : null} /> 
         </Container>
     );
 };
