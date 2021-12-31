@@ -3,9 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Auth from "../router/Auth";
 import BlueprintMaker from "../router/BlueprintMaker";
 import Home from "../router/Home";
-import PlanFactory from "./factory/PlanFactory";
-import RoutineFactory from "./factory/RoutineFactory";
-import TargetFactory from "./factory/TargetFactory";
+import BlueprintEditor from "../router/BlueprintEditor";
 
 const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
     return (
@@ -18,17 +16,11 @@ const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
                     <Route path="/blueprint/maker" element={
                         <BlueprintMaker userObj={userObj} />
                     } />
-                    <Route path="/blueprint/edit/:id" element={
+                    <Route path="/blueprint/edit/:type/:id" element={
+                        <BlueprintEditor userObj={userObj} />
+                    } />
+                    <Route path="/blueprint/:type/:id" element={
                         <BlueprintMaker userObj={userObj} />
-                    } />
-                    <Route path="/blueprint/targets/:id" element={
-                        <TargetFactory userObj={userObj} />
-                    } />
-                    <Route path="/blueprint/plan/:id" element={
-                        <PlanFactory userObj={userObj} />
-                    } />
-                    <Route path="/blueprint/routine/:id" element={
-                        <RoutineFactory userObj={userObj} />
                     } />
                 </>
                 : 

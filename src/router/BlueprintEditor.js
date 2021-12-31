@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState } from 'react/cjs/react.development';
 import styled from 'styled-components';
-import Parent from '../components/factory/Parent';
-import PlanFactory from '../components/factory/PlanFactory';
-import RoutineFactory from '../components/factory/RoutineFactory';
-import TargetFactory from '../components/factory/TargetFactory';
+import PlanEdit from '../components/edit/PlanEdit';
+import RoutineEdit from '../components/edit/RoutineEdit';
+import TargetEdit from '../components/edit/TargetEdit';
 import { defaultContainer, defaultTitle } from '../css/styleConstants';
 import { dbService } from '../fBase';
 
@@ -21,21 +20,23 @@ const Title = styled.div`
 
 const BackBtn = styled.button``;
 
-const BlueprintMaker = ({userObj}) => {
+const BlueprintEditor = ({userObj}) => {
     const { id, type } = useParams();
     const navigate = useNavigate();
     const [typeName, setTypeName] = useState('');
-    const [parent, setParent] = useState('');
+    const [element, setElement] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     const onClick = (e) => {
         e.preventDefault();
         navigate(-1);
     }
 
-    const getParent = async () => {
+    const getElement = async () => {
         await dbService.collection('targets').where('id', '==', id).get().then(snapshot => {
             const data = snapshot.docs.map(el => el.data());
-            setParent(...data);
+            setElement(...data);
+            setIsLoading(false);
         }).catch(error => {
             console.log(error.message);
         })
@@ -43,21 +44,19 @@ const BlueprintMaker = ({userObj}) => {
 
     const getTypeName = () => {
         if (type === 'targets') {
-            setTypeName('목표 만들기');
+            setTypeName('목표 수정하기');
         }
         if (type === 'plan') {
-            setTypeName('계획 세우기');
+            setTypeName('계획 수정하기');
         }
         if (type === 'routine') {
-            setTypeName('루틴 만들기');
+            setTypeName('루틴 수정하기');
         }
     }
 
     useEffect(() => {
         getTypeName();
-        if (id) {
-            getParent();
-        }
+        getElement();
     }, [typeName])
 
     return (
@@ -65,18 +64,20 @@ const BlueprintMaker = ({userObj}) => {
             <Title>
                 {typeName}
             </Title>
-            {parent && 
-                <Parent parent={parent} />
-            }
-            {type === "targets" && <TargetFactory userObj={userObj} parent={parent ? parent : null} /> 
-            }
-            {type === "plan" && <PlanFactory userObj={userObj} parent={parent ? parent : null} /> 
-            }
-            {type === "routine" && <RoutineFactory userObj={userObj} parent={parent ? parent : null} /> 
+            {isLoading ? "Loading..."
+            :
+            <>
+                {type === "target" && <TargetEdit userObj={userObj} element={element} /> 
+                }
+                {type === "plan" && <PlanEdit userObj={userObj} element={element} /> 
+                }
+                {type === "routine" && <RoutineEdit userObj={userObj} element={element} /> 
+                }
+            </>
             }
             <BackBtn onClick={onClick}>돌아가기</BackBtn>
         </Container>
     );
 };
 
-export default BlueprintMaker;
+export default BlueprintEditor;

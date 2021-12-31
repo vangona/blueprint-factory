@@ -22,7 +22,7 @@ const TargetBtn = styled.button``;
 
 const NeedBox = styled.div``;
 
-const PlanFactory = ({userObj, parentId}) => {
+const PlanFactory = ({userObj, parent}) => {
     const {id} = useParams();
     const { handleSubmit } = useForm();
     const [name, setName] = useState('');
@@ -35,7 +35,7 @@ const PlanFactory = ({userObj, parentId}) => {
 
     const onSubmit = async (e) => {
         const targetId = uuidv4();
-        await dbService.collection('targets').add({
+        await dbService.collection('targets').doc(targetId).set({
             id: targetId,
             uid: userObj.uid,
             name,
@@ -48,7 +48,7 @@ const PlanFactory = ({userObj, parentId}) => {
             modifiedAt: 0,
             isComplete: true,
             type: "target",
-            parentId: parentId ? parentId : null,
+            parentId: parent ? parent.id : '',
             completeFeeling: '',
             cancelReason: '',
         }).then(() => {
@@ -72,15 +72,15 @@ const PlanFactory = ({userObj, parentId}) => {
         return new Promise(function(resolve, reject){
             needArr.forEach(async (el) => {
                 const newId = uuidv4();
-                await dbService.collection('targets').add({
+                await dbService.collection('targets').doc(newId).set({
                     id : newId,
                     uid: userObj.uid,
                     name : el,
-                    desire : null,
-                    explain : null,
-                    deadline : null,
-                    prize : null,
-                    needArr : null,
+                    desire : '',
+                    explain : '',
+                    deadline : '',
+                    prize : '',
+                    needArr : [],
                     createdAt: Date.now(),
                     modifiedAt: 0,
                     isComplete: false,

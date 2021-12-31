@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import TargetMindmap from '../components/TargetMindmap';
+import TargetMindmapNew from '../components/TargetMindmapNew';
 import { defaultContainer } from '../css/styleConstants';
 
 const Container = styled.div`
@@ -10,7 +11,7 @@ const Container = styled.div`
 const Home = ({userObj}) => {
   return (
     <Container>
-      <TargetMindmap userObj={userObj} />
+      <TargetMindmapNew userObj={userObj} />
     </Container>
   );
 }
