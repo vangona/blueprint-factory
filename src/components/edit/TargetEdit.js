@@ -43,6 +43,7 @@ const TargetEdit = ({element}) => {
             explain,
             deadline,
             prize,
+            type: "target",
             isComplete: true,
         }).then(() => {
             alert('성공');

@@ -4,6 +4,7 @@ import * as go from 'gojs';
 import { ReactDiagram } from 'gojs-react';
 import { useNavigate } from "react-router-dom";
 import { defaultContainer } from "../css/styleConstants";
+import { dbService } from "../fBase";
 
 const Container = styled.div`
   ${defaultContainer}
@@ -47,12 +48,8 @@ const TargetMindmap = ({ userObj }) => {
         if (type === "target") return 'blue';
         if (type === "plan") return 'skyblue';
         if (type === "routine") return 'orange';
+        if (type === "incomplete") return 'green';
         return "black";
-      }
-
-      function isCompleteColorConverter(isComplete) {
-        if (isComplete) return 'blue';
-        return 'yellow';
       }
 
       const actionTemplate = 
@@ -73,8 +70,13 @@ const TargetMindmap = ({ userObj }) => {
         $(go.Panel, "Auto",
           { name: "BODY" },
           $(go.Shape, "RoundedRectangle",
+            {
+              portId: "",
+              fromLinkable: true,
+              toLinkable: true,
+              cursor: "pointer",
+            },
             new go.Binding("fill", "type", typeColorConverter),
-            new go.Binding("fill", "isComplete", isCompleteColorConverter)
           ),
           $(go.Panel, "Vertical",
             { margin: 10 },
@@ -88,6 +90,7 @@ const TargetMindmap = ({ userObj }) => {
                     stretch: go.GraphObject.Horizontal,
                     font: "bold 12pt Kyobo Handwriting",
                     stroke: "white",
+                    textAlign: "center",
                   },
                   new go.Binding("text", "name")
               ),
@@ -204,27 +207,29 @@ const TargetMindmap = ({ userObj }) => {
       };
       
     const getModels = () => {
-      const dream = {
-        key: 'dream',
-        name: `행복한 사람`,
-        type: 'dream',
-      };
-
-      const dataArr = userObj.targets.map((target) => ({
+      const dataArr = userObj.targets.map((target) => {
+        const Time = new Date(target.deadline.seconds * 1000);
+        console.log(Time);
+        const Year = Time.getFullYear();
+        const Month = Time.getMonth() + 1;
+        const DateTime = Time.getDate();
+        const remainTime = Time - Date.now();
+        const deadlineTime = `${Year}-${Month > 9 ? Month : '0' + Month}-${DateTime > 9 ? DateTime : '0' + DateTime}`;
+        return ({
         key: `${target.id}`, 
         parent: `${target.parentId}`,
         type: `${target.type}`,
-        name: `${target.name}`,
+        name: !target.deadline ? `${target.name}` : `${target.name} \n ${deadlineTime}까지`,
         actions: Array.isArray(target.explain) ? target.explain.map((need, index) => (
           {text: `${need}`}
           )
         )
         : target.explain && [{text: target.explain}],
-        deadline: `${target.deadline}`,
-        isComplete: target.isComplete
-      }));
+        deadline: deadlineTime,
+        remain: remainTime,
+      })});
 
-      setModels([dream, ...dataArr]);
+      setModels(dataArr);
       setIsLoading(false);
     };
 
@@ -232,8 +237,14 @@ const TargetMindmap = ({ userObj }) => {
       getModels();
     }, [])
 
-    const handleModelChange = (changes) => {
-        console.log('GoJS Model changed!');
+    const handleModelChange = async (changes) => {
+        await dbService.collection("targets").doc(`${changes.modifiedNodeData[0].key}`).update({
+          parentId: changes.modifiedNodeData[0].parent
+        }).then(() => {
+          console.log("success");
+        }).catch((error) => {
+          console.log(error.message);
+        })
     };
 
     return (

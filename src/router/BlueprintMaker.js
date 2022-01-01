@@ -26,6 +26,7 @@ const BlueprintMaker = ({userObj}) => {
     const navigate = useNavigate();
     const [typeName, setTypeName] = useState('');
     const [parent, setParent] = useState('');
+    const [isLoading, setIsLoading] = useState(true);
 
     const onClick = (e) => {
         e.preventDefault();
@@ -36,6 +37,7 @@ const BlueprintMaker = ({userObj}) => {
         await dbService.collection('targets').where('id', '==', id).get().then(snapshot => {
             const data = snapshot.docs.map(el => el.data());
             setParent(...data);
+            setIsLoading(false);
         }).catch(error => {
             console.log(error.message);
         })
@@ -61,21 +63,27 @@ const BlueprintMaker = ({userObj}) => {
     }, [typeName])
 
     return (
-        <Container>
-            <Title>
-                {typeName}
-            </Title>
-            {parent && 
-                <Parent parent={parent} />
-            }
-            {type === "targets" && <TargetFactory userObj={userObj} parent={parent ? parent : null} /> 
-            }
-            {type === "plan" && <PlanFactory userObj={userObj} parent={parent ? parent : null} /> 
-            }
-            {type === "routine" && <RoutineFactory userObj={userObj} parent={parent ? parent : null} /> 
-            }
-            <BackBtn onClick={onClick}>돌아가기</BackBtn>
-        </Container>
+        <>
+        {isLoading
+        ? "Loading..."
+            :
+            <Container>
+                <Title>
+                    {typeName}
+                </Title>
+                {parent && 
+                    <Parent parent={parent} />
+                }
+                {type === "targets" && <TargetFactory userObj={userObj} parent={parent ? parent : null} /> 
+                }
+                {type === "plan" && <PlanFactory userObj={userObj} parent={parent ? parent : null} /> 
+                }
+                {type === "routine" && <RoutineFactory userObj={userObj} parent={parent ? parent : null} /> 
+                }
+                <BackBtn onClick={onClick}>돌아가기</BackBtn>
+            </Container>
+        }
+        </>
     );
 };
 

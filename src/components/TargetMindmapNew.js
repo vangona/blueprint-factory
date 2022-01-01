@@ -11,13 +11,15 @@ const Container = styled.div`
 
 const TargetMindmapNew = ({ userObj }) => {
   const navigate = useNavigate();
-  const [models, setModels] = useState([]);
+  const [nodes, setNodes] = useState([]);
+  const [links, setLinks] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
     const initDiagram = () => {
       var $ = go.GraphObject.make;
 
       var myDiagram =
+
         $(go.Diagram, 
           {
             layout: $(go.ForceDirectedLayout),
@@ -74,13 +76,11 @@ const TargetMindmapNew = ({ userObj }) => {
           $(go.Shape, 
             {
                 figure: "RoundedRectangle",
-                parameter1: 10,
-                fill: "orange",  // default fill color
                 portId: "",
-                fromLinkable: true,
-                fromSpot: go.Spot.AllSides,
-                toLinkable: true,
-                toSpot: go.Spot.AllSides,
+                fromLinkable: true, 
+                fromLinkableSelfNode: true, fromLinkableDuplicates: true,
+                toLinkable: true, 
+                toLinkableSelfNode: true, 
                 cursor: "pointer"
             },
             new go.Binding("fill", "type", typeColorConverter),
@@ -202,21 +202,24 @@ const TargetMindmapNew = ({ userObj }) => {
       
     // define a Link template that routes orthogonally, with no arrowhead
     myDiagram.linkTemplate =
-    $(MultiArrowLink,  // subclass of Link, defined below
+    $(go.Link,  // subclass of Link, defined below
         {
             relinkableFrom: true,
             relinkableTo: true,
-            reshapable: true,
-            resegmentable: true
         },
         $(go.Shape,
-        { isPanelMain: true },
-        new go.Binding("fill", "color"))
+          { strokeWidth: 2 },
+          new go.Binding("stroke", "color")
+        ),  
+        $(go.Shape,
+            { toArrow: "Standard", stroke: null },
+            new go.Binding("fill", "black")
+          )
         // no arrowhead is defined here -- they are hard-coded in MultiArrowLink.makeGeometry
     );
 
     // it's best to declare all templates before assigning the model
-    myDiagram.model = new go.GraphLinksModel(models);
+    myDiagram.model = new go.GraphLinksModel(nodes, links);
         return myDiagram;
     };
 
@@ -277,7 +280,7 @@ const TargetMindmapNew = ({ userObj }) => {
         type: 'dream',
       };
 
-      const dataArr = userObj.targets.map((target) => ({
+      const nodedataArr = userObj.targets.map((target) => ({
         key: `${target.id}`, 
         parent: `${target.parentId}`,
         type: `${target.type}`,
@@ -291,7 +294,16 @@ const TargetMindmapNew = ({ userObj }) => {
         isComplete: target.isComplete
       }));
 
-      setModels([dream, ...dataArr]);
+      const linkData = userObj.targets.map((target) => ({
+        from : `${target.id}`,
+        to: `${target.parentId}`,
+        color: 'black',
+      }))
+
+      const nodeData = [dream, ...nodedataArr];
+
+      setNodes(nodeData);
+      setLinks(linkData);
       setIsLoading(false);
     };
 
@@ -310,7 +322,8 @@ const TargetMindmapNew = ({ userObj }) => {
             : <ReactDiagram
                 initDiagram={initDiagram}
                 divClassName='diagram-component'
-                nodeDataArray={models}
+                nodeDataArray={nodes}
+                linkDataArray={links}
                 onModelChange={handleModelChange} 
             />}
         </Container>
