@@ -157,7 +157,7 @@ const TargetMindmap = ({ userObj }) => {
                     const node = obj.part.adornedPart;
                     if (node !== null) {
                       navigate({
-                        pathname: `/blueprint/targets/${node.data.key}`,
+                        pathname: `/blueprint/targets${node.data.key ? '/' + node.data.key : ''}`,
                         state: {type: "targets"}
                       })
                     }
@@ -229,8 +229,21 @@ const TargetMindmap = ({ userObj }) => {
         deadline: deadlineTime,
         remain: remainTime,
       })});
-
-      setModels(dataArr);
+      
+      if (dataArr.length) {
+        setModels(dataArr);
+      } else {
+        const initNode = {
+          key: "",
+          parent: "",
+          type: "",
+          name: "첫번째 목표 만들기",
+          actions: "",
+          deadline: "",
+          remain: "",
+        }
+        setModels([initNode]);
+      }
       setIsLoading(false);
     };
 

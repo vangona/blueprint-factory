@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react/cjs/react.development';
+import { useEffect, useState } from 'react/cjs/react.development';
 import styled from 'styled-components';
 import { defaultContainer } from '../../css/styleConstants';
 import LongtermFactory from './LongtermFactory';
@@ -28,9 +28,9 @@ const TermChoice = ({userObj, parent}) => {
             </ChoiceBtn>
             {isLongterm 
             ?
-                <LongtermFactory userObj={userObj} parent={parent ? parent : null} />
+                <LongtermFactory userObj={userObj} parent={parent} />
             :             
-                <ShorttermFactory userObj={userObj} parent={parent ? parent : null} /> 
+                <ShorttermFactory userObj={userObj} parent={parent} /> 
             }
 
         </Container>

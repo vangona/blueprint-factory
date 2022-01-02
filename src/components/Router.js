@@ -4,6 +4,7 @@ import Auth from "../router/Auth";
 import BlueprintMaker from "../router/BlueprintMaker";
 import Home from "../router/Home";
 import BlueprintEditor from "../router/BlueprintEditor";
+import Signout from "./Signout";
 
 const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
     return (
@@ -13,7 +14,7 @@ const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
                 ? 
                 <>
                     <Route path="/" element={<Home userObj={userObj} />} />
-                    <Route path="/blueprint/maker" element={
+                    <Route path="/blueprint/:type" element={
                         <BlueprintMaker userObj={userObj} />
                     } />
                     <Route path="/blueprint/edit/:type/:id" element={
@@ -21,6 +22,9 @@ const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
                     } />
                     <Route path="/blueprint/:type/:id" element={
                         <BlueprintMaker userObj={userObj} />
+                    } />
+                    <Route path="/signout" element={
+                        <Signout />
                     } />
                 </>
                 : 

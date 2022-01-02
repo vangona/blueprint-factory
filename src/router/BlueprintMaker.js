@@ -60,6 +60,8 @@ const BlueprintMaker = ({userObj}) => {
         getTypeName();
         if (id) {
             getParent();
+        } else {
+            setIsLoading(false);
         }
     }, [])
 
@@ -70,17 +72,17 @@ const BlueprintMaker = ({userObj}) => {
             :
             <Container>
                 <Title>
-                    {typeName}
+                    {typeName ? typeName : "뀨"}
                 </Title>
                 {parent && 
                     <Parent parent={parent} />
                 }
                 {type === "targets" && 
-                <TermChoice userObj={userObj} parent={parent ? parent : null} />
+                <TermChoice userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
-                {type === "plan" && <PlanFactory userObj={userObj} parent={parent ? parent : null} /> 
+                {type === "plan" && <PlanFactory userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
-                {type === "routine" && <RoutineFactory userObj={userObj} parent={parent ? parent : null} /> 
+                {type === "routine" && <RoutineFactory userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
                 <BackBtn onClick={onClick}>돌아가기</BackBtn>
             </Container>
