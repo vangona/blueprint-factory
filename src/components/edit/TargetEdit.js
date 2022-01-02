@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react/cjs/react.development';
+import { useEffect, useState } from 'react/cjs/react.development';
 import styled from 'styled-components';
 import { defaultContainer } from '../../css/styleConstants';
 import { dbService } from '../../fBase';
@@ -23,12 +23,19 @@ const EditInput = styled.input``;
 const BackBtn = styled.button``;
 
 const TargetEdit = ({element}) => {
+    const Time = new Date(element.deadline.seconds * 1000);
+    console.log(Time);
+    const Year = Time.getFullYear();
+    const Month = Time.getMonth() + 1;
+    const DateTime = Time.getDate();
+    const deadlineTime = `${Year}-${Month > 9 ? Month : '0' + Month}-${DateTime > 9 ? DateTime : '0' + DateTime}`;
+
     const navigate = useNavigate();
     const { handleSubmit } = useForm();
     const [name, setName] = useState(element.name);
     const [desire, setDesire] = useState(element.desire);
     const [explain, setExplain] = useState(element.explain);
-    const [deadline, setDeadline] = useState(element.deadline);
+    const [deadline, setDeadline] = useState(deadlineTime);
     const [prize, setPrize] = useState(element.prize); 
 
     const onClick = (e) => {
@@ -41,13 +48,13 @@ const TargetEdit = ({element}) => {
             name,
             desire,
             explain,
-            deadline,
+            deadline : new Date(deadline),
             prize,
-            type: "target",
+            type: (new Date(deadline) - Date.now()) > 32872832197 ? "longterm" : "shortterm",
             isComplete: true,
         }).then(() => {
             alert('성공');
-        }).error((error) => {
+        }).catch((error) => {
             console.log(error.message);
         })
     }

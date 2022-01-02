@@ -45,7 +45,8 @@ const TargetMindmap = ({ userObj }) => {
       );
 
       function typeColorConverter(type) {
-        if (type === "target") return 'blue';
+        if (type === "longterm") return 'blue';
+        if (type === "shortterm") return 'red';
         if (type === "plan") return 'skyblue';
         if (type === "routine") return 'orange';
         if (type === "incomplete") return 'green';
@@ -142,7 +143,7 @@ const TargetMindmap = ({ userObj }) => {
                     const node = obj.part.adornedPart;
                     if (node !== null) {
                       navigate({
-                        pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
+                        pathname: `/blueprint/edit/${node.data.type === "incomplete" ? "target" : node.data.type}/${node.data.key}`,
                         state: {type: "edit"}
                       })
                     }

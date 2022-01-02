@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Parent from '../components/factory/Parent';
 import PlanFactory from '../components/factory/PlanFactory';
 import RoutineFactory from '../components/factory/RoutineFactory';
-import TargetFactory from '../components/factory/TargetFactory';
+import TermChoice from '../components/factory/TermChoice';
 import { defaultContainer, defaultTitle } from '../css/styleConstants';
 import { dbService } from '../fBase';
 
@@ -36,6 +36,7 @@ const BlueprintMaker = ({userObj}) => {
     const getParent = async () => {
         await dbService.collection('targets').where('id', '==', id).get().then(snapshot => {
             const data = snapshot.docs.map(el => el.data());
+            console.log(data);
             setParent(...data);
             setIsLoading(false);
         }).catch(error => {
@@ -60,7 +61,7 @@ const BlueprintMaker = ({userObj}) => {
         if (id) {
             getParent();
         }
-    }, [typeName])
+    }, [])
 
     return (
         <>
@@ -74,7 +75,8 @@ const BlueprintMaker = ({userObj}) => {
                 {parent && 
                     <Parent parent={parent} />
                 }
-                {type === "targets" && <TargetFactory userObj={userObj} parent={parent ? parent : null} /> 
+                {type === "targets" && 
+                <TermChoice userObj={userObj} parent={parent ? parent : null} />
                 }
                 {type === "plan" && <PlanFactory userObj={userObj} parent={parent ? parent : null} /> 
                 }

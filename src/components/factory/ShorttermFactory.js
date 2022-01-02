@@ -22,7 +22,7 @@ const TargetBtn = styled.button``;
 
 const NeedBox = styled.div``;
 
-const TargetFactory = ({userObj, parent}) => {
+const ShorttermFactory = ({userObj, parent}) => {
     const {id} = useParams();
     const { handleSubmit } = useForm();
     const [name, setName] = useState('');
@@ -84,7 +84,7 @@ const TargetFactory = ({userObj, parent}) => {
                     createdAt: Date.now(),
                     modifiedAt: 0,
                     isComplete: false,
-                    type: "incomplete",
+                    type: "shorterm",
                     parentId,
                     completeFeeling: '',
                     cancelReason: '',
@@ -130,7 +130,7 @@ const TargetFactory = ({userObj, parent}) => {
         <Container>
             <TargetForm onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>
-                    <TargetLabel htmlFor='targetName'>목표 : </TargetLabel>
+                    <TargetLabel htmlFor='targetName'>단기 목표 : </TargetLabel>
                     <TargetInput onChange={onChange} value={name} id='targetName' type="text" required/>
                 </TargetBox>
                 <TargetBox>
@@ -163,4 +163,4 @@ const TargetFactory = ({userObj, parent}) => {
     );
 };
 
-export default TargetFactory;
+export default ShorttermFactory;
