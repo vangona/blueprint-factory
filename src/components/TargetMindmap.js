@@ -191,7 +191,23 @@ const TargetMindmap = ({ userObj }) => {
                     }
                   }
                 }
-              )
+              ),
+              $("ContextMenuButton",
+              $(go.TextBlock, "목표 삭제하기"),
+              {
+                click: async function(e, obj) {
+                  const node = obj.part.adornedPart;
+                  if (node !== null) {
+                    await dbService.collection("targets").doc(`${node.data.key}`).delete()
+                    .then(()=>{
+                      alert('성공');
+                    }).catch(error => {
+                      console.log(error.message);
+                    })
+                  }
+                }
+              }
+            )
         )
       
       // define a Link template that routes orthogonally, with no arrowhead
