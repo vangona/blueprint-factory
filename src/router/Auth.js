@@ -29,7 +29,10 @@ const AuthLabel = styled.label``;
 
 const AuthInput = styled.input``;
 
+const AuthBtn = styled.button``;
+
 const Auth = () => {
+    const [loginState, setLoginState] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -44,14 +47,27 @@ const Auth = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        try {
+        if (!loginState) {
             await authService.createUserWithEmailAndPassword(
                 email,
                 password
-            );
-        } catch (error) {
-            console.log(error.message);
+            )
+            .then(console.log('success'))
+            .catch(error => {
+                console.log(error.message)
+            });
+        } else {
+            await authService.signInWithEmailAndPassword(email, password)
+            .then(console.log('success'))
+            .catch(error => {
+                console.log(error.messsage);
+            })
         }
+    }
+
+    const onClick = (e) => {
+        e.preventDefault();
+        setLoginState(!loginState);
     }
 
     return (
@@ -72,7 +88,8 @@ const Auth = () => {
                 </AuthLabel>
                 <AuthInput name="password" onChange={onChange} value={password} type="password" />
             </AuthBox>
-            <AuthInput type="submit" value="회원가입" />
+            <AuthInput type="submit" value={loginState ? "로그인" : "회원가입"} />
+            <AuthBtn onClick={onClick}>{!loginState ? "로그인하기" : "회원가입하기"}</AuthBtn>
         </AuthForm>
     </Container>
     );

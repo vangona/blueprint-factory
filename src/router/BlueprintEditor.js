@@ -67,8 +67,9 @@ const BlueprintEditor = ({userObj}) => {
             {isLoading ? "Loading..."
             :
             <>
-                {type === "target" && <TargetEdit userObj={userObj} element={element} /> 
+                {type === "longterm" && <TargetEdit userObj={userObj} element={element} /> 
                 }
+                {type === "shortterm" && <TargetEdit userObj={userObj} element={element} />}
                 {type === "plan" && <PlanEdit userObj={userObj} element={element} /> 
                 }
                 {type === "routine" && <RoutineEdit userObj={userObj} element={element} /> 
