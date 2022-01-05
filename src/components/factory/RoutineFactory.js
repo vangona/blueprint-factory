@@ -11,6 +11,8 @@ const Container = styled.div`
     ${defaultContainer}
 `;
 
+const RoutineTitle = styled.h1``;
+
 const RoutineForm = styled.form``;
 
 const RoutineBox = styled.div``;
@@ -87,6 +89,7 @@ const RoutineFactory = ({userObj, parent}) => {
 
     return (
         <Container>
+            <RoutineTitle>{parent.name}에 대한 루틴을 세워봅시다.</RoutineTitle>
             <RoutineForm onSubmit={handleSubmit(onSubmit)}>
                 <RoutineBox>
                     {period ? `${period}에` : null} {frequency ? `${frequency}` : null} {need}

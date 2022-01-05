@@ -10,6 +10,8 @@ const Container = styled.div`
     ${defaultContainer}
 `;
 
+const TargetTitle = styled.h1``;
+
 const TargetForm = styled.form``;
 
 const TargetBox = styled.div``;
@@ -128,6 +130,7 @@ const ShorttermFactory = ({userObj, parent}) => {
 
     return (
         <Container>
+            <TargetTitle>1년 이내에 이루고 싶은 목표가 있나요?</TargetTitle>
             <TargetForm onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>
                     <TargetLabel htmlFor='targetName'>단기 목표 : </TargetLabel>

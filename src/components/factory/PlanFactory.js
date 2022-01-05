@@ -10,6 +10,8 @@ const Container = styled.div`
     ${defaultContainer}
 `;
 
+const TargetTitle = styled.h1``;
+
 const TargetForm = styled.form``;
 
 const TargetBox = styled.div``;
@@ -170,6 +172,7 @@ const PlanFactory = ({userObj, parent}) => {
 
     return (
         <Container>
+            <TargetTitle>{parent.name}에 대한 계획을 세워봅시다.</TargetTitle>
             <TargetForm onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>
                     <TargetLabel htmlFor='targetName'>계획이름 : </TargetLabel>
