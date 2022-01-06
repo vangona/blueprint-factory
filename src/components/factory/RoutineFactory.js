@@ -69,6 +69,7 @@ const RoutineFactory = ({userObj, parent}) => {
             createdAt: Date.now(),
             modifiedAt: 0,
             isComplete: true,
+            isOpen: true,
             type: "routine",
             parentId: parent ? parent.id : '',
             completeFeeling: '',

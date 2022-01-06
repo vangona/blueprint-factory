@@ -5,10 +5,12 @@ import BlueprintMaker from "../router/BlueprintMaker";
 import Home from "../router/Home";
 import BlueprintEditor from "../router/BlueprintEditor";
 import Signout from "./Signout";
+import Navigation from "../router/Navigation";
 
 const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
     return (
         <Router>
+            <Navigation />
             <Routes>
                 {isLoggedIn
                 ? 

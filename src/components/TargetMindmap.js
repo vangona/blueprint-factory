@@ -10,15 +10,19 @@ const Container = styled.div`
   ${defaultContainer}
 `;
 
+const ZoomToFit = styled.button``;
+
+const MoveToNode = styled.button``;
+
 const TargetMindmap = ({ userObj }) => {
   const navigate = useNavigate();
   const [models, setModels] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
     const initDiagram = () => {
-      var $ = go.GraphObject.make;
+      const $ = go.GraphObject.make;
 
-      var myDiagram =
+      const myDiagram =
         $(go.Diagram,
           {
             "undoManager.isEnabled": true,
@@ -118,7 +122,7 @@ const TargetMindmap = ({ userObj }) => {
         )
         cm.add(
           $("ContextMenuButton",
-            $(go.TextBlock, "목표 삭제하기"),
+            $(go.TextBlock, "삭제하기"),
             {
               click: async function(e, obj) {
                 const node = obj.part.adornedPart;
@@ -203,7 +207,7 @@ const TargetMindmap = ({ userObj }) => {
         )
         cm.add(
           $("ContextMenuButton",
-            $(go.TextBlock, "목표 삭제하기"),
+            $(go.TextBlock, "삭제하기"),
             {
               click: async function(e, obj) {
                 const node = obj.part.adornedPart;
@@ -288,7 +292,7 @@ const TargetMindmap = ({ userObj }) => {
         )
         cm.add(
           $("ContextMenuButton",
-            $(go.TextBlock, "계획 삭제하기"),
+            $(go.TextBlock, "삭제하기"),
             {
               click: async function(e, obj) {
                 const node = obj.part.adornedPart;
@@ -325,7 +329,7 @@ const TargetMindmap = ({ userObj }) => {
         )
         cm.add(
           $("ContextMenuButton",
-            $(go.TextBlock, "루틴 삭제하기"),
+            $(go.TextBlock, "삭제하기"),
             {
               click: async function(e, obj) {
                 const node = obj.part.adornedPart;
@@ -354,6 +358,24 @@ const TargetMindmap = ({ userObj }) => {
                   navigate({
                     pathname: `/blueprint/edit/target/${node.data.key}`,
                     state: {type: "edit"}
+                  })
+                }
+              }
+            }
+          )
+        )
+        cm.add(
+          $("ContextMenuButton",
+            $(go.TextBlock, "삭제하기"),
+            {
+              click: async function(e, obj) {
+                const node = obj.part.adornedPart;
+                if (node !== null) {
+                  await dbService.collection("targets").doc(`${node.data.key}`).delete()
+                  .then(()=>{
+                    alert('성공');
+                  }).catch(error => {
+                    console.log(error.message);
                   })
                 }
               }
@@ -399,10 +421,19 @@ const TargetMindmap = ({ userObj }) => {
 
       myDiagram.nodeTemplate =
         $(go.Node, "Vertical",
+
         new go.Binding("isTreeExpanded").makeTwoWay(),
         new go.Binding("wasTreeExpanded").makeTwoWay(),
 
-        { deletable: false, toolTip: tooltiptemplate, selectionObjectName: "BODY", contextMenu: $("ContextMenu") },
+        { deletable: false, 
+          toolTip: tooltiptemplate, 
+          selectionObjectName: "BODY", 
+          contextMenu: $("ContextMenu"), 
+          click: (e, obj) => {
+            myDiagram.commandHandler.scrollToPart(myDiagram.findNodeForKey(obj.part.data.key));
+            myDiagram.commandHandler.resetZoom();
+          } 
+        },
 
         new go.Binding("text", "name"),
 
@@ -449,7 +480,10 @@ const TargetMindmap = ({ userObj }) => {
                     }
                   ),
                   $("PanelExpanderButton", "COLLAPSIBLE",
-                    { column: 1, alignment: go.Spot.Right }
+                    { 
+                      column: 1, 
+                      alignment: go.Spot.Right,
+                    }
                   )
                 ),
                 $(go.Panel, "Vertical",
@@ -480,10 +514,15 @@ const TargetMindmap = ({ userObj }) => {
             { strokeWidth: 3, stroke: "#555" })
         );
 
+      document.getElementById('zoom-to-fit').addEventListener('click', () => {
+        myDiagram.commandHandler.zoomToFit();
+      });
+
       // it's best to declare all templates before assigning the model
       myDiagram.model = new go.TreeModel(models);
           return myDiagram;
-      };
+          
+    };
       
     const getModels = () => {
       const dataArr = userObj.targets.map((target) => {
@@ -505,6 +544,7 @@ const TargetMindmap = ({ userObj }) => {
         : target.explain && [{text: target.explain}],
         deadline: deadlineTime,
         remain: remainTime,
+        isOpen: target.isOpen,
       })});
       
       if (dataArr.length) {
@@ -518,6 +558,7 @@ const TargetMindmap = ({ userObj }) => {
           actions: "",
           deadline: "",
           remain: "",
+          isOpen: false,
         }
         setModels([initNode]);
       }
@@ -548,6 +589,8 @@ const TargetMindmap = ({ userObj }) => {
                 nodeDataArray={models}
                 onModelChange={handleModelChange} 
             />}
+            <ZoomToFit id="zoom-to-fit">Zoom to Fit</ZoomToFit>
+            <MoveToNode id="move-to-node">Move to Node</MoveToNode>
         </Container>
     )
 }
