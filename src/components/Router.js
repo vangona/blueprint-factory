@@ -6,6 +6,9 @@ import Home from "../router/Home";
 import BlueprintEditor from "../router/BlueprintEditor";
 import Signout from "./Signout";
 import Navigation from "../router/Navigation";
+import Community from "../router/Community";
+import Blueprint from "../router/Blueprint";
+import Setting from "../router/Setting";
 
 const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
     return (
@@ -16,6 +19,15 @@ const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
                 ? 
                 <>
                     <Route path="/" element={<Home userObj={userObj} />} />
+                    <Route path="/community" element={
+                        <Community userObj={userObj} />
+                    } />
+                    <Route path="/blueprint" element={
+                        <Blueprint userObj={userObj} />
+                    } />         
+                    <Route path="/setting" element={
+                        <Setting userObj={userObj} />
+                    } />                                  
                     <Route path="/blueprint/:type" element={
                         <BlueprintMaker userObj={userObj} />
                     } />
