@@ -6,9 +6,20 @@ body,
   background-color: beige;
 }
 
+@font-face {
+  font-family: "Kyobo Handwriting";
+  src: url("/src/fonts/KyoboHandwriting2020pdy.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Jeju Myeongjo";
+  src: url("/src/fonts/JejuMyeongjo.ttf") format("truetype");
+}
+
 .diagram-component {
-  width: 100%;
-  min-height: 100%;
-  border: solid 1px black;
+  width: 90%;
+  min-height: 90%;
+  padding: 10px;
+  box-sizing: border-box;
   background-color: white;
 }

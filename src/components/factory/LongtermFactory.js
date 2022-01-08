@@ -132,7 +132,9 @@ const LongtermFactory = ({userObj, parent}) => {
 
     return (
         <Container>
-            <TargetTitle>살면서 이루고 싶은 목표가 있나요?</TargetTitle>
+            <TargetTitle>
+                살면서 이루고 싶은 목표가 있나요?
+            </TargetTitle>
             <TargetForm onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>
                     <TargetLabel htmlFor='targetName'>장기 목표 : </TargetLabel>

@@ -28,7 +28,15 @@ const TargetMindmap = ({ userObj }) => {
             "undoManager.isEnabled": true,
             layout: $(go.TreeLayout, { angle: 90, layerSpacing: 35 }),
             "contextMenuTool.showContextMenu" : makeContextMenu,
+            maxSelectionCount: 1,
           });
+
+      function nodeDoubleClick(e, obj) {
+        const clicked = obj.part;
+        if (clicked !== null) {
+          navigate(`/blueprint/${clicked.data.key}`);
+        }
+      }
       
       function makeContextMenu(cm, obj) {
         const data = obj.part.data;
@@ -402,6 +410,14 @@ const TargetMindmap = ({ userObj }) => {
           new go.Binding("text", "", tooltipTextConverter))
       );
 
+      function isComplishedPainter(isComplished) {
+        if(isComplished) {
+          return "green";
+        } else {
+          return "white";
+        }
+      }      
+      
       function typeColorConverter(type) {
         if (type === "longterm") return 'blue';
         if (type === "shortterm") return 'red';
@@ -414,7 +430,10 @@ const TargetMindmap = ({ userObj }) => {
       const actionTemplate = 
         $(go.Panel,
           $(go.TextBlock,
-            { font: "10pt Verdana, sans-serif" },
+            { 
+              font: "10pt Kyobo Handwriting, sans-serif",
+              alignment: go.Spot.Center,
+            },
             new go.Binding("text")
           )
         )
@@ -428,11 +447,12 @@ const TargetMindmap = ({ userObj }) => {
         { deletable: false, 
           toolTip: tooltiptemplate, 
           selectionObjectName: "BODY", 
-          contextMenu: $("ContextMenu"), 
+          contextMenu: $("ContextMenu"),
           click: (e, obj) => {
             myDiagram.commandHandler.scrollToPart(myDiagram.findNodeForKey(obj.part.data.key));
             myDiagram.commandHandler.resetZoom();
-          } 
+          },
+          doubleClick: nodeDoubleClick,
         },
 
         new go.Binding("text", "name"),
@@ -445,40 +465,44 @@ const TargetMindmap = ({ userObj }) => {
               fromLinkable: true,
               toLinkable: true,
               cursor: "pointer",
+              fill: "white",
+              strokeWidth: 3,
             },
-            new go.Binding("fill", "type", typeColorConverter),
+            new go.Binding("fill", "isComplished", isComplishedPainter),
+            new go.Binding("stroke", "type", typeColorConverter),
           ),
           $(go.Panel, "Vertical",
-            { margin: 10 },
-            $("Button", 
-              {
-                "ButtonBorder.fill" : null,
-                "ButtonBorder.stroke" : null,
-              },
+            { 
+              margin: 10,
+              cursor: "pointer",
+            },
               $(go.TextBlock,
                   {
                     stretch: go.GraphObject.Horizontal,
                     font: "bold 12pt Kyobo Handwriting",
-                    stroke: "white",
+                    stroke: "black",
                     textAlign: "center",
                   },
                   new go.Binding("text", "name")
-              ),
-              { click: (e, obj) => {navigate(`/blueprint/${obj.part.data.key}`)}, }
             ),
             $(go.Panel, "Vertical",
-                { stretch: go.GraphObject.Horizontal, visible: false },
+                { 
+                  stretch: go.GraphObject.Horizontal,
+                  visible: false,
+                },
                 new go.Binding("visible", "actions", function(acts) {
                   return (Array.isArray(acts) && acts.length > 0);
                 }),
                 $(go.Panel, "Table",
-                  { stretch: go.GraphObject.Horizontal },
-                  $(go.TextBlock, 
-                    {
-                      alignment: go.Spot.Left,
-                      font: "10pt Handwriting, sans-serif"
-                    }
-                  ),
+                  { 
+                    stretch: go.GraphObject.Horizontal,
+                  },
+                  // $(go.TextBlock, 
+                  //   {
+                  //     alignment: go.Spot.Left,
+                  //     font: "10pt Kyobo Handwriting, sans-serif",
+                  //   },
+                  // ),
                   $("PanelExpanderButton", "COLLAPSIBLE",
                     { 
                       column: 1, 
@@ -509,7 +533,12 @@ const TargetMindmap = ({ userObj }) => {
       // define a Link template that routes orthogonally, with no arrowhead
       myDiagram.linkTemplate =
         $(go.Link, go.Link.Orthogonal,
-          { corner: 5, relinkableFrom: true, relinkableTo: true },
+          {
+            corner: 10,
+            deletable: false, 
+            relinkableFrom: true, 
+            relinkableTo: true,
+          },
           $(go.Shape, // the link's path shape
             { strokeWidth: 3, stroke: "#555" })
         );
@@ -542,6 +571,7 @@ const TargetMindmap = ({ userObj }) => {
           )
         )
         : target.explain && [{text: target.explain}],
+        isComplished: target.isComplished,
         deadline: deadlineTime,
         remain: remainTime,
         isOpen: target.isOpen,
@@ -558,6 +588,7 @@ const TargetMindmap = ({ userObj }) => {
           actions: "",
           deadline: "",
           remain: "",
+          isComplished: false,
           isOpen: false,
         }
         setModels([initNode]);
