@@ -53,3 +53,13 @@ export const targetFactoryContentTitle = css`
     text-align: center;
     line-height: 55px;    
 `;
+
+export const targetFactoryContentInput = css`
+    font-family: SsurroundAir;
+    background-color: #EEEEEE;
+    border-radius: 30px;
+    width: 80%;
+    height: 45px;
+    padding: 20px;
+    box-sizing: border-box;
+`;

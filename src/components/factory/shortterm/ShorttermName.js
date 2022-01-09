@@ -43,7 +43,7 @@ const Noitce = styled.div`
     font-family: SsurroundAir;    
 `;
 
-const Textarea = styled.input`
+const Input = styled.input`
     font-family: SsurroundAir;
     background-color: #EEEEEE;
     border-radius: 30px;
@@ -73,7 +73,7 @@ const ShorttermName = ({getTarget}) => {
                 </TargetName>
                 <Cloud src={cloud} />
             </CloudBox>
-            <Textarea value={name} onChange={onChange} />
+            <Input value={name} type="text" onChange={onChange} />
             <Noitce>
                 {name && "다 썼다면 다음으로 넘어가봅시다."}
             </Noitce>
