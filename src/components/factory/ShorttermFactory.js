@@ -2,9 +2,16 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { defaultContainer } from '../../css/styleConstants';
+import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
 import { dbService } from '../../fBase';
 import { v4 as uuidv4 } from "uuid";
+import { RiArrowGoBackLine } from "react-icons/ri";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { IoMdArrowRoundForward } from "react-icons/io";
+import ShorttermParent from './shortterm/ShorttermParent';
+import ShorttermBackground from './shortterm/ShorttermBackground';
+import ShorttermName from './shortterm/ShorttermName';
+import ShorttermDigit from './shortterm/ShorttermDigit';
 
 const Container = styled.div`
     ${defaultContainer}
@@ -24,9 +31,49 @@ const TargetBtn = styled.button``;
 
 const NeedBox = styled.div``;
 
+const ReturnBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 99;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    transform: scaleY(-1);
+    :hover {
+        cursor: pointer;
+    }
+    :active {
+        transform: scaleY(-1) scale(0.98);
+    }
+`;
+
+const PageBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    background-color: #3F5DAC;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    ${defaultBtnAction};
+`;
+
 const ShorttermFactory = ({userObj, parent}) => {
     const {id} = useParams();
     const { handleSubmit } = useForm();
+    const [page, setPage] = useState(1);
     const [name, setName] = useState('');
     const [desire, setDesire] = useState('');
     const [explain, setExplain] = useState('');
@@ -34,6 +81,8 @@ const ShorttermFactory = ({userObj, parent}) => {
     const [prize, setPrize] = useState(''); 
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);
+
+    const [target, setTarget] = useState('');
 
     const onSubmit = async (e) => {
         const targetId = uuidv4();
@@ -49,6 +98,7 @@ const ShorttermFactory = ({userObj, parent}) => {
             createdAt: Date.now(),
             modifiedAt: 0,
             isComplete: true,
+            isComplished: false,
             isOpen: true,
             type: "shortterm",
             parentId: parent ? parent.id : '',
@@ -87,6 +137,7 @@ const ShorttermFactory = ({userObj, parent}) => {
                     createdAt: Date.now(),
                     modifiedAt: 0,
                     isComplete: false,
+                    isComplished: false,
                     isOpen: true,
                     type: "incomplete",
                     parentId,
@@ -130,9 +181,31 @@ const ShorttermFactory = ({userObj, parent}) => {
         }
     }
 
+    const getTarget = (value) => {
+        setTarget(value);
+    }
+    
+    const getDigit = value => {
+        setName(value);
+    }
+
+    const onClickPrev = e => {
+        e.preventDefault();
+        setPage(page - 1);
+    }
+
+    const onClickNext = e => {
+        e.preventDefault();
+        setPage(page + 1);
+    }
+
     return (
         <Container>
-            <TargetTitle>1년 이내에 이루고 싶은 목표가 있나요?</TargetTitle>
+            {page === 1 && <ShorttermParent userObj={userObj} parent={parent} />}
+            {page > 1 && <ShorttermBackground userObj={userObj} parent={parent} />}
+            {page === 2 && <ShorttermName getTarget={getTarget} /> }
+            {page === 3 && <ShorttermDigit getDigit={getDigit} target={target} />}
+            {/* <TargetTitle>1년 이내에 이루고 싶은 목표가 있나요?</TargetTitle>
             <TargetForm onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>
                     <TargetLabel htmlFor='targetName'>단기 목표 : </TargetLabel>
@@ -163,7 +236,16 @@ const ShorttermFactory = ({userObj, parent}) => {
                         <NeedBox key={index}>{el}</NeedBox>
                     ))}
                 <TargetInput type="submit" />
-            </TargetForm>
+            </TargetForm> */}
+            <ReturnBtn>
+                <RiArrowGoBackLine />
+            </ReturnBtn>
+            {page !== 1 && <PageBtn onClick={onClickPrev} style={{left: "20px"}}>
+                <IoMdArrowRoundBack style={{fill: "white"}} />
+            </PageBtn>}
+            <PageBtn onClick={onClickNext}>
+                <IoMdArrowRoundForward style={{fill: "white"}} />
+            </PageBtn>
         </Container>
     );
 };

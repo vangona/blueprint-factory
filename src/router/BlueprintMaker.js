@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Parent from '../components/factory/Parent';
 import PlanFactory from '../components/factory/PlanFactory';
 import RoutineFactory from '../components/factory/RoutineFactory';
+import ShorttermFactory from '../components/factory/ShorttermFactory';
 import TermChoice from '../components/factory/TermChoice';
 import { defaultContainer, defaultTitle } from '../css/styleConstants';
 import { dbService } from '../fBase';
@@ -79,6 +80,9 @@ const BlueprintMaker = ({userObj}) => {
                 }
                 {type === "targets" && 
                 <TermChoice userObj={userObj} parent={parent ? parent : undefined} /> 
+                }
+                {type === "shortterm" && 
+                <ShorttermFactory userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
                 {type === "plan" && <PlanFactory userObj={userObj} parent={parent ? parent : undefined} /> 
                 }

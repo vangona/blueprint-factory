@@ -5,6 +5,8 @@ import { defaultContainer } from '../css/styleConstants';
 
 const Container = styled.div`
     ${defaultContainer};
+    padding-bottom: 65px;
+    box-sizing: border-box;
 `;
 
 const Blueprint = ({userObj}) => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import TargetMindmap from '../components/TargetMindmap';
-import TodoToday from '../components/todo/TodoToday';
+import HomeLowerComponent from '../components/home/HomeLowerComponent';
+import HomeUpperComponent from '../components/home/HomeUpperComponent';
 import { defaultContainer } from '../css/styleConstants';
 
 const Container = styled.div`
@@ -12,7 +12,8 @@ const Container = styled.div`
 const Home = ({userObj}) => {
   return (
     <Container>
-      <TodoToday userObj={userObj} />
+      <HomeUpperComponent />
+      <HomeLowerComponent />
     </Container>
   );
 }

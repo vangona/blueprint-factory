@@ -42,7 +42,23 @@ const TargetMindmap = ({ userObj }) => {
         const data = obj.part.data;
 
         while (cm.elements.count > 0) cm.removeAt(0);
-
+        cm.add(
+          $("ContextMenuButton",
+            $(go.TextBlock, "목표 완료하기"),
+            {
+              click: function(e, obj) {
+                const node = obj.part.adornedPart;
+                dbService.collection("targets").doc(`${node.data.key}`).update({
+                  isComplished: true,
+                }).then(() => {
+                  alert("축하드립니다!");
+                }).catch(error => {
+                  console.log(error.message);
+                })
+              }
+            }
+          )          
+        )
         switch(data.type) {
           case 'longterm' :
             makeLongtermContextmenu(cm);
@@ -412,7 +428,7 @@ const TargetMindmap = ({ userObj }) => {
 
       function isComplishedPainter(isComplished) {
         if(isComplished) {
-          return "green";
+          return "lightgreen";
         } else {
           return "white";
         }
@@ -431,7 +447,7 @@ const TargetMindmap = ({ userObj }) => {
         $(go.Panel,
           $(go.TextBlock,
             { 
-              font: "10pt Kyobo Handwriting, sans-serif",
+              font: "10pt SsurroundAir, sans-serif",
               alignment: go.Spot.Center,
             },
             new go.Binding("text")
@@ -479,7 +495,7 @@ const TargetMindmap = ({ userObj }) => {
               $(go.TextBlock,
                   {
                     stretch: go.GraphObject.Horizontal,
-                    font: "bold 12pt Kyobo Handwriting",
+                    font: "bold 12pt SsurroundAir",
                     stroke: "black",
                     textAlign: "center",
                   },
@@ -583,7 +599,7 @@ const TargetMindmap = ({ userObj }) => {
         const initNode = {
           key: "",
           parent: "",
-          type: "",
+          type: "longterm",
           name: "첫번째 목표 만들기",
           actions: "",
           deadline: "",

@@ -50,6 +50,7 @@ const TargetEdit = ({element}) => {
             explain,
             deadline : new Date(deadline),
             prize,
+            isComplished: false,
             type: (new Date(deadline) - Date.now()) > 32872832197 ? "longterm" : "shortterm",
             isComplete: true,
         }).then(() => {
