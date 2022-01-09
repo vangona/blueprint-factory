@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
 import { dbService } from '../../fBase';
@@ -12,6 +12,9 @@ import ShorttermParent from './shortterm/ShorttermParent';
 import ShorttermBackground from './shortterm/ShorttermBackground';
 import ShorttermName from './shortterm/ShorttermName';
 import ShorttermDigit from './shortterm/ShorttermDigit';
+import ShorttermDeadline from './shortterm/ShorttermDeadline';
+import ShorttermNeed from './shortterm/ShorttermNeed';
+import ShorttermCheck from './shortterm/ShorttermCheck';
 
 const Container = styled.div`
     ${defaultContainer}
@@ -70,7 +73,27 @@ const PageBtn = styled.button`
     ${defaultBtnAction};
 `;
 
+const SubmitBtn = styled.input`
+    display: flex;
+    font-family: SSurroundAir;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    z-index: 99;
+    background-color: #3F5DAC;
+    border: none;
+    border-radius: 20px;
+    width: auto;
+    padding: 10px 15px;
+    color: white;
+    box-sizing: border-box;
+    font-size: 20px;
+    ${defaultBtnAction};
+`;
+
 const ShorttermFactory = ({userObj, parent}) => {
+    const navigate = useNavigate();
     const {id} = useParams();
     const { handleSubmit } = useForm();
     const [page, setPage] = useState(1);
@@ -113,6 +136,7 @@ const ShorttermFactory = ({userObj, parent}) => {
                 setPrize('');
                 setNeedArr('');
                 alert('성공');
+                navigate("/blueprint")
             }).catch((error) => {
                 console.log(error.message);
             })
@@ -181,12 +205,36 @@ const ShorttermFactory = ({userObj, parent}) => {
         }
     }
 
-    const getTarget = (value) => {
+    const onClickDelete = e => {
+        e.preventDefault();
+        const need = e.target.previousSibling.innerHTML;
+        const filtered = needArr.filter(el => el !== need);
+        setNeedArr(filtered);
+    }
+
+    const getTarget = value => {
         setTarget(value);
     }
     
     const getDigit = value => {
         setName(value);
+    }
+
+    const getDeadline = value => {
+        setDeadline(value);
+    }
+
+    const getNeed = value => {
+        setNeed(value);
+    }
+
+    const getExplain = value => {
+        setExplain(value);
+    }
+
+    const onClickReturn = e => {
+        e.preventDefault();
+        navigate("/")
     }
 
     const onClickPrev = e => {
@@ -201,12 +249,31 @@ const ShorttermFactory = ({userObj, parent}) => {
 
     return (
         <Container>
-            {page === 1 && <ShorttermParent userObj={userObj} parent={parent} />}
-            {page > 1 && <ShorttermBackground userObj={userObj} parent={parent} />}
-            {page === 2 && <ShorttermName getTarget={getTarget} /> }
-            {page === 3 && <ShorttermDigit getDigit={getDigit} target={target} />}
-            {/* <TargetTitle>1년 이내에 이루고 싶은 목표가 있나요?</TargetTitle>
-            <TargetForm onSubmit={handleSubmit(onSubmit)}>
+            {page === 1 && 
+                <ShorttermParent userObj={userObj} parent={parent} />
+            }
+            {page > 1 && 
+                <ShorttermBackground userObj={userObj} parent={parent} />
+            }
+            {page === 2 && 
+                <ShorttermName target={target} getTarget={getTarget} /> 
+            }
+            {page === 3 && 
+                <ShorttermDigit getDigit={getDigit} digit={name} target={target} />
+            }
+            {page === 4 && 
+                <ShorttermDeadline getDeadline={getDeadline} deadline={deadline} target={name} /> 
+            }
+            {page === 5 && 
+                <ShorttermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={target} />
+            }
+            {page === 6 && 
+                <ShorttermCheck getExplain={getExplain} explain={explain} name={name} needArr={needArr} deadline={deadline} target={target} />
+            }
+
+
+
+            <TargetForm display="none" onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>
                     <TargetLabel htmlFor='targetName'>단기 목표 : </TargetLabel>
                     <TargetInput onChange={onChange} value={name} id='targetName' type="text" required/>
@@ -236,8 +303,9 @@ const ShorttermFactory = ({userObj, parent}) => {
                         <NeedBox key={index}>{el}</NeedBox>
                     ))}
                 <TargetInput type="submit" />
-            </TargetForm> */}
-            <ReturnBtn>
+            </TargetForm>
+            
+            <ReturnBtn onClick={onClickReturn} >
                 <RiArrowGoBackLine />
             </ReturnBtn>
             {page !== 1 && <PageBtn onClick={onClickPrev} style={{left: "20px"}}>
@@ -246,6 +314,13 @@ const ShorttermFactory = ({userObj, parent}) => {
             <PageBtn onClick={onClickNext}>
                 <IoMdArrowRoundForward style={{fill: "white"}} />
             </PageBtn>
+            {page === 6 && 
+                <SubmitBtn type="submit" onClick={() => {
+                    window.confirm("제출할까요?") &&
+                    onSubmit();
+                }
+                } value="제출하기" />
+            }
         </Container>
     );
 };

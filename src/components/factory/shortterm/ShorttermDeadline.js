@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
-import img from "../../../img/digit.png";
+import img from "../../../img/deadline.png";
 
 const Container = styled.div`
     ${defaultContainer};
@@ -25,31 +25,33 @@ const Img = styled.img`
 
 const Explain = styled.div`
     font-family: SsurroundAir;
+    font-size: 15px;
+    color: var(--main-blue);
 `;
 
 const Input = styled.input`
     ${targetFactoryContentInput};
 `;
 
-const ShorttermDigit = ({getDigit, digit, target}) => {
+const ShorttermDeadline = ({getDeadline, deadline, target}) => {
 
     const onChange = e => {
-        getDigit(e.target.value);
+        getDeadline(e.target.value);
     }
 
     return (
         <Container>
             <Title>
-                {target}(을)를 <br /> 
-                <Bold>'숫자'</Bold>로 나타내 볼까요?
+                <Bold>{target}</Bold>(을)를 <br /> 
+                <Bold>언제까지</Bold> 이루면 될까요?
             </Title>
             <Img src={img}/>
             <Explain>
-                ex) 독서하기 ={'>'} 한 달 3권 이상 독서하기
+                현실적 일정을 고려해봐요!
             </Explain>
-            <Input type="text" value={digit} onChange={onChange}/>
+            <Input type="date" value={deadline} onChange={onChange}/>
         </Container>
     );
 };
 
-export default ShorttermDigit;
+export default ShorttermDeadline;

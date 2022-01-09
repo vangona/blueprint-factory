@@ -10,9 +10,13 @@ const Container = styled.div`
   ${defaultContainer}
 `;
 
-const ZoomToFit = styled.button``;
+const Title = styled.h1`
+  font-family: Ssurround;
+  font-size: 25px;
+  margin: 20px;
+`;
 
-const MoveToNode = styled.button``;
+const ZoomToFit = styled.button``;
 
 const TargetMindmap = ({ userObj }) => {
   const navigate = useNavigate();
@@ -630,14 +634,21 @@ const TargetMindmap = ({ userObj }) => {
         <Container> 
             {isLoading
             ? "Loading..."
-            : <ReactDiagram
+            :
+            <>
+            <Title>
+              청사진
+            </Title>
+            <ReactDiagram
                 initDiagram={initDiagram}
                 divClassName='diagram-component'
                 nodeDataArray={models}
-                onModelChange={handleModelChange} 
-            />}
-            <ZoomToFit id="zoom-to-fit">Zoom to Fit</ZoomToFit>
-            <MoveToNode id="move-to-node">Move to Node</MoveToNode>
+                onModelChange={handleModelChange}
+            />
+            <ZoomToFit id="zoom-to-fit">전체 보기</ZoomToFit>
+            </>
+            }
+            
         </Container>
     )
 }

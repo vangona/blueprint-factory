@@ -28,9 +28,9 @@ body,
 
 .diagram-component {
   width: 100%;
-  min-height: 90%;
-  padding: 10px;
+  height: 90%;
+  padding: 20px;
   box-sizing: border-box;
   background-color: white;
-  border: 1px solid black;
+  margin-bottom: 10px;
 }

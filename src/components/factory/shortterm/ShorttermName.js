@@ -53,11 +53,9 @@ const Input = styled.input`
     box-sizing: border-box;
 `;
 
-const ShorttermName = ({getTarget}) => {
-    const [name, setName] = useState('');
+const ShorttermName = ({target, getTarget}) => {
 
     const onChange = e => {
-        setName(e.target.value);
         getTarget(e.target.value);
     }
     
@@ -69,13 +67,13 @@ const ShorttermName = ({getTarget}) => {
             </Title>
             <CloudBox>
                 <TargetName>
-                    {name}
+                    {target}
                 </TargetName>
                 <Cloud src={cloud} />
             </CloudBox>
-            <Input value={name} type="text" onChange={onChange} />
+            <Input value={target} type="text" onChange={onChange} />
             <Noitce>
-                {name && "다 썼다면 다음으로 넘어가봅시다."}
+                {target && "다 썼다면 다음으로 넘어가봅시다."}
             </Noitce>
         </Container>
     );
