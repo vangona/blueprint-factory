@@ -45,7 +45,11 @@ const ProfileBox = styled.div`
     ${defaultBtnAction};
 `;
 
-const ProfilePic = styled.img``;
+const ProfilePic = styled.img`
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+`;
 
 const Navigation = ({userObj}) => {
     const navigate = useNavigate();
@@ -87,7 +91,7 @@ const Navigation = ({userObj}) => {
             </NavBox>
             <ProfileBox onClick={onClickSetting}>
                 {userObj.photoURL 
-                    ? <ProfilePic src='' />
+                    ? <ProfilePic src={userObj.photoURL} />
                     : <AiOutlineUser />
                 }
             </ProfileBox>

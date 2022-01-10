@@ -3,7 +3,7 @@ import { FaExchangeAlt } from 'react-icons/fa';
 import styled from 'styled-components';
 import BackgroundBottomCloud from '../components/background/BackgroundBottomCloud';
 import { defaultBtnAction, defaultContainer } from '../css/styleConstants';
-import { authService } from '../fBase';
+import { authService, dbService } from '../fBase';
 
 const Container = styled.div`
     ${ defaultContainer }
@@ -113,13 +113,25 @@ const Auth = () => {
                 email,
                 password
             )
-            .then(() => {alert('환영합니다.')})
+            .then(async (user) => {
+                await dbService.collection("users").doc(`${user.uid}`).set({
+                    uid: user.uid,
+                    displayName: "익명",
+                    photoURL: '',
+                    friends: [],
+                    targets: [],
+                }).then(() => {
+                    alert('환영합니다.')
+                })
+            })
             .catch(error => {
                 setError(error.message);
             });
         } else {
             await authService.signInWithEmailAndPassword(email, password)
-            .then(() => {alert('어서오세요.')})
+            .then(() => {
+                alert('어서오세요.')
+            })
             .catch(error => {
                 setError(error.message);
             })
