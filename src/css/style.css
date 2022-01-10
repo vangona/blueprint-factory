@@ -34,3 +34,7 @@ body,
   background-color: white;
   margin-bottom: 10px;
 }
+
+.diagram-component::-webkit-scrollbar {
+  width: 0;
+}

@@ -1,11 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
-import { defaultContainer } from '../../css/styleConstants';
+import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
 import { dbService } from '../../fBase';
 import { v4 as uuidv4 } from "uuid";
 import { useForm } from 'react-hook-form';
 import { useState } from 'react/cjs/react.development';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import RoutineName from './routine/RoutineName';
+import ShorttermBackground from './shortterm/ShorttermBackground';
+import { RiArrowGoBackLine } from 'react-icons/ri';
+import { IoMdArrowRoundBack, IoMdArrowRoundForward } from 'react-icons/io';
+import RoutineParent from './routine/RoutineParent';
+import RoutineTodo from './routine/RoutineTodo';
+import RoutinePeriod from './routine/RoutinePeriod';
 
 const Container = styled.div`
     ${defaultContainer}
@@ -21,8 +28,68 @@ const RoutineLabel = styled.label``;
 
 const RoutineInput = styled.input``;
 
+const ReturnBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 99;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    transform: scaleY(-1);
+    :hover {
+        cursor: pointer;
+    }
+    :active {
+        transform: scaleY(-1) scale(0.98);
+    }
+`;
+
+const PageBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99;
+    background-color: #3F5DAC;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    ${defaultBtnAction};
+`;
+
+const SubmitBtn = styled.input`
+    display: flex;
+    font-family: SSurroundAir;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    z-index: 99;
+    background-color: #3F5DAC;
+    border: none;
+    border-radius: 20px;
+    width: auto;
+    padding: 10px 15px;
+    color: white;
+    box-sizing: border-box;
+    font-size: 20px;
+    ${defaultBtnAction};
+`;
+
 const RoutineFactory = ({userObj, parent}) => {
+    const navigate = useNavigate();
     const { id } = useParams();
+    const [page, setPage] = useState(1);
     const { handleSubmit } = useForm();
     const [name, setName] = useState(`${parent.name}을 위한 루틴`);
     const [desire, setDesire] = useState(`${parent.name}을 위해`);
@@ -89,8 +156,46 @@ const RoutineFactory = ({userObj, parent}) => {
         })
     }
 
+    const onClickReturn = e => {
+        e.preventDefault();
+        navigate("/blueprint")
+    }
+
+    const onClickPrev = e => {
+        e.preventDefault();
+        setPage(page - 1);
+    }
+
+    const onClickNext = e => {
+        e.preventDefault();
+        setPage(page + 1);
+    }
+
+    const getName = value => {
+        setName(value);
+    }
+
+    const getNeed = value => {
+        setNeed(value);
+    }
+
+    const getPeriod = value => {
+        setPeriod(value);
+    }
+
+    const getFrequency = value => {
+        setFrequency(value);
+    }
+
     return (
         <Container>
+            {page === 1 && <RoutineParent parent={parent} />}
+            {page > 1 && <ShorttermBackground />}
+            {page === 2 && <RoutineName getName={getName} name={name} parent={parent} />}
+            {page === 3 && <RoutineTodo getNeed={getNeed} parent={parent} need={need} />}
+            {page === 4 && <RoutinePeriod getPeriod={getPeriod} getFrequency={getFrequency} period={period} frequency={frequency} need={need} />}
+
+
             <RoutineTitle>{parent.name}에 대한 루틴을 세워봅시다.</RoutineTitle>
             <RoutineForm onSubmit={handleSubmit(onSubmit)}>
                 <RoutineBox>
@@ -134,6 +239,23 @@ const RoutineFactory = ({userObj, parent}) => {
                 </RoutineBox>
                 <RoutineInput type="submit" value="제출" />
             </RoutineForm>
+
+            <ReturnBtn onClick={onClickReturn} >
+                <RiArrowGoBackLine />
+            </ReturnBtn>
+            {page !== 1 && <PageBtn onClick={onClickPrev} style={{left: "20px"}}>
+                <IoMdArrowRoundBack style={{fill: "white"}} />
+            </PageBtn>}
+            <PageBtn onClick={onClickNext}>
+                <IoMdArrowRoundForward style={{fill: "white"}} />
+            </PageBtn>
+            {page === 6 && 
+                <SubmitBtn type="submit" onClick={() => {
+                    window.confirm("제출할까요?") &&
+                    onSubmit();
+                }
+                } value="제출하기" />
+            }            
         </Container>
     );
 };

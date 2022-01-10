@@ -14,7 +14,7 @@ const Container = styled.div`
     bottom: 0;
     flex-direction: row;
     height: 65px;
-    z-index: 3;
+    z-index: 5;
     justify-content: space-between;
     background-color: white;
 `;
@@ -24,6 +24,7 @@ const NavBox = styled.div`
     text-align: center;
     padding: 0 5%;
     font-size: 40px;
+    z-index: 6;
     :hover {
         cursor: pointer;
     }

@@ -129,12 +129,6 @@ const ShorttermFactory = ({userObj, parent}) => {
             cancelReason: '',
         }).then(() => {
             makeChilds(targetId).then(() => {
-                setName('');
-                setDesire('');
-                setExplain('');
-                setDeadline('');
-                setPrize('');
-                setNeedArr('');
                 alert('성공');
                 navigate("/blueprint")
             }).catch((error) => {
@@ -234,7 +228,7 @@ const ShorttermFactory = ({userObj, parent}) => {
 
     const onClickReturn = e => {
         e.preventDefault();
-        navigate("/")
+        navigate("/blueprint")
     }
 
     const onClickPrev = e => {
