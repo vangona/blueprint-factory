@@ -29,9 +29,11 @@ const App = () => {
         authService.onAuthStateChanged(async (user) => {
             if (user) {
                 const targetData = await getTargetData(user.uid);
+                console.log(user.photoURL)
                 setUserObj({
                     uid: user.uid,
                     targets: targetData,
+                    photoURL: user.photoURL ? user.photoURL : '',
                     displayName: (user.displayName ? user.displayName : "익명"),
                     updateProfile: (args) => user.updateProfile(args),
                 });

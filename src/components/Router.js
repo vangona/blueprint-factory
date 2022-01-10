@@ -13,7 +13,7 @@ import Setting from "../router/Setting";
 const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
     return (
         <Router>
-            <Navigation />
+            {isLoggedIn && <Navigation userObj={userObj} />}
             <Routes>
                 {isLoggedIn
                 ? 

@@ -19,14 +19,26 @@ const Bold = styled.span`
 `;
 
 const Content = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     font-family: SsurroundAir;
+    text-align: center;
 `;
 
-const Name = styled.div``;
+const Name = styled.div`
+    color: var(--main-blue);
+`;
+
+const Desire = styled.div``;
 
 const Deadline = styled.div``;
 
 const NeedContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-top: 10px;
     display: flex;
     flex-direction: column;
@@ -55,7 +67,7 @@ const Input = styled.textarea`
     height: 120px;
 `;
 
-const ShorttermCheck = ({getExplain, explain, name, needArr, deadline}) => {
+const LongtermCheck = ({getExplain, explain, name, desire, needArr, deadline}) => {
 
     const onChange = e => {
         getExplain(e.target.value);
@@ -70,8 +82,11 @@ const ShorttermCheck = ({getExplain, explain, name, needArr, deadline}) => {
                 <Name>
                     {name}
                 </Name>
+                <Desire>
+                    {desire}(을)를 위해
+                </Desire>
                 <Deadline>
-                    {deadline}까지
+                    {deadline ? `${deadline}까지` : "평생동안"}
                 </Deadline>
                 <NeedContainer>
                 {needArr.map((need, index) => (
@@ -86,12 +101,8 @@ const ShorttermCheck = ({getExplain, explain, name, needArr, deadline}) => {
                 싶은 것이 있다면 적어보세요.
             </Explain>
             <Input type="text" value={explain} onChange={onChange}/>
-            <Explain>
-                목표를 달성하고자 하는 <br />
-                이유를 적어두면 아주 좋아요!
-            </Explain>
         </Container>
     );
 };
 
-export default ShorttermCheck;
+export default LongtermCheck;

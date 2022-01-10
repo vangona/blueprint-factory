@@ -9,36 +9,37 @@ const Container = styled.div`
     top: 0;
     justify-content: center;
     height: 100vh;
-    z-index: 50;
+    z-index: 10;
     gap: 15px;
     overflow: hidden;
 `;
 
 const Title = styled.h1`
-    font-size: 28px;
+    font-size: 25px;
     font-family: Ssurround;
     text-align: center;
     line-height: 55px;
 `;
 
+const Bold = styled.span`
+    color: var(--main-blue);
+`;
+
 const CloudBox = styled.div`
+    position: relative;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
 `;
 
 const TargetName = styled.div`
-    color: black;
+    position: absolute;
+    color: white;
     font-family: Ssurround;
 `;
 
-const Explain = styled.div`
-    font-family: SsurroundAir;
-    font-size: 15px;
-    color: var(--main-blue);
-    line-height: 25px;
-    text-align: center;
+const Cloud = styled.img`
+    width: 100%;
 `;
 
 const Noitce = styled.div`
@@ -53,41 +54,39 @@ const Input = styled.input`
     height: 45px;
     padding: 20px;
     box-sizing: border-box;
-    text-align: center;
-    ::placeholder {
-        text-align: center;
-    }
 `;
 
 const BlockBtn = styled.div`
-    ${blockBtn};
+    ${blockBtn}
 `;
 
-const RoutineTodo = ({getNeed, need, parent}) => {
+const LongtermName = ({parent, target, getTarget}) => {
 
     const onChange = e => {
-        getNeed(e.target.value);
+        getTarget(e.target.value);
     }
     
     return (
         <>
         <Container>
             <Title>
-                {parent.name}을(를) 위해 <br />
-                반복해야하는 것이 있나요?
+                <Bold>{parent.name}</Bold>을(를) 위해 <br />
+                필요한 <Bold>장기 목표</Bold>가 무엇인가요?
             </Title>
-            <Explain>
-                만약 쓰기 어렵다면, 청사진으로 돌아가서 <br />
-                하위 목표를 더 여러 개로 쪼개야해요!
-            </Explain>
-            <Input name="need" value={need} type="text" onChange={onChange} placeholder='목표 행동' />
+            <CloudBox>
+                <TargetName>
+                    {target}
+                </TargetName>
+                <Cloud src={cloud} />
+            </CloudBox>
+            <Input value={target} type="text" onChange={onChange} />
             <Noitce>
-                {need && "다 썼다면 다음으로 넘어가봅시다."}
+                {target && "다 썼다면 다음으로 넘어가봅시다."}
             </Noitce>
         </Container>
-        {!need && <BlockBtn></BlockBtn>}
+        {!target && <BlockBtn></BlockBtn>}
         </>
     );
 };
 
-export default RoutineTodo;
+export default LongtermName;

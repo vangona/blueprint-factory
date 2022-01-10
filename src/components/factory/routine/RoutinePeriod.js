@@ -9,7 +9,7 @@ const Container = styled.div`
     top: 0;
     justify-content: center;
     height: 100vh;
-    z-index: 99;
+    z-index: 10;
     gap: 15px;
     overflow: hidden;
 `;
@@ -19,6 +19,18 @@ const Title = styled.h1`
     font-family: Ssurround;
     text-align: center;
     line-height: 55px;
+`;
+
+const Explain = styled.div`
+    font-family: SsurroundAir;
+    font-size: 15px;
+    color: var(--main-blue);
+    line-height: 25px;
+    text-align: center;
+`;
+
+const Bold = styled.span`
+    font-weight: bold;
 `;
 
 const CloudBox = styled.div`
@@ -60,6 +72,15 @@ const RoutineBox = styled.div`
     font-family: SsurroundAir;
 `;
 
+const SubmitBlockBtn = styled.div`
+    position: fixed;
+    bottom: 20px;
+    z-index: 99;
+    background-color: white;
+    border: none;
+    width: 200px;
+    height: 50px;
+`;
 
 const RoutinePeriod = ({getPeriod, getFrequency, period, frequency, need}) => {
 
@@ -74,27 +95,30 @@ const RoutinePeriod = ({getPeriod, getFrequency, period, frequency, need}) => {
     }
     
     return (
+        <>
         <Container>
             <Title>
                 루틴으로 만들어봅시다.
             </Title>
+            <Explain>
+                ex) <Bold>1주일</Bold>에 <Bold>3회</Bold> <Bold>운동</Bold>
+            </Explain>
             <CloudBox>
                 <TargetName>
-                    {period && `${period}에` } {frequency} {need}
+                    {period && `${period}에`} {frequency} {need}
                 </TargetName>
             </CloudBox>
             <RoutineBox>
                 <Label>주기</Label>
-                <Input name="period" value={period} type="text" onChange={onChange} placeholder='행동의 주기' />
+                <Input name="period" value={period} type="text" onChange={onChange} placeholder='얼마나 자주 할까요?' />
             </RoutineBox>
             <RoutineBox>
                 <Label>빈도 수</Label>
-                <Input name="frequency" value={frequency} type="text" onChange={onChange} placeholder='주기 별 반복 횟수' />
+                <Input name="frequency" value={frequency} type="text" onChange={onChange} placeholder={period ? `${period}에 몇 번 할까요?` : "몇 번이나 할까요?"} />
             </RoutineBox>
-            <Noitce>
-                {frequency && period && "다 썼다면 다음으로 넘어가봅시다."}
-            </Noitce>
         </Container>
+        {!frequency | !period && <SubmitBlockBtn></SubmitBlockBtn>}
+        </>
     );
 };
 

@@ -36,10 +36,10 @@ const BlockBtn = styled.div`
     ${blockBtn}
 `;
 
-const ShorttermDigit = ({getDigit, digit, target}) => {
+const LongtermDesire = ({getDesire, desire, target}) => {
 
     const onChange = e => {
-        getDigit(e.target.value);
+        getDesire(e.target.value);
     }
 
     return (
@@ -47,17 +47,17 @@ const ShorttermDigit = ({getDigit, digit, target}) => {
         <Container>
             <Title>
                 {target}(을)를 <br /> 
-                <Bold>'숫자'</Bold>로 나타내 볼까요?
+                원하는 이유가 무엇이신가요?
             </Title>
             <Img src={img}/>
             <Explain>
-                ex) 독서하기 ={'>'} 한 달 3권 이상 독서하기
+                ex) 재테크 공부 ={'>'} 돈을 불리고 싶어서
             </Explain>
-            <Input type="text" value={digit} onChange={onChange}/>
+            <Input type="text" value={desire} onChange={onChange}/>
         </Container>
-        {!digit && <BlockBtn></BlockBtn>}
+        {!desire && <BlockBtn></BlockBtn>}
         </>
     );
 };
 
-export default ShorttermDigit;
+export default LongtermDesire;

@@ -41,7 +41,7 @@ const ReturnBtn = styled.button`
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 99;
+    z-index: 50;
     width: 40px;
     height: 40px;
     background-color: transparent;
@@ -63,7 +63,7 @@ const PageBtn = styled.button`
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 99;
+    z-index: 50;
     background-color: #3F5DAC;
     border: none;
     border-radius: 50%;
@@ -80,7 +80,7 @@ const SubmitBtn = styled.input`
     align-items: center;
     position: fixed;
     bottom: 20px;
-    z-index: 99;
+    z-index: 10;
     background-color: #3F5DAC;
     border: none;
     border-radius: 20px;
@@ -129,8 +129,8 @@ const ShorttermFactory = ({userObj, parent}) => {
             cancelReason: '',
         }).then(() => {
             makeChilds(targetId).then(() => {
-                alert('성공');
-                navigate("/blueprint")
+                alert('작은 구름이 하나 띄워졌습니다.');
+                navigate("/blueprint"   )
             }).catch((error) => {
                 console.log(error.message);
             })
@@ -310,9 +310,7 @@ const ShorttermFactory = ({userObj, parent}) => {
             </PageBtn>
             {page === 6 && 
                 <SubmitBtn type="submit" onClick={() => {
-                    window.confirm("제출할까요?") &&
-                    onSubmit();
-                }
+                    window.confirm(`${name} 목표가 마음에 드시나요?`) && onSubmit()}
                 } value="제출하기" />
             }
         </Container>

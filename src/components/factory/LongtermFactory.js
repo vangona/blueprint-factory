@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-import { defaultContainer } from '../../css/styleConstants';
+import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
 import { dbService } from '../../fBase';
 import { v4 as uuidv4 } from "uuid";
+import BackgroundTopCloud from '../background/BackgroundTopCloud';
+import LongtermParent from './longterm/LongtermParent';
+import { RiArrowGoBackLine } from 'react-icons/ri';
+import { IoMdArrowRoundBack, IoMdArrowRoundForward } from 'react-icons/io';
+import LongtermName from './longterm/LongtermName';
+import BackgroundBottomCloud from '../background/BackgroundBottomCloud';
+import LongtermDesire from './longterm/LongtermDesire';
+import LongtermNeed from './longterm/LongtermNeed';
+import LongtermDeadline from './longterm/LongtermDeadline';
+import LongtermCheck from './longterm/LongtermCheck';
 
 const Container = styled.div`
     ${defaultContainer}
@@ -24,9 +34,70 @@ const TargetBtn = styled.button``;
 
 const NeedBox = styled.div``;
 
+const ReturnBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 50;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    transform: scaleY(-1);
+    :hover {
+        cursor: pointer;
+    }
+    :active {
+        transform: scaleY(-1) scale(0.98);
+    }
+`;
+
+const PageBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 50;
+    background-color: #3F5DAC;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    ${defaultBtnAction};
+`;
+
+const SubmitBtn = styled.input`
+    display: flex;
+    font-family: SSurroundAir;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    z-index: 10;
+    background-color: #3F5DAC;
+    border: none;
+    border-radius: 20px;
+    width: auto;
+    padding: 10px 15px;
+    color: white;
+    box-sizing: border-box;
+    font-size: 20px;
+    ${defaultBtnAction};
+`;
+
 const LongtermFactory = ({userObj, parent}) => {
+    const navigate = useNavigate();
     const {id} = useParams();
+    const [page, setPage] = useState(1);
     const { handleSubmit } = useForm();
+    const [target, setTarget] = useState('');
     const [name, setName] = useState('');
     const [desire, setDesire] = useState('');
     const [explain, setExplain] = useState('');
@@ -57,13 +128,8 @@ const LongtermFactory = ({userObj, parent}) => {
             cancelReason: '',
         }).then(() => {
             makeChilds(targetId).then(() => {
-                setName('');
-                setDesire('');
-                setExplain('');
-                setDeadline('');
-                setPrize('');
-                setNeedArr('');
-                alert('성공');
+                alert('큰 구름이 하나 만들어졌어요!');
+                navigate("/blueprint")
             }).catch((error) => {
                 console.log(error.message);
             })
@@ -132,11 +198,59 @@ const LongtermFactory = ({userObj, parent}) => {
         }
     }
 
+    const onClickDelete = e => {
+        e.preventDefault();
+        const need = e.target.previousSibling.innerHTML;
+        const filtered = needArr.filter(el => el !== need);
+        setNeedArr(filtered);
+    }
+
+    const onClickReturn = e => {
+        e.preventDefault();
+        navigate("/blueprint")
+    }
+
+    const onClickPrev = e => {
+        e.preventDefault();
+        setPage(page - 1);
+    }
+
+    const onClickNext = e => {
+        e.preventDefault();
+        setPage(page + 1);
+    }
+
+    const getName = value => {
+        setName(value);
+    }
+
+    const getDesire = value => {
+        setDesire(value);
+    }
+
+    const getNeed = value => {
+        setNeed(value);
+    }
+
+    const getDeadline = value => {
+        setDeadline(value);
+    }
+
+    const getExplain = value => {
+        setExplain(value);
+    }
+
     return (
         <Container>
-            <TargetTitle>
-                살면서 이루고 싶은 목표가 있나요?
-            </TargetTitle>
+            {page === 1 && <BackgroundTopCloud />}
+            {page > 1 && <BackgroundBottomCloud />}
+            {page === 1 && <LongtermParent parent={parent} /> }
+            {page === 2 && <LongtermName parent={parent} target={name} getTarget={getName} /> }
+            {page === 3 && <LongtermDesire getDesire={getDesire} desire={desire} target={name} /> }
+            {page === 4 && <LongtermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={target} />}
+            {page === 5 && <LongtermDeadline getDeadline={getDeadline} deadline={deadline} target={name} />}
+            {page === 6 && <LongtermCheck getExplain={getExplain} explain={explain} name={name} desire={desire} needArr={needArr} deadline={deadline} target={target} />}
+
             <TargetForm onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>
                     <TargetLabel htmlFor='targetName'>장기 목표 : </TargetLabel>
@@ -168,6 +282,20 @@ const LongtermFactory = ({userObj, parent}) => {
                     ))}
                 <TargetInput type="submit" />
             </TargetForm>
+            <ReturnBtn onClick={onClickReturn} >
+                <RiArrowGoBackLine />
+            </ReturnBtn>
+            {page !== 1 && <PageBtn onClick={onClickPrev} style={{left: "20px"}}>
+                <IoMdArrowRoundBack style={{fill: "white"}} />
+            </PageBtn>}
+            {page !== 6 && <PageBtn onClick={onClickNext}>
+                <IoMdArrowRoundForward style={{fill: "white"}} />
+            </PageBtn>}
+            {page === 6 && 
+                <SubmitBtn type="submit" onClick={() => {
+                    window.confirm(`${name} 목표가 마음에 드시나요?`) && onSubmit()}
+                } value="제출하기" />
+            }
         </Container>
     );
 };

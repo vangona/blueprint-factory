@@ -58,7 +58,7 @@ const TargetMindmap = ({ userObj }) => {
         while (cm.elements.count > 0) cm.removeAt(0);
         cm.add(
           $("ContextMenuButton",
-            $(go.TextBlock, "목표 완료하기"),
+            $(go.TextBlock, "목표를 달성했어요"),
             {
               click: function(e, obj) {
                 const node = obj.part.adornedPart;
@@ -647,7 +647,7 @@ const TargetMindmap = ({ userObj }) => {
             :
             <>
             <Title>
-              청사진
+              {userObj.displayName}님의 청사진
             </Title>
             <ReactDiagram
                 initDiagram={initDiagram}

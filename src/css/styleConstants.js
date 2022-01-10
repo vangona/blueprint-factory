@@ -63,3 +63,27 @@ export const targetFactoryContentInput = css`
     padding: 20px;
     box-sizing: border-box;
 `;
+
+export const blockBtn = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+    background-color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+`;
+
+export const sumbitBlockBtn = css`
+    position: fixed;
+    bottom: 20px;
+    z-index: 99;
+    background-color: white;
+    border: none;
+    width: 200px;
+    height: 50px;
+`;

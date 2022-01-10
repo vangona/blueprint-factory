@@ -90,7 +90,7 @@ const DeleteBtn = styled.button`
     ${defaultBtnAction};
 `;
 
-const ShorttermNeed = ({getNeed, need, needArr, onClickPlus, onClickDelete, target}) => {
+const LongtermNeed = ({getNeed, need, needArr, onClickPlus, onClickDelete, target}) => {
 
     const onChange = e => {
         getNeed(e.target.value);
@@ -104,8 +104,8 @@ const ShorttermNeed = ({getNeed, need, needArr, onClickPlus, onClickDelete, targ
             </Title>
             <Img src={img}/>
             <Explain>
-                Hint : 내가 지금 당장 {target}을(를) <br />
-                이루지 못하는 이유는 무엇일까요?
+                Hint : 이것들은 {target}의 <br />
+                하위 단기 목표가 될거에요.
             </Explain>
             <InputBox>    
                 <Input type="text" value={need} placeholder='없다면 넘어가도 괜찮아요!' onChange={onChange}/>
@@ -123,4 +123,4 @@ const ShorttermNeed = ({getNeed, need, needArr, onClickPlus, onClickDelete, targ
     );
 };
 
-export default ShorttermNeed;
+export default LongtermNeed;

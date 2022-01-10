@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react/cjs/react.development';
 import styled from 'styled-components';
 import { blockBtn, defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
 import img from "../../../img/deadline.png";
@@ -33,14 +34,36 @@ const Input = styled.input`
     ${targetFactoryContentInput};
 `;
 
+const LifetimeBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: SsurroundAir;
+`;
+
+const CheckBox = styled.input`
+    width: 15px;
+    height: 15px;
+`
+
+const Label = styled.label``;
+
 const BlockBtn = styled.div`
     ${blockBtn};
 `;
 
-const ShorttermDeadline = ({getDeadline, deadline, target}) => {
+const LongtermDeadline = ({getDeadline, deadline, target}) => {
+    const [isLifetime, setIsLifetime] = useState(false);
 
     const onChange = e => {
         getDeadline(e.target.value);
+    }
+
+    const onChangeLifetime = e => {
+        if(isLifetime === false) {
+            getDeadline('');
+        }
+        setIsLifetime(!isLifetime);
     }
 
     return (
@@ -55,10 +78,14 @@ const ShorttermDeadline = ({getDeadline, deadline, target}) => {
                 현실적 일정을 고려해봐요!
             </Explain>
             <Input type="date" value={deadline} onChange={onChange}/>
+            <LifetimeBox>
+               <CheckBox id="lifetime" type="checkbox" onChange={onChangeLifetime} />
+               <Label for="lifetime">평생동안 이룰 목표에요</Label>
+            </LifetimeBox>
         </Container>
-        {!deadline && <BlockBtn></BlockBtn>}
+        {!deadline & !isLifetime && <BlockBtn></BlockBtn>}
         </>
     );
 };
 
-export default ShorttermDeadline;
+export default LongtermDeadline;

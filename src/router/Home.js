@@ -12,8 +12,8 @@ const Container = styled.div`
 const Home = ({userObj}) => {
   return (
     <Container>
-      <HomeUpperComponent />
-      <HomeLowerComponent />
+      <HomeUpperComponent userObj={userObj} />
+      <HomeLowerComponent userObj={userObj} />
     </Container>
   );
 }

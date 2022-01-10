@@ -141,13 +141,8 @@ const PlanFactory = ({userObj, parent}) => {
             cancelReason: '',
         }).then(() => {
             makeChilds(targetId).then(() => {
-                setName('');
-                setDesire('');
-                setExplain('');
-                setDeadline('');
-                setPrize('');
-                setNeedArr('');
-                alert('성공');
+                alert('성공적으로 계획을 세우셨어요!');
+                navigate('/blueprint')
             }).catch((error) => {
                 console.log(error.message);
             })

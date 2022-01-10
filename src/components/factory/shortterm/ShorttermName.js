@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { defaultContainer } from '../../../css/styleConstants';
+import { blockBtn, defaultContainer } from '../../../css/styleConstants';
 import cloud from "../../../img/cloud.png"
 
 const Container = styled.div`
@@ -9,7 +9,7 @@ const Container = styled.div`
     top: 0;
     justify-content: center;
     height: 100vh;
-    z-index: 99;
+    z-index: 10;
     gap: 15px;
     overflow: hidden;
 `;
@@ -52,6 +52,10 @@ const Input = styled.input`
     box-sizing: border-box;
 `;
 
+const BlockBtn = styled.div`
+    ${blockBtn}
+`;
+
 const ShorttermName = ({target, getTarget}) => {
 
     const onChange = e => {
@@ -59,6 +63,7 @@ const ShorttermName = ({target, getTarget}) => {
     }
     
     return (
+        <>
         <Container>
             <Title>
                 먼저 이루고자 하는 것을 <br />
@@ -75,6 +80,8 @@ const ShorttermName = ({target, getTarget}) => {
                 {target && "다 썼다면 다음으로 넘어가봅시다."}
             </Noitce>
         </Container>
+        {!target && <BlockBtn></BlockBtn>}
+        </>
     );
 };
 

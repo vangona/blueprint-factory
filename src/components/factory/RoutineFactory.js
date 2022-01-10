@@ -73,7 +73,7 @@ const SubmitBtn = styled.input`
     align-items: center;
     position: fixed;
     bottom: 20px;
-    z-index: 99;
+    z-index: 60;
     background-color: #3F5DAC;
     border: none;
     border-radius: 20px;
@@ -142,14 +142,8 @@ const RoutineFactory = ({userObj, parent}) => {
             completeFeeling: '',
             cancelReason: '',
         }).then(() => {
-                setName('');
-                setDesire('');
-                setNeed('');
-                setPeriod('');
-                setFrequency('');
-                setDeadline('');
-                setPrize('');
-                alert('성공');
+                alert('루틴을 만들었어요!');
+                navigate('/blueprint')
         }).catch(error => {
             console.log(error.message);
         })
@@ -245,10 +239,10 @@ const RoutineFactory = ({userObj, parent}) => {
             {page !== 1 && <PageBtn onClick={onClickPrev} style={{left: "20px"}}>
                 <IoMdArrowRoundBack style={{fill: "white"}} />
             </PageBtn>}
-            <PageBtn onClick={onClickNext}>
+            {page !== 4 && <PageBtn onClick={onClickNext}>
                 <IoMdArrowRoundForward style={{fill: "white"}} />
-            </PageBtn>
-            {page === 6 && 
+            </PageBtn>}
+            {page === 4 && 
                 <SubmitBtn type="submit" onClick={() => {
                     window.confirm("제출할까요?") &&
                     onSubmit();
