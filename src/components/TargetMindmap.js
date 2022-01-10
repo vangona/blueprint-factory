@@ -3,7 +3,7 @@ import styled from "styled-components";
 import * as go from 'gojs';
 import { ReactDiagram } from 'gojs-react';
 import { useNavigate } from "react-router-dom";
-import { defaultContainer } from "../css/styleConstants";
+import { defaultBtnAction, defaultContainer, defaultShadow } from "../css/styleConstants";
 import { dbService } from "../fBase";
 
 const Container = styled.div`
@@ -16,7 +16,16 @@ const Title = styled.h1`
   margin: 20px;
 `;
 
-const ZoomToFit = styled.button``;
+const ZoomToFit = styled.button`
+  color: white;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--main-blue);
+  font-family: Ssurround;
+  ${defaultShadow};
+  ${defaultBtnAction};
+`;
 
 const TargetMindmap = ({ userObj }) => {
   const navigate = useNavigate();
@@ -33,6 +42,7 @@ const TargetMindmap = ({ userObj }) => {
             layout: $(go.TreeLayout, { angle: 90, layerSpacing: 35 }),
             "contextMenuTool.showContextMenu" : makeContextMenu,
             maxSelectionCount: 1,
+            initialAutoScale: go.Diagram.Uniform,
           });
 
       function nodeDoubleClick(e, obj) {

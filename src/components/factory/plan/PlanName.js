@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react/cjs/react.development';
 import styled from 'styled-components';
 import { defaultContainer } from '../../../css/styleConstants';
 import cloud from "../../../img/cloud.png"

@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react/cjs/react.development';
 import { authService } from '../fBase';
 
 const Signout = () => {

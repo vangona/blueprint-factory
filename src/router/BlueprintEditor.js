@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useState } from 'react/cjs/react.development';
 import styled from 'styled-components';
 import PlanEdit from '../components/edit/PlanEdit';
 import RoutineEdit from '../components/edit/RoutineEdit';

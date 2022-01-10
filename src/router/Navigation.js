@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { defaultContainer, outliner } from '../css/styleConstants';
@@ -6,7 +6,6 @@ import { AiOutlineHome } from "react-icons/ai"
 import { FiUsers } from "react-icons/fi"
 import { GiArcheryTarget } from "react-icons/gi"
 import { FaRegCalendarAlt } from "react-icons/fa"
-import { useState } from 'react/cjs/react.development';
 
 const Container = styled.div`
     ${defaultContainer};
