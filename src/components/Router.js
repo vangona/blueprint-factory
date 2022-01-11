@@ -9,6 +9,7 @@ import Navigation from "../router/Navigation";
 import Community from "../router/Community";
 import Blueprint from "../router/Blueprint";
 import Setting from "../router/Setting";
+import CalendarRoute from "../router/CalendarRoute";
 
 const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
     return (
@@ -27,7 +28,10 @@ const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
                     } />         
                     <Route path="/setting" element={
                         <Setting userObj={userObj} />
-                    } />                                  
+                    } />
+                    <Route path="/calendar" element={
+                        <CalendarRoute userObj={userObj} />
+                    } />                                   
                     <Route path="/blueprint/:type" element={
                         <BlueprintMaker userObj={userObj} />
                     } />

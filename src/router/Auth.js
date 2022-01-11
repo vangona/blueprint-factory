@@ -43,20 +43,24 @@ const AuthForm = styled.form`
 `;
 
 const AuthBox = styled.div`
+    display: flex;
+    flex-direction: column;
     z-index: 11;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
     gap: 10px;
+    max-width: 80%;
 `;
 
 const AuthLabel = styled.label`
+    font-size: 14px;
     z-index: 11;
 `;
 
 const AuthInput = styled.input`
     font-family: SsurroundAir;
     z-index: 11;
+    width: auto;
 `;
 
 const AuthSubmit = styled.input`
@@ -155,13 +159,13 @@ const Auth = () => {
         <AuthForm onSubmit={onSubmit}>
             <AuthBox>
                 <AuthLabel>
-                    ID : 
+                    ID
                 </AuthLabel>
                 <AuthInput name="email" onChange={onChange} value={email} type="email" />
             </AuthBox>
             <AuthBox style={{marginBottom: "20px"}}>
                 <AuthLabel>
-                    Password :
+                    Password
                 </AuthLabel>
                 <AuthInput name="password" onChange={onChange} value={password} type="password" />
             </AuthBox>
