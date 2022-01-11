@@ -7,18 +7,22 @@ const Container = styled.div`
     ${defaultContainer};
     justify-content: flex-start;
     align-items: flex-start;
-    width: 85%;
-    height: 150px;
-    padding: 15px;
+    width: 95%;
+    height: auto;
+    padding: 25px 30px;
     gap: 25px;
+    border-radius: 10px;
     ${spreadShadow};
 `;
 
 const Title = styled.h1`
-    font-size: 30px;
+    font-family: SsurroundAir;
+    font-weight: bold;
+    font-size: 25px;
 `;
 
 const Explain = styled.span`
+    font-family: SsurroundAir;
     color: gray;
 `;
 
@@ -56,7 +60,11 @@ const UsersBox = styled.div`
     }
 `;
 
-const UserPic = styled.img``;
+const UserPic = styled.img`
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+`;
 
 const UserNumber = styled.span`
     position: absolute;
@@ -66,30 +74,21 @@ const UserNumber = styled.span`
     font-size: 12px;
 `;
 
-const CommunityWindow = () => {
+const CommunityWindow = ({userObj}) => {
     return (
         <Container>
             <Title>
-                미라클모닝W
+                {userObj.displayName}
             </Title>
             <Explain>
-                뭐 그런 것입니다.
+                꿈을 이루고 있습니다.
             </Explain>
             <UsersContainer>
                 <UsersBox>
-                    <UserPic />
-                </UsersBox>
-                <UsersBox>
-                    <UserPic />
-                </UsersBox>
-                <UsersBox>
-                    <UserPic />
-                </UsersBox>
-                <UsersBox>
-                    <FaPlus />
+                    <UserPic src={userObj.photoURL} />
                 </UsersBox>
                 <UserNumber>
-                    4/8
+                    1
                 </UserNumber>
             </UsersContainer>
         </Container>

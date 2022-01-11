@@ -13,7 +13,7 @@ const Container = styled.div`
 const Title = styled.h1`
   font-family: Ssurround;
   font-size: 25px;
-  margin: 20px;
+  margin-top: 20px;
 `;
 
 const ZoomToFit = styled.button`
@@ -65,7 +65,7 @@ const TargetMindmap = ({ userObj }) => {
                 dbService.collection("targets").doc(`${node.data.key}`).update({
                   isComplished: true,
                 }).then(() => {
-                  alert("축하드립니다!");
+                  alert("축하드려오");
                 }).catch(error => {
                   console.log(error.message);
                 })
@@ -94,22 +94,22 @@ const TargetMindmap = ({ userObj }) => {
       }
 
       function makeLongtermContextmenu(cm) {
-        cm.add(
-          $("ContextMenuButton",
-            $(go.TextBlock, "목표 수정하기"),
-            {
-              click: function(e, obj) {
-                const node = obj.part.adornedPart;
-                if (node !== null) {
-                  navigate({
-                    pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
-                    state: {type: "edit"}
-                  })
-                }
-              }
-            }
-          )
-        )
+        // cm.add(
+        //   $("ContextMenuButton",
+        //     $(go.TextBlock, "목표 수정하기"),
+        //     {
+        //       click: function(e, obj) {
+        //         const node = obj.part.adornedPart;
+        //         if (node !== null) {
+        //           navigate({
+        //             pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
+        //             state: {type: "edit"}
+        //           })
+        //         }
+        //       }
+        //     }
+        //   )
+        // )
         cm.add(
           $("ContextMenuButton",
             $(go.TextBlock, "하위 목표 만들기"),
@@ -179,22 +179,22 @@ const TargetMindmap = ({ userObj }) => {
       }
 
       function makeShorttermContextmenu(cm) {
-        cm.add(
-          $("ContextMenuButton",
-            $(go.TextBlock, "목표 수정하기"),
-            {
-              click: function(e, obj) {
-                const node = obj.part.adornedPart;
-                if (node !== null) {
-                  navigate({
-                    pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
-                    state: {type: "edit"}
-                  })
-                }
-              }
-            }
-          )
-        )
+        // cm.add(
+        //   $("ContextMenuButton",
+        //     $(go.TextBlock, "목표 수정하기"),
+        //     {
+        //       click: function(e, obj) {
+        //         const node = obj.part.adornedPart;
+        //         if (node !== null) {
+        //           navigate({
+        //             pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
+        //             state: {type: "edit"}
+        //           })
+        //         }
+        //       }
+        //     }
+        //   )
+        // )
         cm.add(
           $("ContextMenuButton",
             $(go.TextBlock, "하위 목표 만들기"),
@@ -264,22 +264,22 @@ const TargetMindmap = ({ userObj }) => {
       }
 
       function makePlanContextmenu(cm) {
-        cm.add(
-          $("ContextMenuButton",
-            $(go.TextBlock, "계획 수정하기"),
-            {
-              click: function(e, obj) {
-                const node = obj.part.adornedPart;
-                if (node !== null) {
-                  navigate({
-                    pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
-                    state: {type: "edit"}
-                  })
-                }
-              }
-            }
-          )
-        )
+        // cm.add(
+        //   $("ContextMenuButton",
+        //     $(go.TextBlock, "계획 수정하기"),
+        //     {
+        //       click: function(e, obj) {
+        //         const node = obj.part.adornedPart;
+        //         if (node !== null) {
+        //           navigate({
+        //             pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
+        //             state: {type: "edit"}
+        //           })
+        //         }
+        //       }
+        //     }
+        //   )
+        // )
         cm.add(
           $("ContextMenuButton",
             $(go.TextBlock, "하위 목표 만들기"),
@@ -349,22 +349,22 @@ const TargetMindmap = ({ userObj }) => {
       }     
       
       function makeRoutineContextmenu(cm) {
-        cm.add(
-          $("ContextMenuButton",
-            $(go.TextBlock, "루틴 수정하기"),
-            {
-              click: function(e, obj) {
-                const node = obj.part.adornedPart;
-                if (node !== null) {
-                  navigate({
-                    pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
-                    state: {type: "edit"}
-                  })
-                }
-              }
-            }
-          )
-        )
+        // cm.add(
+        //   $("ContextMenuButton",
+        //     $(go.TextBlock, "루틴 수정하기"),
+        //     {
+        //       click: function(e, obj) {
+        //         const node = obj.part.adornedPart;
+        //         if (node !== null) {
+        //           navigate({
+        //             pathname: `/blueprint/edit/${node.data.type}/${node.data.key}`,
+        //             state: {type: "edit"}
+        //           })
+        //         }
+        //       }
+        //     }
+        //   )
+        // )
         cm.add(
           $("ContextMenuButton",
             $(go.TextBlock, "삭제하기"),

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { defaultContainer } from '../../css/styleConstants';
 
@@ -23,8 +23,9 @@ const TodoContainer = styled.div`
 
 const TodoTitle = styled.h1`
     color: white;
-    font-family: SsurroundAir;
+    font-family: Ssurround;
     margin-bottom: 20px;
+    font-size: 20px;
 `;
 
 const TodoBox = styled.div`
@@ -40,18 +41,41 @@ const Todo = styled.div`
 const TodoCheckBox = styled.input``;
 
 const HomeLowerComponent = ({userObj}) => {
+    const [todayTargets, setTodayTargets] = useState('');
+
+    const getTodayTarget = () => {
+        const today = new Date(Date.now());
+        const filtered = userObj.targets.filter(el => {
+            const Time = new Date(el.deadline.seconds * 1000);
+            const YearTime = Time.getFullYear();
+            const MonthTime = Time.getMonth() + 1;
+            const DateTime = Time.getDate();
+            return Boolean(DateTime === today.getDate() && MonthTime === today.getMonth() + 1 && YearTime === today.getFullYear());
+        })
+        setTodayTargets(filtered);
+    }
+
+    useEffect(() => {
+        getTodayTarget();
+    }, []);
+
     return (
         <Container>
             <TodoContainer>
                 <TodoTitle>
-                    오늘의 목표
+                    오늘 마감인 목표
                 </TodoTitle>
-                {userObj.targets.map((target, index) => (
+                {todayTargets.length 
+                ? todayTargets.map((target, index) => (
                     <TodoBox key={index}>
                         <TodoCheckBox type="checkbox" />
                         <Todo>{target.name}</Todo>
                     </TodoBox>
-                ))}
+                ))
+                : <Todo>
+                    오늘 마감인 목표가 없습니다.
+                </Todo>
+                }
             </TodoContainer>
         </Container>
     );

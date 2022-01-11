@@ -34,10 +34,12 @@ const SearchInput = styled.input`
     border: none;
     color: white;
     font-size: 15px;
+    font-family: SsurroundAir;
     ::-webkit-input-placeholder {
         color: white;
         font-size: 15px;
         vertical-align: bottom;
+        font-family: SsurroundAir;
     }
 `;
 

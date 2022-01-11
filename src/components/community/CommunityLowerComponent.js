@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { defaultContainer } from '../../css/styleConstants';
+import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
 import CommunityWindow from './CommunityWindow';
 
 const Container = styled.div`
@@ -23,12 +23,14 @@ const NavBox = styled.div`
     line-height: 45px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
+    font-family: SsurroundAir;
     font-weight: bold;
     color: var(--main-blue);
     :first-child {
         background-color: var(--main-blue);
         color: white;
     }
+    ${defaultBtnAction};
 `;
 
 const ContentContainer = styled.div`
@@ -40,7 +42,7 @@ const ContentContainer = styled.div`
     width: 90%;
 `;
 
-const CommunityLowerComponent = () => {
+const CommunityLowerComponent = ({userObj}) => {
     return (
         <Container>
             <NavContainer>
@@ -58,10 +60,7 @@ const CommunityLowerComponent = () => {
                 </NavBox>
             </NavContainer>
             <ContentContainer>
-                <CommunityWindow />
-                <CommunityWindow />
-                <CommunityWindow />
-                <CommunityWindow />
+                <CommunityWindow userObj={userObj} />
             </ContentContainer>
         </Container>
     );

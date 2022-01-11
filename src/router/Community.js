@@ -8,14 +8,14 @@ import CommunityLowerComponent from '../components/community/CommunityLowerCompo
 const Container = styled.div`
     ${defaultContainer};
     justify-content: flex-start;
-    margin-bottom: 65px;
+    padding-bottom: 65px;
 `;
 
-const Community = () => {
+const Community = ({userObj}) => {
     return (
         <Container>
             <CommunityUpperComponent />
-            <CommunityLowerComponent />
+            <CommunityLowerComponent userObj={userObj} />
         </Container>
     );
 };

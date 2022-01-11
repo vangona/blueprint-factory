@@ -38,8 +38,8 @@ const ProfileBox = styled.div`
     top: 20px;
     right: 15px;
     background-color: white;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     border: 1px solid rgba(0, 0, 0, 0.3);
     ${defaultBtnAction};
