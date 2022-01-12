@@ -126,22 +126,22 @@ const TargetMindmap = ({ userObj }) => {
             }
           )
         )
-        cm.add(
-          $("ContextMenuButton",
-            $(go.TextBlock, "계획 세우기"),
-            {
-              click: function(e, obj) {
-                const node = obj.part.adornedPart;
-                if (node !== null) {
-                  navigate({
-                    pathname: `/blueprint/plan/${node.data.key}`,
-                    state: {type : "plan"}
-                  })
-                }
-              }
-            }
-          )
-        )
+        // cm.add(
+        //   $("ContextMenuButton",
+        //     $(go.TextBlock, "계획 세우기"),
+        //     {
+        //       click: function(e, obj) {
+        //         const node = obj.part.adornedPart;
+        //         if (node !== null) {
+        //           navigate({
+        //             pathname: `/blueprint/plan/${node.data.key}`,
+        //             state: {type : "plan"}
+        //           })
+        //         }
+        //       }
+        //     }
+        //   )
+        // )
         cm.add(
           $("ContextMenuButton",
             $(go.TextBlock, "루틴 만들기"),
@@ -166,8 +166,16 @@ const TargetMindmap = ({ userObj }) => {
                 const node = obj.part.adornedPart;
                 if (node !== null) {
                   await dbService.collection("targets").doc(`${node.data.key}`).delete()
-                  .then(()=>{
-                    alert('성공');
+                  .then(async ()=>{
+                    await dbService.collection("targets").where("parentId", "==", node.data.key).get().then(snapshot => {
+                      snapshot.docs.forEach(async doc => {
+                        const id = doc.data().id;
+                        await dbService.collection("targets").doc(`${id}`).delete();
+                      })
+                    }).then(() => {
+                      alert('성공');
+                      window.location.reload();
+                    })
                   }).catch(error => {
                     console.log(error.message);
                   })
@@ -251,8 +259,16 @@ const TargetMindmap = ({ userObj }) => {
                 const node = obj.part.adornedPart;
                 if (node !== null) {
                   await dbService.collection("targets").doc(`${node.data.key}`).delete()
-                  .then(()=>{
-                    alert('성공');
+                  .then(async ()=>{
+                      await dbService.collection("targets").where("parentId", "==", node.data.key).get().then(snapshot => {
+                        snapshot.docs.forEach(async doc => {
+                          const id = doc.data().id;
+                          await dbService.collection("targets").doc(`${id}`).delete();
+                        })
+                      }).then(() => {
+                        alert('성공');
+                        window.location.reload();
+                      })
                   }).catch(error => {
                     console.log(error.message);
                   })
@@ -336,8 +352,25 @@ const TargetMindmap = ({ userObj }) => {
                 const node = obj.part.adornedPart;
                 if (node !== null) {
                   await dbService.collection("targets").doc(`${node.data.key}`).delete()
-                  .then(()=>{
-                    alert('성공');
+                  .then(async ()=>{
+                    await dbService.collection("targets").where("parentId", "==", node.data.key).get().then(snapshot => {
+                      snapshot.docs.forEach(async doc => {
+                        const id = doc.data().id;
+                        await dbService.collection("targets").doc(`${id}`).delete();
+                      })
+                    }).then(async () => {
+                      await dbService.collection("steps")
+                      .where("parentId", "==", node.data.key)
+                      .get()
+                      .then(snapshot => {
+                        snapshot.docs.forEach(async doc => {
+                          const id = doc.data().id;
+                          await dbService.collection("steps").doc(`${id}`).delete();
+                        })
+                        alert('성공');
+                        window.location.reload();
+                      })
+                    })
                   }).catch(error => {
                     console.log(error.message);
                   })
@@ -375,6 +408,7 @@ const TargetMindmap = ({ userObj }) => {
                   await dbService.collection("targets").doc(`${node.data.key}`).delete()
                   .then(()=>{
                     alert('성공');
+                    window.location.reload();
                   }).catch(error => {
                     console.log(error.message);
                   })

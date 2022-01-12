@@ -42,12 +42,13 @@ const ContentContainer = styled.div`
     width: 90%;
 `;
 
-const CommunityLowerComponent = ({userObj}) => {
+const CommunityLowerComponent = ({userObj, users}) => {
     return (
         <Container>
             <NavContainer>
                 <NavBox>
                     팀
+                    {users[0].displayName}
                 </NavBox>
                 <NavBox>
                     친구
@@ -60,7 +61,9 @@ const CommunityLowerComponent = ({userObj}) => {
                 </NavBox>
             </NavContainer>
             <ContentContainer>
-                <CommunityWindow userObj={userObj} />
+                {users.map((user, index) => (
+                    <CommunityWindow key={index} userObj={userObj} user={user} />
+                ))}
             </ContentContainer>
         </Container>
     );

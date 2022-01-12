@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import CytoscapeMindmap from '../components/mindmap/CytoscapeMindmap';
 import TargetMindmap from '../components/TargetMindmap';
 import { defaultContainer } from '../css/styleConstants';
 
@@ -13,6 +14,7 @@ const Blueprint = ({userObj}) => {
     return (
         <Container>
             <TargetMindmap userObj={userObj} />
+            {/* <CytoscapeMindmap /> */}
         </Container>        
     );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { defaultContainer, defaultShadow, spreadShadow } from '../../css/styleConstants';
 import { FaPlus } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -74,18 +75,25 @@ const UserNumber = styled.span`
     font-size: 12px;
 `;
 
-const CommunityWindow = ({userObj}) => {
+const CommunityWindow = ({userObj, user}) => {
+    const navigate = useNavigate();
+
+    const onClickUser = (e) => {
+        e.preventDefault();
+        navigate(`/blueprint/view/${user.uid}`)
+    }
+
     return (
-        <Container>
+        <Container onClick={onClickUser}>
             <Title>
-                {userObj.displayName}
+                {user.displayName}
             </Title>
             <Explain>
-                꿈을 이루고 있습니다.
+                {user.bio}
             </Explain>
             <UsersContainer>
                 <UsersBox>
-                    <UserPic src={userObj.photoURL} />
+                    <UserPic src={user.photoURL} />
                 </UsersBox>
                 <UserNumber>
                     1

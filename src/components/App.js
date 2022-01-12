@@ -16,6 +16,16 @@ const App = () => {
         return targetArray;
     }
 
+    const getSteps = async(uid) => {
+        let targetArray = [];
+        await dbService.collection('steps').where('uid', '==', uid).get().then(snapshot => {
+            snapshot.docs.forEach(doc => {
+                targetArray.push({...doc.data()});
+            })
+        })
+        return targetArray;
+    }
+
     const refreshUser = async () => {
         const user = authService.currentUser;
         setUserObj({
@@ -25,14 +35,29 @@ const App = () => {
         });
     };
 
-    useEffect(() => {
+    const getUserData = async (user) => {
+        await dbService.collection("users").doc(`${user.uid}`).get().then((snapshot) => {
+            if(!snapshot.exists) {
+                dbService.collection("users").doc(`${user.uid}`).set({
+                    uid: user.uid,
+                    displayName: user.displayName ? user.displayName : "익명",
+                    photoURL: user.photoURL,
+                    bio: "",
+                })
+            }
+        })
+    }
+
+    const getUserObj = () => {
         authService.onAuthStateChanged(async (user) => {
             if (user) {
                 const targetData = await getTargetData(user.uid);
-                console.log(user.photoURL)
+                const stepData = await getSteps(user.uid);
+                getUserData(user);
                 setUserObj({
                     uid: user.uid,
                     targets: targetData,
+                    steps: stepData,
                     photoURL: user.photoURL ? user.photoURL : '',
                     displayName: (user.displayName ? user.displayName : "익명"),
                     updateProfile: (args) => user.updateProfile(args),
@@ -43,6 +68,10 @@ const App = () => {
                 setInit(true);
             }
         })
+    }
+
+    useEffect(() => {
+        getUserObj();
     }, [init])
 
     return (

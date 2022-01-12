@@ -201,8 +201,8 @@ const ShorttermFactory = ({userObj, parent}) => {
 
     const onClickDelete = e => {
         e.preventDefault();
-        const need = e.target.previousSibling.innerHTML;
-        const filtered = needArr.filter(el => el !== need);
+        const clickedIndex = e.target.parentNode.id;
+        const filtered = needArr.filter((el, index) => index !== parseInt(clickedIndex));
         setNeedArr(filtered);
     }
 

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { defaultContainer } from '../../css/styleConstants';
+import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
+import { dbService } from '../../fBase';
 
 const Container = styled.div`
     ${defaultContainer};
 `;
 
 const TodoContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
     margin-top: 30px;
     background-color: #6F9AE9;
     padding: 20px;
@@ -30,34 +34,35 @@ const TodoTitle = styled.h1`
 
 const TodoBox = styled.div`
     display: flex;
+    gap: 10px;
     margin-bottom: 5px;
 `;
 
-const Todo = styled.div`
+const Todo = styled.label`
     color: white;
     font-family: SsurroundAir;
+    ${defaultBtnAction};
 `;
 
-const TodoCheckBox = styled.input``;
+const TodoCheckBox = styled.input`
+    ${defaultBtnAction};
+`;
 
-const HomeLowerComponent = ({userObj}) => {
-    const [todayTargets, setTodayTargets] = useState('');
+const HomeLowerComponent = ({userObj, todayTargets, todaySteps}) => {
 
-    const getTodayTarget = () => {
-        const today = new Date(Date.now());
-        const filtered = userObj.targets.filter(el => {
-            const Time = new Date(el.deadline.seconds * 1000);
-            const YearTime = Time.getFullYear();
-            const MonthTime = Time.getMonth() + 1;
-            const DateTime = Time.getDate();
-            return Boolean(DateTime === today.getDate() && MonthTime === today.getMonth() + 1 && YearTime === today.getFullYear());
-        })
-        setTodayTargets(filtered);
+    const onClickCheckBox = (e, target) => {
+        const name = e.target.getAttribute('name');
+        if (name === 'step') {
+            dbService.collection('steps').doc(`${target.id}`).update({
+                isComplished: !target.isComplished,
+            })
+        }
+        if (name === 'target') {
+            dbService.collection('targets').doc(`${target.id}`).update({
+                isComplished: !target.isComplished,
+            })
+        }
     }
-
-    useEffect(() => {
-        getTodayTarget();
-    }, []);
 
     return (
         <Container>
@@ -65,13 +70,42 @@ const HomeLowerComponent = ({userObj}) => {
                 <TodoTitle>
                     오늘 마감인 목표
                 </TodoTitle>
-                {todayTargets.length 
-                ? todayTargets.map((target, index) => (
-                    <TodoBox key={index}>
-                        <TodoCheckBox type="checkbox" />
-                        <Todo>{target.name}</Todo>
-                    </TodoBox>
-                ))
+                {todayTargets.length || todaySteps.length
+                ? 
+                <>
+                    {todayTargets.map((target, index) => (
+                        <TodoBox key={index}>
+                            <TodoCheckBox id={target.id} type="checkbox" name="target" checked={target.isComplished} readOnly onClick={(e) => {
+                                e.preventDefault();
+                                if (target.isComplished) {
+                                    window.confirm("앗 실수로 누르셨었나요?") &&
+                                    onClickCheckBox(e, target);    
+                                } else {
+                                    window.confirm("목표를 달성 하셨나요?") &&
+                                    onClickCheckBox(e, target);    
+                                }
+                            }} />
+                            <Todo style={{color: target.isComplished ? "yellow" : null, textDecorationLine: target.isComplished ? 'line-through' : null}} 
+                                htmlFor={target.id}>{target.name}</Todo>
+                        </TodoBox>
+                    ))}
+                    {todaySteps.map((target, index) => (
+                        <TodoBox key={index}>
+                            <TodoCheckBox id={target.id} type="checkbox" name="step" checked={target.isComplished} readOnly onClick={(e) => {
+                                e.preventDefault();
+                                if (target.isComplished) {
+                                    window.confirm("앗 실수로 누르셨었나요?") &&
+                                    onClickCheckBox(e, target);    
+                                } else {
+                                    window.confirm("목표를 달성 하셨나요?") &&
+                                    onClickCheckBox(e, target);    
+                                }
+                            }} />
+                            <Todo style={{color: target.isComplished ? "yellow" : null, textDecorationLine: target.isComplished ? 'line-through' : null}}  
+                                htmlFor={target.id}>{target.name} - {target.explain}</Todo>
+                        </TodoBox>
+                    ))}
+                </>
                 : <Todo>
                     오늘 마감인 목표가 없습니다.
                 </Todo>

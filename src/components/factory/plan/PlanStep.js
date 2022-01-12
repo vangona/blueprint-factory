@@ -24,6 +24,7 @@ const Img = styled.img`
 `;
 
 const Explain = styled.div`
+    text-align: center;
     font-family: SsurroundAir;
     font-size: 15px;
     color: var(--main-blue);
@@ -109,24 +110,30 @@ const PlanStep = ({getStep, step, stepArr, onClickStep, onClickDelete, target}) 
             </Title>
             <Img src={img}/>
             <Explain>
-                한 단계가 너무 크면, <br />
-                다시 하나의 목표로 만드세요!
+                계획을 오늘 당장 실행하기 어렵다면, <br />
+                청사진으로 돌아가서 목표를 더 쪼개봅시다!
             </Explain>
             <InputBox>    
                 <Input type="text" value={step} onChange={onChange}/>
                 <Plus onClick={onClickStep}>+</Plus>
             </InputBox>
+            <Explain>
+                {stepArr.length === 0 && 'Hint : 1단계는 오늘이라도 할 수 있어야해요!'}
+            </Explain>
             <NeedContainer>
                 {stepArr.map((step, index) => (
-                    <NeedBox key={index}>
+                    <NeedBox key={index} id={index}>
                         <StepIndex>{index + 1}단계 : </StepIndex>
                         <Need>{step}</Need>
                         <DeleteBtn onClick={onClickDelete}>-</DeleteBtn>
                     </NeedBox>
                 ))}
             </NeedContainer>
+            <Explain>
+                {stepArr.length === 1 && 'Hint : 단계가 끝나면 다음 단계를 할 수 있어야해요!'}
+            </Explain>
         </Container>
-        {!stepArr[0] && <BlockBtn></BlockBtn>}
+        {!stepArr.length && <BlockBtn></BlockBtn>}
         </>
     );
 };

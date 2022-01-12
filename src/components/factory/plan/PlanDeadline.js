@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { defaultBtnAction, defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
+import { blockBtn, defaultBtnAction, defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
 import img from "../../../img/deadline.png";
+import StepInput from './StepInput';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -37,33 +38,18 @@ gap: 10px;
 font-family: SsurroundAir;
 `;
 
-const StepBox = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
+const BlockBtn = styled.div`
+    ${blockBtn};
 `;
 
-const Step = styled.div`
-    width: auto;
-`;
-
-const Input = styled.input`
-    ${targetFactoryContentInput};
-    height: 14px;
-    padding: 15px;
-    font-size: 10px;
-    width: auto;
-`;
-
-const PlanDeadline = ({getDeadlineArr, deadlineArr, explainArr, target}) => {
-
-    const onChange = e => {
-        getDeadlineArr(e);
-    }
+const PlanDeadline = ({getDeadlineArr, deadlineArr, deadlineState, explainArr, target}) => {
+    const Time = new Date(Date.now());
+    const YearTime = Time.getFullYear();
+    const MonthTime = Time.getMonth() + 1 < 10 ? '0' + `${Time.getMonth() + 1}` : `${Time.getMonth() + 1}`;
+    const DateTime = Time.getDate() < 10 ? '0' + `${Time.getDate()}` : `${Time.getDate()}`;
 
     return (
+        <>
         <Container>
             <Title>
                 <Bold>각 단계</Bold>를 <br /> 
@@ -75,13 +61,12 @@ const PlanDeadline = ({getDeadlineArr, deadlineArr, explainArr, target}) => {
             </Explain>
             <StepContainer>
                 {explainArr.map((step, index) => (
-                    <StepBox key={index}>
-                        <Step>{index + 1}단계 : {step}</Step>
-                        <Input id={index} type="date" value={deadlineArr[index]} onChange={onChange}/>
-                    </StepBox>
+                    <StepInput key={index} step={step} getDeadlineArr={getDeadlineArr} deadlineArr={deadlineArr} index={index} minDate={`${YearTime}-${MonthTime}-${DateTime}`} maxDate={`${YearTime+1}-${MonthTime}-${DateTime}`} />
                 ))}
             </StepContainer>
         </Container>
+        {!deadlineState && <BlockBtn></BlockBtn>}
+        </>
     );
 };
 

@@ -113,7 +113,7 @@ const LongtermNeed = ({getNeed, need, needArr, onClickPlus, onClickDelete, targe
             </InputBox>
             <NeedContainer>
                 {needArr.map((need, index) => (
-                    <NeedBox key={index}>
+                    <NeedBox key={index} id={index}>
                         <Need>{need}</Need>
                         <DeleteBtn onClick={onClickDelete}>-</DeleteBtn>
                     </NeedBox>

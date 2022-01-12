@@ -6,16 +6,16 @@ const Container = styled.div`
   width: 50%;
 `;
 
-const DoughnutChart = () => {
+const DoughnutChart = ({compishmentRate}) => {
     const data = [
-      { name: "complished", value: 87, color: '#BBD0FF' }
+      { name: "complished", value: compishmentRate, color: '#BBD0FF' }
     ];
 
     return (
         <Container>
             <PieChart 
               data={data}
-              reveal={87}
+              reveal={compishmentRate}
               lineWidth={18}
               background='#F5F5F5'
               lengthAngle={360}

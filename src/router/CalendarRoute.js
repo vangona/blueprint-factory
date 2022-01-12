@@ -7,6 +7,7 @@ import EventComponent from '../components/calendar/EventComponent';
 const Container = styled.div`
     ${defaultContainer};
     padding-top: 70px;
+    height: auto;
 `;
 
 const CalendarRoute = ({userObj}) => {
@@ -14,9 +15,10 @@ const CalendarRoute = ({userObj}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [schedules, setSchedules] = useState([]);
 
-    const getDeadlines = (targets) => {
-        const filtered = targets.filter(el => el.deadline);
-        setSchedules(filtered);
+    const getDeadlines = () => {
+        const steps = userObj.steps;
+        const filtered = userObj.targets.filter(el => el.deadline);
+        setSchedules([...filtered, ...steps]);
         setIsLoading(false);
     }
 
@@ -32,7 +34,7 @@ const CalendarRoute = ({userObj}) => {
     }
 
     useEffect(() => {
-        getDeadlines(userObj.targets);
+        getDeadlines();
     }, [])
 
     return (

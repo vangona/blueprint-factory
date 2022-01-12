@@ -28,6 +28,7 @@ const Explain = styled.div`
     font-size: 15px;
     color: var(--main-blue);
     line-height: 25px;
+    text-align: center;
 `;
 
 const InputBox = styled.div`
@@ -111,12 +112,16 @@ const PlanNeed = ({getNeed, need, needArr, onClickPlus, onClickDelete, target}) 
             </InputBox>
             <NeedContainer>
                 {needArr.map((need, index) => (
-                    <NeedBox key={index}>
+                    <NeedBox key={index} id={index}>
                         <Need>{need}</Need>
                         <DeleteBtn onClick={onClickDelete}>-</DeleteBtn>
                     </NeedBox>
                 ))}
             </NeedContainer>
+            {!needArr.length && <Explain>
+                계획에서 필요한 것은 바로 구할 수 있어야해요. <br />
+                아니라면, 목표를 더 쪼개봅시다.
+            </Explain>}
         </Container>
     );
 };

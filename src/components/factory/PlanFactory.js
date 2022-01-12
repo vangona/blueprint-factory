@@ -114,7 +114,9 @@ const PlanFactory = ({userObj, parent}) => {
     const [desire, setDesire] = useState(`${parent.name}을 위해`);
     const [explain, setExplain] = useState('');
     const [explainArr, setExplainArr] = useState([]);
+    const [deadline, setDeadline] = useState('');
     const [deadlineArr, setDeadlineArr] = useState([]);
+    const [deadlineState, setDeadlineState] = useState(false);
     const [prize, setPrize] = useState(''); 
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);
@@ -127,7 +129,7 @@ const PlanFactory = ({userObj, parent}) => {
             name,
             desire,
             explain : explainArr,
-            deadline : new Date(deadlineArr[deadlineArr.length - 1]),
+            deadline : new Date(deadline),
             prize,
             needArr,
             createdAt: Date.now(),
@@ -160,7 +162,8 @@ const PlanFactory = ({userObj, parent}) => {
                 await dbService.collection('steps').doc(newId).set({
                     id : newId,
                     uid: userObj.uid,
-                    name : el,
+                    name : name,
+                    explain: el,
                     deadline : new Date(deadlineArr[index]),
                     createdAt: Date.now(),
                     modifiedAt: 0,
@@ -242,15 +245,17 @@ const PlanFactory = ({userObj, parent}) => {
 
     const onClickDeleteStep = e => {
         e.preventDefault();
-        const explain = e.target.previousSibling.innerHTML;
-        const filtered = explainArr.filter(el => el !== explain);
+        const clickedIndex = e.target.parentNode.id;
+        const filtered = explainArr.filter((el, index) => index !== parseInt(clickedIndex));
+        const filteredDeadlineArr = deadlineArr.filter((el, index) => index !== parseInt(clickedIndex));
         setExplainArr(filtered);
+        setDeadlineArr(filteredDeadlineArr);
     }
 
     const onClickDeleteNeed = e => {
         e.preventDefault();
-        const need = e.target.previousSibling.innerHTML;
-        const filtered = needArr.filter(el => el !== need);
+        const clickedIndex = e.target.parentNode.id;
+        const filtered = needArr.filter((el, index) => index !== parseInt(clickedIndex));
         setNeedArr(filtered);
     }
 
@@ -277,16 +282,19 @@ const PlanFactory = ({userObj, parent}) => {
         setExplain(value);
     }
 
-    const getDeadlineArr = e => {
+    const getDeadlineArr = (value, index) => {
         let arr = deadlineArr;
-        const index = e.target.id;
-        arr[index] = e.target.value;
-        console.log(arr);
+        arr[index] = value;
         setDeadlineArr(arr);
+        setDeadline(arr[arr.length - 1]);
+        if(arr.length === explainArr.length) {
+            setDeadlineState(true);
+        }
     }
 
     const getNeed = value => {
         setNeed(value);
+
     }
 
     return (
@@ -295,7 +303,7 @@ const PlanFactory = ({userObj, parent}) => {
             {page > 1 && <ShorttermBackground userObj={userObj} parent={parent} />}
             {page === 2 && <PlanName name={name} getName={getName} />}
             {page === 3 && <PlanStep getStep={getStep} step={explain} stepArr={explainArr} onClickStep={onClickStep} onClickDelete={onClickDeleteStep} target={name} />}
-            {page === 4 && <PlanDeadline getDeadlineArr={getDeadlineArr} deadlineArr={deadlineArr} explainArr={explainArr} target={name} /> }
+            {page === 4 && <PlanDeadline getDeadlineArr={getDeadlineArr} deadlineArr={deadlineArr} deadlineState={deadlineState} explainArr={explainArr} target={name} /> }
             {page === 5 && <PlanNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDeleteNeed} target={name} /> }
             {page === 6 && 
                 <PlanCheck explainArr={explainArr} needArr={needArr} deadlineArr={deadlineArr} target={name} />            
@@ -330,7 +338,7 @@ const PlanFactory = ({userObj, parent}) => {
                 </ArrayContainer>
                 <TargetBox>
                     <TargetLabel htmlFor='targetDeadline'>기한 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={deadlineArr[deadlineArr.length - 1]} id='targetDeadline' type="date" required/>
+                    <TargetInput onChange={onChange} value={deadline} id='targetDeadline' type="date" required/>
                 </TargetBox>
                 <TargetBox>
                     <TargetLabel htmlFor='targetPrize'>달성 시 보상 : </TargetLabel>

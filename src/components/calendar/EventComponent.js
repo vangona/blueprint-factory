@@ -10,9 +10,12 @@ const SelectionContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     width: 100%;
+    max-height: 45vh;
+    overflow: scroll;
+    padding: 20px 0;
 `;
 
 const Selection = styled.div`
@@ -41,9 +44,6 @@ const Explain = styled.div`
 `;
 
 const EventComponent = ({selected}) => {
-    useEffect(() => {
-        console.log(selected);
-    }, [selected])
 
     return (
         <Container>
@@ -51,7 +51,7 @@ const EventComponent = ({selected}) => {
             {selected && selected.map((el, index) => (
                 <Selection key={index}>
                     <Name>{el.name}</Name>
-                    <Explain>{el.explain}</Explain>
+                    <Explain>{Array.isArray(el.explain) ? '계획 완료날' : el.explain}</Explain>
                 </Selection>
             ))}
             </SelectionContainer>

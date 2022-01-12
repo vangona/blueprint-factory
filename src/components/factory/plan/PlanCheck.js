@@ -29,6 +29,7 @@ const Content = styled.div`
     border-radius: 15px;
     padding: 20px;
     word-break: keep-all;
+    min-width: 60%;
 `;
 
 const Name = styled.div``;
@@ -41,14 +42,16 @@ const NeedContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
     font-family: SsurroundAir;
 `;
 
 const NeedBox = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     gap: 10px;
+    text-align: center;
 `;
 
 const Need = styled.div`
@@ -59,7 +62,7 @@ const Line = styled.hr`
     width: 90%;
 `;
 
-const PlanCheck = ({explainArr, target, needArr, deadline}) => {
+const PlanCheck = ({explainArr, deadlineArr, target, needArr, deadline}) => {
 
     return (
         <Container>
@@ -71,7 +74,7 @@ const PlanCheck = ({explainArr, target, needArr, deadline}) => {
                     {target}
                 </Name>
                 <Deadline>
-                    {deadline}까지
+                    {deadlineArr[deadlineArr.length - 1]}까지
                 </Deadline>
                 <Line />
                 <NeedContainer>
@@ -80,6 +83,9 @@ const PlanCheck = ({explainArr, target, needArr, deadline}) => {
                     <NeedBox key={index}>
                         <Need>
                             {index + 1}단계 : {explain}
+                        </Need>
+                        <Need>
+                            {deadlineArr[index]}까지
                         </Need>
                     </NeedBox>
                 ))}
