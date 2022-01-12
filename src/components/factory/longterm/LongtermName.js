@@ -57,7 +57,7 @@ const Input = styled.input`
 `;
 
 const BlockBtn = styled.div`
-    ${blockBtn}
+    ${blockBtn};
 `;
 
 const LongtermName = ({parent, target, getTarget}) => {

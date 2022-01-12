@@ -513,7 +513,7 @@ const TargetMindmap = ({ userObj }) => {
                     stroke: "black",
                     textAlign: "center",
                   },
-                  new go.Binding("text", "name")
+                  new go.Binding("text", "name"),
             ),
             $(go.Panel, "Vertical",
                 { 

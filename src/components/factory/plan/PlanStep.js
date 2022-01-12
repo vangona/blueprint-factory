@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { defaultBtnAction, defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
+import { blockBtn, defaultBtnAction, defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
 import img from "../../../img/need.png";
 
 const Container = styled.div`
@@ -71,6 +71,8 @@ const NeedBox = styled.div`
     gap: 10px;
 `;
 
+const StepIndex = styled.span``;
+
 const Need = styled.div``;
 
 const DeleteBtn = styled.button`
@@ -88,6 +90,10 @@ const DeleteBtn = styled.button`
     ${defaultBtnAction};
 `;
 
+const BlockBtn = styled.div`
+    ${blockBtn};
+`;
+
 const PlanStep = ({getStep, step, stepArr, onClickStep, onClickDelete, target}) => {
 
     const onChange = e => {
@@ -95,6 +101,7 @@ const PlanStep = ({getStep, step, stepArr, onClickStep, onClickDelete, target}) 
     }
 
     return (
+        <>
         <Container>
             <Title>
                 <Bold>{target}</Bold> <br /> 
@@ -112,12 +119,15 @@ const PlanStep = ({getStep, step, stepArr, onClickStep, onClickDelete, target}) 
             <NeedContainer>
                 {stepArr.map((step, index) => (
                     <NeedBox key={index}>
-                        <Need>{index + 1}단계 : {step}</Need>
+                        <StepIndex>{index + 1}단계 : </StepIndex>
+                        <Need>{step}</Need>
                         <DeleteBtn onClick={onClickDelete}>-</DeleteBtn>
                     </NeedBox>
                 ))}
             </NeedContainer>
         </Container>
+        {!stepArr[0] && <BlockBtn></BlockBtn>}
+        </>
     );
 };
 

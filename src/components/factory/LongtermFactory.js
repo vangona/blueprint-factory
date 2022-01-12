@@ -247,7 +247,7 @@ const LongtermFactory = ({userObj, parent}) => {
             {page === 1 && <LongtermParent parent={parent} /> }
             {page === 2 && <LongtermName parent={parent} target={name} getTarget={getName} /> }
             {page === 3 && <LongtermDesire getDesire={getDesire} desire={desire} target={name} /> }
-            {page === 4 && <LongtermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={target} />}
+            {page === 4 && <LongtermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={name} />}
             {page === 5 && <LongtermDeadline getDeadline={getDeadline} deadline={deadline} target={name} />}
             {page === 6 && <LongtermCheck getExplain={getExplain} explain={explain} name={name} desire={desire} needArr={needArr} deadline={deadline} target={target} />}
 

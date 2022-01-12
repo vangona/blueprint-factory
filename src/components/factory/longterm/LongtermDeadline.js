@@ -79,7 +79,7 @@ const LongtermDeadline = ({getDeadline, deadline, target}) => {
             <Input type="date" value={deadline} onChange={onChange}/>
             <LifetimeBox>
                <CheckBox id="lifetime" type="checkbox" onChange={onChangeLifetime} />
-               <Label for="lifetime">평생동안 이룰 목표에요</Label>
+               <Label htmlFor="lifetime">평생동안 이룰 목표에요</Label>
             </LifetimeBox>
         </Container>
         {!deadline & !isLifetime && <BlockBtn></BlockBtn>}

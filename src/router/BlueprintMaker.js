@@ -14,7 +14,7 @@ import { dbService } from '../fBase';
 const Container = styled.div`
     ${defaultContainer}
     justify-content: flex-start;
-    margin-top: 50px;
+    padding-top: 50px;
     z-index: 10;
 `;
 
@@ -93,7 +93,7 @@ const BlueprintMaker = ({userObj}) => {
                 }
                 {type === "routine" && <RoutineFactory userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
-                <BackBtn onClick={onClick}>돌아가기</BackBtn>
+                {/* <BackBtn onClick={onClick}>돌아가기</BackBtn> */}
             </Container>
         }
         </>

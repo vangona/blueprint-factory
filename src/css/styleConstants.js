@@ -71,7 +71,7 @@ export const blockBtn = css`
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 999;
+    z-index: 100;
     background-color: white;
     border: none;
     width: 40px;

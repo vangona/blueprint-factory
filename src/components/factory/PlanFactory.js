@@ -54,7 +54,7 @@ const ReturnBtn = styled.button`
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 99;
+    z-index: 50;
     width: 40px;
     height: 40px;
     background-color: transparent;
@@ -76,7 +76,7 @@ const PageBtn = styled.button`
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 99;
+    z-index: 50;
     background-color: #3F5DAC;
     border: none;
     border-radius: 50%;
@@ -93,7 +93,7 @@ const SubmitBtn = styled.input`
     align-items: center;
     position: fixed;
     bottom: 20px;
-    z-index: 99;
+    z-index: 50;
     background-color: #3F5DAC;
     border: none;
     border-radius: 20px;
@@ -114,7 +114,7 @@ const PlanFactory = ({userObj, parent}) => {
     const [desire, setDesire] = useState(`${parent.name}을 위해`);
     const [explain, setExplain] = useState('');
     const [explainArr, setExplainArr] = useState([]);
-    const [deadline, setDeadline] = useState('');
+    const [deadlineArr, setDeadlineArr] = useState([]);
     const [prize, setPrize] = useState(''); 
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);
@@ -127,7 +127,7 @@ const PlanFactory = ({userObj, parent}) => {
             name,
             desire,
             explain : explainArr,
-            deadline : new Date(deadline),
+            deadline : new Date(deadlineArr[deadlineArr.length - 1]),
             prize,
             needArr,
             createdAt: Date.now(),
@@ -141,13 +141,35 @@ const PlanFactory = ({userObj, parent}) => {
             cancelReason: '',
         }).then(() => {
             makeChilds(targetId).then(() => {
-                alert('성공적으로 계획을 세우셨어요!');
-                navigate('/blueprint')
+                makeSteps(targetId).then(() => {
+                    alert('성공적으로 계획을 세우셨어요!');
+                    navigate('/blueprint')
+                })
             }).catch((error) => {
                 console.log(error.message);
             })
         }).catch(error => {
             console.log(error.message);
+        })
+    }
+
+    const makeSteps = (parentId) => {
+        return new Promise(function(resolve, reject){
+            explainArr.forEach(async (el, index) => {
+                const newId = uuidv4();
+                await dbService.collection('steps').doc(newId).set({
+                    id : newId,
+                    uid: userObj.uid,
+                    name : el,
+                    deadline : new Date(deadlineArr[index]),
+                    createdAt: Date.now(),
+                    modifiedAt: 0,
+                    isComplished: false,
+                    parentId,
+                    completeFeeling: '',
+                })            
+            })
+            resolve();
         })
     }
 
@@ -190,9 +212,6 @@ const PlanFactory = ({userObj, parent}) => {
         if (inputName === 'targetExplain') {
             setExplain(e.target.value);
         }
-        if (inputName === 'targetDeadline') {
-            setDeadline(e.target.value);
-        }
         if (inputName === 'targetPrize') {
             setPrize(e.target.value);
         }
@@ -216,7 +235,6 @@ const PlanFactory = ({userObj, parent}) => {
         if (explain !== '') {
             let explainArray = [...explainArr];
             explainArray.push(explain);
-            console.log(explainArray)
             setExplain('');
             setExplainArr(explainArray);
         }        
@@ -259,8 +277,12 @@ const PlanFactory = ({userObj, parent}) => {
         setExplain(value);
     }
 
-    const getDeadline = value => {
-        setDeadline(value);
+    const getDeadlineArr = e => {
+        let arr = deadlineArr;
+        const index = e.target.id;
+        arr[index] = e.target.value;
+        console.log(arr);
+        setDeadlineArr(arr);
     }
 
     const getNeed = value => {
@@ -273,10 +295,10 @@ const PlanFactory = ({userObj, parent}) => {
             {page > 1 && <ShorttermBackground userObj={userObj} parent={parent} />}
             {page === 2 && <PlanName name={name} getName={getName} />}
             {page === 3 && <PlanStep getStep={getStep} step={explain} stepArr={explainArr} onClickStep={onClickStep} onClickDelete={onClickDeleteStep} target={name} />}
-            {page === 4 && <PlanDeadline getDeadline={getDeadline} deadline={deadline} target={name} /> }
+            {page === 4 && <PlanDeadline getDeadlineArr={getDeadlineArr} deadlineArr={deadlineArr} explainArr={explainArr} target={name} /> }
             {page === 5 && <PlanNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDeleteNeed} target={name} /> }
             {page === 6 && 
-                <PlanCheck explainArr={explainArr} needArr={needArr} deadline={deadline} target={name} />            
+                <PlanCheck explainArr={explainArr} needArr={needArr} deadlineArr={deadlineArr} target={name} />            
             }
 
 
@@ -308,7 +330,7 @@ const PlanFactory = ({userObj, parent}) => {
                 </ArrayContainer>
                 <TargetBox>
                     <TargetLabel htmlFor='targetDeadline'>기한 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={deadline} id='targetDeadline' type="date" required/>
+                    <TargetInput onChange={onChange} value={deadlineArr[deadlineArr.length - 1]} id='targetDeadline' type="date" required/>
                 </TargetBox>
                 <TargetBox>
                     <TargetLabel htmlFor='targetPrize'>달성 시 보상 : </TargetLabel>
