@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cytoscape from "cytoscape";
 import CytoscapeComponent from 'react-cytoscapejs';
-import COSEBilkent from 'cytoscape-cose-bilkent';
-import popper from "cytoscape-popper";
 import dagre from "cytoscape-dagre";
+import contextMenus from "cytoscape-context-menus"
 import { useParams } from 'react-router-dom';
 import { dbService } from '../../fBase';
 
@@ -11,10 +10,11 @@ const CytoscapeMindmap = ({userObj}) => {
     const {id} = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState('');
-    const cyRef = useRef();
+    const [cy, setCy] = useState('');
+    let cyRef = useRef();
 
     cytoscape.use(dagre);
-    cytoscape.use(COSEBilkent);
+    cytoscape.use(contextMenus);
 
     const MindmapData = [ // list of graph elements to start with
         {
@@ -140,6 +140,8 @@ const CytoscapeMindmap = ({userObj}) => {
                 'font-family': 'Ssurround',
                 'font-size': '14px',
                 'background-color': '#666',
+                "shape": "round-rectangle",
+                "width": '100px',
                 'label': 'data(label)'
             }
         },
@@ -163,7 +165,8 @@ const CytoscapeMindmap = ({userObj}) => {
             const nodeArr = userObj.targets.map((target) => ({
                 "data": {
                     "id" : `${target.id}`,
-                    "label" : `${target.name}`
+                    "label" : `${target.name}`,
+                    "explain": `${Array.isArray(target.explain) ? target.explain.join('\n') : target.explain}`
                 },
             }));
             const edgeArr = userObj.targets.map((target) => ({
@@ -222,6 +225,7 @@ const CytoscapeMindmap = ({userObj}) => {
                     }
                 })});
                 setData([...nodeArr, ...edgeArr]);
+                setIsLoading(false);
             } else {
                 await dbService.collection("users").doc(`${id}`).get().then(snapshot => {
                     const userData = snapshot.data();
@@ -232,41 +236,86 @@ const CytoscapeMindmap = ({userObj}) => {
                         }
                     }
                     setData([initNode]);        
+                    setIsLoading(false);
                 })
             }
-            setIsLoading(false);
         })
     };
 
-    // const origin = cytoscape({
-    //     container: document.getElementById('cy'),
-    //     elements: data ? data : MindmapData,
-    //     style: MindmapStyle,
-    //     layout: MindmapLayout,
-    // });
+    const fillCy = () => {
+        const cy = cytoscape({
+            container: document.getElementById('cy'),
+            elements: data,
+            style: MindmapStyle,
+            layout: MindmapLayout,
+            wheelSensitivity: 0.2
+        });
 
+        const options = {
+            // Customize event to bring up the context menu
+            // Possible options https://js.cytoscape.org/#events/user-input-device-events
+            evtType: 'cxttap',
+            // List of initial menu items
+            // A menu item must have either onClickFunction or submenu or both
+            menuItems: [
+                {
+                    id: 'hide',
+                    content: 'hide',
+                    tooltipText: 'hide',
+                    selector: 'node, edge',
+                    onClickFunction: (e) => {
+                      console.log(e);
+                    },
+                },
+                {
+                    id: 'add-node',
+                    content: 'add node',
+                    tooltipText: 'add node',
+                    selector: 'node',
+                    coreAsWell: true,
+                    onClickFunction: (e) => {
+                        console.log(e);
+                    },
+                }
+            ],
+            // css classes that menu items will have
+            menuItemClasses: [
+              // add class names to this list
+            ],
+            // css classes that context menu will have
+            contextMenuClasses: [
+              // add class names to this list
+            ],
+            // Indicates that the menu item has a submenu. If not provided default one will be used
+            submenuIndicator: { width: 12, height: 12 }
+        };
+
+
+        const rightClick = cy.contextMenus(options);
+    }
+    
     useEffect(() => {
-        if (id) {
-            makeSomeoneData(id);
+        if (!data) {
+            if (id) {
+                makeSomeoneData(id);
+            } else {
+                makeUserData();
+            }
         } else {
-            makeUserData();
+            fillCy();
         }
-    }, [])
+    }, [data])
 
     return (
-        <>
-        {isLoading
-            ? "Loading..."
-            : 
-            <CytoscapeComponent 
-                ref={cyRef}
-                elements={data ? data : MindmapData}
-                style={{width: '100%', height: '95vh'}}
-                stylesheet={MindmapStyle}
-                layout={MindmapLayout}
-            />
-        }
-        </>
+            <div id="cy" style={{width: '100%', height: '95vh'}}>
+            </div>
+            // <CytoscapeComponent 
+            //     cy={(cy) => cyRef = cy}
+            //     elements={data ? data : MindmapData}
+            //     style={{width: '100%', height: '95vh'}}
+            //     stylesheet={MindmapStyle}
+            //     layout={MindmapLayout}
+            // />
     );
 };
 
