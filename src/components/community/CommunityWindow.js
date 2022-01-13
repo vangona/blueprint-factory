@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { defaultContainer, defaultShadow, spreadShadow } from '../../css/styleConstants';
 import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { AiOutlineUser } from 'react-icons/ai';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -38,8 +39,8 @@ const UsersBox = styled.div`
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background-color: lawngreen;
-    :nth-child(2) {
+    background-color: white;
+    /* :nth-child(2) {
         left: 30px;
         z-index: 2;
         background-color: green;
@@ -58,7 +59,7 @@ const UsersBox = styled.div`
         left: 90px;
         z-index: 4;
         background-color: lightgray;
-    }
+    } */
 `;
 
 const UserPic = styled.img`
@@ -93,7 +94,10 @@ const CommunityWindow = ({userObj, user}) => {
             </Explain>
             <UsersContainer>
                 <UsersBox>
-                    <UserPic src={user.photoURL} />
+                    {user.photoURL 
+                        ? <UserPic src={user.photoURL} />
+                        : <AiOutlineUser size='2x' />
+                    }
                 </UsersBox>
                 <UserNumber>
                     1

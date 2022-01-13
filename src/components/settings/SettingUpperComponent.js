@@ -3,7 +3,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import styled from 'styled-components';
 import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
 import { v4 as uuidv4} from "uuid";
-import { storageService } from '../../fBase';
+import { dbService, storageService } from '../../fBase';
 import imageCompression from "browser-image-compression";
 
 const Container = styled.div`
@@ -45,9 +45,12 @@ const DisplayName = styled.h1`
     font-family: Ssurround;
 `;
 
+const DisplayNameInput = styled.input``;
+
 const SubmitBtn = styled.button``;
 
 const SettingUpperComponent = ({userObj, refreshUser}) => {
+    const [newName, setNewName] = useState(userObj.displayName);
     const [attachment, setAttachment] = useState('');
 
     const onSubmit = async (e) => {
@@ -60,8 +63,25 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
             await userObj.updateProfile({
                 photoURL: attachmentUrl,
             });
+            setAttachment('');
             refreshUser();
         }
+        if (newName !== userObj.displayName) {
+            await dbService.collection('users').doc(`${userObj.uid}`).update({
+                displayName: newName,
+            }).then(() => {
+                userObj.updateProfile({
+                    displayName: newName,
+                })
+                alert('성공적으로 변경되었습니다.')
+                setNewName('');
+                refreshUser();
+            })
+        }
+    }
+
+    const onChange = e => {
+        setNewName(e.target.value);
     }
 
     const onFileChange = async (event) => {
@@ -93,8 +113,9 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
                         : <AiOutlineUser />
                     }
                 </ProfileBox>
-                <PicUploader id="profile__pic" onChange={onFileChange} type="file" />
+                <PicUploader id="profile__pic" onChange={onFileChange} type="file" accept='image/*' />
                 <DisplayName>{userObj.displayName}</DisplayName>
+                <DisplayNameInput value={newName} name="displayname" onChange={onChange} type="text" />
                 <SubmitBtn onClick={onSubmit}>변경사항 적용하기</SubmitBtn>
             </ProfileContainer>
         </Container>
