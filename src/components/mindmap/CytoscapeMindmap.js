@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import cytoscape from "cytoscape";
+import CytoscapeComponent from 'react-cytoscapejs';
+import COSEBilkent from 'cytoscape-cose-bilkent';
+import popper from "cytoscape-popper";
+import dagre from "cytoscape-dagre";
 
-const CytoscapeMindmap = () => {
-    const data = [ 
+const CytoscapeMindmap = ({userObj}) => {
+    const [isLoading, setIsLoading] = useState(true);
+    const [data, setData] = useState('');
+    const cyRef = useRef();
+
+    cytoscape.use(dagre);
+    cytoscape.use(COSEBilkent);
+
+    const MindmapData = [ // list of graph elements to start with
         {
             "data": {
                 "id": "PJ-mindMap",
@@ -112,41 +123,99 @@ const CytoscapeMindmap = () => {
         }
     ];
 
-    const cy = cytoscape({
+    const MindmapLayout = { 
+        name: 'dagre',
+        animate: true,
+        animationEasing: 'ease-in-out',
+        rankDir: 'TB',
+    };
 
-        container: document.getElementById('cy'), // container to render in
-    
-        elements: data,
-    
-        style: [ // the stylesheet for the graph
-            {
-                selector: 'node',
-                style: {
-                    'background-color': '#666',
-                    'label': 'data(id)'
-                }
-            },
-    
-            {
-                selector: 'edge',
-                style: {
-                    'width': 3,
-                    'line-color': '#ccc',
-                    'target-arrow-color': '#ccc',
-                    'target-arrow-shape': 'triangle'
-                }
+    const MindmapStyle = [ // the stylesheet for the graph
+        {
+            selector: 'node',
+            style: {
+                'background-color': '#666',
+                'label': 'data(label)'
             }
-        ],
-    
-        layout: {
-            name: 'grid',
-            rows: 5
+        },
+
+        {
+            selector: 'edge',
+            style: {
+                'width': 3,
+                'curve-style': 'bezier',
+                'line-color': '#ccc',
+              // 변경된 부분
+                'source-arrow-color': '#ccc',
+                'source-arrow-shape': 'triangle'
+              //
+            }
         }
-    });
+    ]
+
+    const getData = () => {
+        return new Promise((resolve, reject) => {
+            const nodeArr = userObj.targets.map((target) => ({
+                "data": {
+                    "id" : `${target.id}`,
+                    "label" : `${target.name}`
+                },
+            }));
+            const edgeArr = userObj.targets.map((target) => ({
+                "data": {
+                    "id" : `${target.id}->${target.parentId}`,
+                    "source" : `${target.parentId}`,
+                    "target" : `${target.id}`
+                }
+            }));
+            resolve([...nodeArr, ...edgeArr]);
+        })
+    }
+
+    const makeData = () => { 
+        getData()
+        .then(snapshot => {
+            if (snapshot.length) {
+                setData(snapshot);
+            } else {
+              const initNode = {
+                "data": {
+                    "id" : "a",
+                    "label" : "새로운 목표를 만들어 봅시다."
+                }
+              }
+              setData([initNode]);
+            }
+            setIsLoading(false);
+        })
+      };
+
+    // const origin = cytoscape({
+    //     container: document.getElementById('cy'),
+    //     elements: data ? data : MindmapData,
+    //     style: MindmapStyle,
+    //     layout: MindmapLayout,
+    // });
+
+    useEffect(() => {
+        makeData();
+        console.log(cyRef);
+    }, [])
 
     return (
-        <div id="cy">
-        </div>
+        <>
+        {isLoading
+            ? "Loading..."
+            : 
+            <CytoscapeComponent 
+                ref={cyRef}
+                elements={data ? data : MindmapData}
+                style={{width: '100%', height: '95vh'}}
+                stylesheet={MindmapStyle}
+                layout={MindmapLayout}
+            />
+        }
+        </>
     );
 };
 

@@ -6,10 +6,10 @@ import "./styles.css";
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <Reset />
     <App />
-  </React.StrictMode>,
+  </>,
   document.getElementById('root')
 );
 

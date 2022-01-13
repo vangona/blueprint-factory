@@ -1,5 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import CytoscapeMindmap from '../components/mindmap/CytoscapeMindmap';
 
 const SomeonesBlueprint = ({userObj}) => {
     const {id} = useParams();
@@ -7,7 +8,7 @@ const SomeonesBlueprint = ({userObj}) => {
     return (
         <div>
             {id}
-            누군가의 청사진
+            <CytoscapeMindmap userObj={userObj} />
         </div>
     );
 };
