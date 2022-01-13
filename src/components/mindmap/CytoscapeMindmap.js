@@ -4,8 +4,11 @@ import CytoscapeComponent from 'react-cytoscapejs';
 import COSEBilkent from 'cytoscape-cose-bilkent';
 import popper from "cytoscape-popper";
 import dagre from "cytoscape-dagre";
+import { useParams } from 'react-router-dom';
+import { dbService } from '../../fBase';
 
 const CytoscapeMindmap = ({userObj}) => {
+    const {id} = useParams();
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState('');
     const cyRef = useRef();
@@ -134,6 +137,8 @@ const CytoscapeMindmap = ({userObj}) => {
         {
             selector: 'node',
             style: {
+                'font-family': 'Ssurround',
+                'font-size': '14px',
                 'background-color': '#666',
                 'label': 'data(label)'
             }
@@ -153,7 +158,7 @@ const CytoscapeMindmap = ({userObj}) => {
         }
     ]
 
-    const getData = () => {
+    const getUserData = () => {
         return new Promise((resolve, reject) => {
             const nodeArr = userObj.targets.map((target) => ({
                 "data": {
@@ -172,8 +177,8 @@ const CytoscapeMindmap = ({userObj}) => {
         })
     }
 
-    const makeData = () => { 
-        getData()
+    const makeUserData = () => { 
+        getUserData()
         .then(snapshot => {
             if (snapshot.length) {
                 setData(snapshot);
@@ -190,6 +195,46 @@ const CytoscapeMindmap = ({userObj}) => {
         })
       };
 
+    const makeSomeoneData = (id) => { 
+        dbService.collection('targets').where('uid', '==', `${id}`).onSnapshot(querySnapshot => {
+            if (querySnapshot.docs.length) {
+                const nodeArr = querySnapshot.docs.map((doc) => {
+                    const target = {
+                        id: doc.id,
+                        ...doc.data(),
+                    }
+                    return ({
+                    "data": {
+                        "id" : `${target.id}`,
+                        "label" : `${target.name}`
+                    },
+                })});
+                const edgeArr = querySnapshot.docs.map((doc) => {
+                    const target = {
+                        id: doc.id,
+                        ...doc.data(),
+                    }
+                    return ({
+                    "data": {
+                        "id" : `${target.id}->${target.parentId}`,
+                        "source" : `${target.parentId}`,
+                        "target" : `${target.id}`
+                    }
+                })});
+                setData([...nodeArr, ...edgeArr]);
+            } else {
+                const initNode = {
+                "data": {
+                    "id" : "a",
+                    "label" : "새로운 목표를 만들어 봅시다."
+                }
+                }
+                setData([initNode]);
+            }
+            setIsLoading(false);
+        })
+    };
+
     // const origin = cytoscape({
     //     container: document.getElementById('cy'),
     //     elements: data ? data : MindmapData,
@@ -198,8 +243,11 @@ const CytoscapeMindmap = ({userObj}) => {
     // });
 
     useEffect(() => {
-        makeData();
-        console.log(cyRef);
+        if (id) {
+            makeSomeoneData(id);
+        } else {
+            makeUserData();
+        }
     }, [])
 
     return (

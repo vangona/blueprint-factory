@@ -13,7 +13,7 @@ const Container = styled.div`
 const Blueprint = ({userObj}) => {
     return (
         <Container>
-            <TargetMindmap userObj={userObj} />
+            <CytoscapeMindmap userObj={userObj} />
             {/* <CytoscapeMindmap /> */}
         </Container>        
     );
