@@ -6,15 +6,16 @@ import CommunityWindow from './CommunityWindow';
 const Container = styled.div`
     ${defaultContainer};
     justify-content: flex-start;
-    padding: 20px 40px 80px 40px;
-    gap: 20px;
+    padding: 20px 20px 60px 20px;
+    gap: 20px;;
+    height: 80vh;
 `;
 
 const NavContainer = styled.div`
     display: flex;
     justify-content: space-between;
     width: 85%;
-    height: 45px;
+    min-height: 8%;
 `;
 
 const NavBox = styled.div`
@@ -35,11 +36,18 @@ const NavBox = styled.div`
 
 const ContentContainer = styled.div`
     display: flex;
+    padding: 10px 10px;
     flex-direction: column;
     gap: 30px;
     align-items: center;
     justify-content: flex-start;
     width: 90%;
+    height: 70vh;
+    overflow: scroll;
+    box-sizing: border-box;
+    ::-webkit-scrollbar {
+        width: 0;
+    }
 `;
 
 const CommunityLowerComponent = ({userObj, users}) => {

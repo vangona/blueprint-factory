@@ -7,7 +7,7 @@ import {ImCloud} from "react-icons/im"
 const Container = styled.div`
     ${defaultContainer};
     justify-content: flex-start;
-    height: 200px;
+    height: 20vh;
     background: rgb(86,124,233);
     background: linear-gradient(180deg, rgba(86,124,233,1) 0%, rgba(172,190,255,1) 100%);
 `;

@@ -195,8 +195,8 @@ const CytoscapeMindmap = ({userObj}) => {
         })
       };
 
-    const makeSomeoneData = (id) => { 
-        dbService.collection('targets').where('uid', '==', `${id}`).onSnapshot(querySnapshot => {
+    const makeSomeoneData = async (id) => { 
+        dbService.collection('targets').where('uid', '==', `${id}`).onSnapshot(async (querySnapshot) => {
             if (querySnapshot.docs.length) {
                 const nodeArr = querySnapshot.docs.map((doc) => {
                     const target = {
@@ -223,13 +223,16 @@ const CytoscapeMindmap = ({userObj}) => {
                 })});
                 setData([...nodeArr, ...edgeArr]);
             } else {
-                const initNode = {
-                "data": {
-                    "id" : "a",
-                    "label" : "새로운 목표를 만들어 봅시다."
-                }
-                }
-                setData([initNode]);
+                await dbService.collection("users").doc(`${id}`).get().then(snapshot => {
+                    const userData = snapshot.data();
+                    const initNode = {
+                        "data": {
+                            "id" : "a",
+                            "label" : `${userData.displayName}님은 아직 청사진을 그리지 않으셨어요.`
+                        }
+                    }
+                    setData([initNode]);        
+                })
             }
             setIsLoading(false);
         })

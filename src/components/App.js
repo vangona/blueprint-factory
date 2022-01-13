@@ -53,7 +53,9 @@ const App = () => {
             if (user) {
                 const targetData = await getTargetData(user.uid);
                 const stepData = await getSteps(user.uid);
-                getUserData(user);
+                if (user.email) {
+                    getUserData(user);
+                }
                 setUserObj({
                     uid: user.uid,
                     targets: targetData,

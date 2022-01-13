@@ -73,6 +73,7 @@ const AuthSubmit = styled.input`
     z-index: 11;
     color: white;
     background-color: var(--main-blue);
+    border-radius: 10px;
     ${defaultBtnAction};
 `;
 
@@ -85,6 +86,7 @@ const AuthBtn = styled.button`
     padding: 5px 20px;
     z-index: 11;
     background-color: white;
+    border-radius: 10px;
     ${defaultBtnAction};
 `;
 
@@ -142,6 +144,15 @@ const Auth = () => {
         }
     }
 
+    const onClickAnonymously = () => {
+        authService.signInAnonymously()
+        .then(() => {
+            alert('어서오세오')
+        }).catch(error => {
+            console.log(error.message);
+        })
+    }
+
     const onClick = (e) => {
         e.preventDefault();
         setLoginState(!loginState);
@@ -176,6 +187,9 @@ const Auth = () => {
                 {!loginState ? "로그인하기" : "회원가입하기"}
             </AuthBtn>
         </AuthForm>
+        <AuthBtn onClick={onClickAnonymously}>
+                일단 둘러볼게요!
+        </AuthBtn>
     </Container>
     );
 }
