@@ -584,7 +584,7 @@ const CytoscapeMindmap = ({userObj}) => {
     
     useEffect(() => {
         if (!data) {
-            getData();
+            getData(id);
         } else {
             fillCy();
         }

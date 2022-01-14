@@ -3,7 +3,7 @@ import { AiOutlineUser } from 'react-icons/ai';
 import styled from 'styled-components';
 import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
 import { v4 as uuidv4} from "uuid";
-import { dbService, storageService } from '../../fBase';
+import { authService, dbService, storageService } from '../../fBase';
 import imageCompression from "browser-image-compression";
 
 const Container = styled.div`
@@ -47,11 +47,16 @@ const DisplayName = styled.h1`
 
 const DisplayNameInput = styled.input``;
 
+const BioLabel = styled.label``;
+
+const BioTextarea = styled.textarea``;
+
 const SubmitBtn = styled.button``;
 
 const SettingUpperComponent = ({userObj, refreshUser}) => {
     const [newName, setNewName] = useState(userObj.displayName);
     const [attachment, setAttachment] = useState('');
+    const [newBio, setNewBio] = useState('');
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -78,10 +83,23 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
                 refreshUser();
             })
         }
+        if (newBio) {
+            await dbService.collection('users').doc(`${userObj.uid}`).update({
+                bio: newBio
+            }).then(() => {
+                alert('굿')
+            })
+        }
     }
 
     const onChange = e => {
-        setNewName(e.target.value);
+        const name = e.target.getAttribute('name');
+        if (name === 'displayName') {
+            setNewName(e.target.value);
+        } 
+        if (name === 'bio') {
+            setNewBio(e.target.value);
+        }
     }
 
     const onFileChange = async (event) => {
@@ -116,6 +134,8 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
                 <PicUploader id="profile__pic" onChange={onFileChange} type="file" accept='image/*' />
                 <DisplayName>{userObj.displayName}</DisplayName>
                 <DisplayNameInput value={newName} name="displayname" onChange={onChange} type="text" />
+                <BioLabel></BioLabel>
+                <BioTextarea value={newBio} name="bio" onChange={onChange} />
                 <SubmitBtn onClick={onSubmit}>변경사항 적용하기</SubmitBtn>
             </ProfileContainer>
         </Container>

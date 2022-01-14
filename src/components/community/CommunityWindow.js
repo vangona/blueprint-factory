@@ -35,9 +35,13 @@ const UsersContainer = styled.div`
 `;
 
 const UsersBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: absolute;
     width: 45px;
     height: 45px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     border-radius: 50%;
     background-color: white;
     /* :nth-child(2) {
@@ -96,11 +100,10 @@ const CommunityWindow = ({userObj, user}) => {
                 <UsersBox>
                     {user.photoURL 
                         ? <UserPic src={user.photoURL} />
-                        : <AiOutlineUser size='2x' />
+                        : <AiOutlineUser size='75%' />
                     }
                 </UsersBox>
                 <UserNumber>
-                    1
                 </UserNumber>
             </UsersContainer>
         </Container>
