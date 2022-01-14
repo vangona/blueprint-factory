@@ -14,6 +14,7 @@
     "cytoscape-cose-bilkent": "^4.1.0",
     "cytoscape-dagre": "^2.3.2",
     "cytoscape-dom-node": "^1.1.0",
+    "cytoscape-edgehandles": "^4.0.1",
     "cytoscape-popper": "^2.0.0",
     "firebase": "^8.9.1",
     "gh-pages": "^3.2.3",

@@ -2,9 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import cytoscape from "cytoscape";
 import CytoscapeComponent from 'react-cytoscapejs';
 import dagre from "cytoscape-dagre";
-import contextMenus from "cytoscape-context-menus"
+import contextMenus from "cytoscape-context-menus";
+import edgehandles from "cytoscape-edgehandles";
 import { useParams } from 'react-router-dom';
 import { dbService } from '../../fBase';
+import { ContextMenuOptions } from './ContextMenuOptions';
+import { EdgeHandlesOptions } from './EdgeHandlesOptions';
 
 const CytoscapeMindmap = ({userObj}) => {
     const {id} = useParams();
@@ -14,7 +17,12 @@ const CytoscapeMindmap = ({userObj}) => {
     let cyRef = useRef();
 
     cytoscape.use(dagre);
-    cytoscape.use(contextMenus);
+    if (typeof cytoscape("core", "contextMenus") === "undefined") {
+        contextMenus(cytoscape);
+      }
+    if (typeof cytoscape("core", "edgehandles") === "undefined") {
+        edgehandles(cytoscape);
+      }
 
     const MindmapData = [ // list of graph elements to start with
         {
@@ -157,7 +165,60 @@ const CytoscapeMindmap = ({userObj}) => {
                 'source-arrow-shape': 'triangle'
               //
             }
-        }
+        },
+
+        // edgehandles
+        {
+            selector: '.eh-handle',
+            style: {
+              'background-color': 'red',
+              'width': 12,
+              'height': 12,
+              'shape': 'ellipse',
+              'overlay-opacity': 0,
+              'border-width': 12, // makes the handle easier to hit
+              'border-opacity': 0
+            }
+          },
+
+          {
+            selector: '.eh-hover',
+            style: {
+              'background-color': 'red'
+            }
+          },
+
+          {
+            selector: '.eh-source',
+            style: {
+              'border-width': 2,
+              'border-color': 'red'
+            }
+          },
+
+          {
+            selector: '.eh-target',
+            style: {
+              'border-width': 2,
+              'border-color': 'red'
+            }
+          },
+
+          {
+            selector: '.eh-preview, .eh-ghost-edge',
+            style: {
+              'background-color': 'red',
+              'line-color': 'red',
+              'target-arrow-color': 'red',
+              'source-arrow-color': 'red'
+            }
+          },
+          {
+            selector: '.eh-ghost-edge.eh-preview-active',
+            style: {
+              'opacity': 0
+            }
+          }
     ]
 
     const getUserData = () => {
@@ -243,55 +304,25 @@ const CytoscapeMindmap = ({userObj}) => {
     };
 
     const fillCy = () => {
+
         const cy = cytoscape({
             container: document.getElementById('cy'),
             elements: data,
+            ready: function () {
+                this.contextMenus(ContextMenuOptions)
+            },
             style: MindmapStyle,
             layout: MindmapLayout,
             wheelSensitivity: 0.2
         });
 
-        const options = {
-            // Customize event to bring up the context menu
-            // Possible options https://js.cytoscape.org/#events/user-input-device-events
-            evtType: 'cxttap',
-            // List of initial menu items
-            // A menu item must have either onClickFunction or submenu or both
-            menuItems: [
-                {
-                    id: 'hide',
-                    content: 'hide',
-                    tooltipText: 'hide',
-                    selector: 'node, edge',
-                    onClickFunction: (e) => {
-                      console.log(e);
-                    },
-                },
-                {
-                    id: 'add-node',
-                    content: 'add node',
-                    tooltipText: 'add node',
-                    selector: 'node',
-                    coreAsWell: true,
-                    onClickFunction: (e) => {
-                        console.log(e);
-                    },
-                }
-            ],
-            // css classes that menu items will have
-            menuItemClasses: [
-              // add class names to this list
-            ],
-            // css classes that context menu will have
-            contextMenuClasses: [
-              // add class names to this list
-            ],
-            // Indicates that the menu item has a submenu. If not provided default one will be used
-            submenuIndicator: { width: 12, height: 12 }
-        };
+        const eh = cy.edgehandles(EdgeHandlesOptions);
 
+        eh.enableDrawMode();
 
-        const rightClick = cy.contextMenus(options);
+        cy.on('ehcomplete', (event, sourceNode, targetNode, addedEdge) => {
+            console.log(sourceNode.id());
+        })
     }
     
     useEffect(() => {
