@@ -14,7 +14,7 @@ const Blueprint = ({userObj}) => {
     return (
         <Container>
             <CytoscapeMindmap userObj={userObj} />
-            {/* <CytoscapeMindmap /> */}
+            {/* <TargetMindmap userObj={userObj} /> */}
         </Container>        
     );
 };

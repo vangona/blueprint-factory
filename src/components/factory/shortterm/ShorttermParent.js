@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { defaultContainer } from '../../../css/styleConstants';
 import cloud from "../../../img/bottom-cloud.png"
@@ -59,19 +59,27 @@ const ShorttermParent = ({userObj, parent}) => {
     const DateTime = Time.getDate();
     const deadlineTime = `${Year}-${Month > 9 ? Month : '0' + Month}-${DateTime > 9 ? DateTime : '0' + DateTime}`;
 
+    useEffect(() => {
+        console.log(parent);
+    })
+
     return (
         <Container>
             <Title>
-                <Bold>{parent.name}</Bold>(을)를 위한 <br />
+                {parent.id !== 'new' && (
+                    <>
+                        <Bold>{parent.name}</Bold>(을)를 위한 <br />
+                    </>
+                )}
                 <Bold>단기 목표</Bold>를 만들어봅시다!
             </Title>
             <Content>
                 <Explain>
                     {parent.explain}
                 </Explain>
-                <Deadline>
+                {parent.deadline && <Deadline>
                     {deadlineTime}까지
-                </Deadline>
+                </Deadline>}
             </Content>
             <BottomCloud src={cloud} />
         </Container>

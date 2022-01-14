@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
-import { dbService } from '../../fBase';
+import { dbService, firebaseInstance } from '../../fBase';
 import { v4 as uuidv4 } from "uuid";
 import PlanParent from './plan/PlanParent';
 import { IoMdArrowRoundBack, IoMdArrowRoundForward } from 'react-icons/io';
@@ -123,13 +123,28 @@ const PlanFactory = ({userObj, parent}) => {
 
     const onSubmit = async (e) => {
         const targetId = uuidv4();
+        const childIds = [];
+        const stepIds = [];
+
+        needArr.forEach(async (need) => {
+            const childId = uuidv4();
+            childIds.push(childId);
+            await makeChild(need, childId, targetId);
+        })
+
+        explainArr.forEach(async (step, index) => {
+            const stepId = uuidv4();
+            stepIds.push(stepId);
+            await makeStep(step, stepId, targetId, index);
+        })
+
         await dbService.collection('targets').doc(targetId).set({
             id: targetId,
             uid: userObj.uid,
             name,
             desire,
             explain : explainArr,
-            deadline : new Date(deadline),
+            deadline : new Date(deadlineArr[deadlineArr.length - 1]),
             prize,
             needArr,
             createdAt: Date.now(),
@@ -138,16 +153,19 @@ const PlanFactory = ({userObj, parent}) => {
             isComplished: false,
             isOpen: true,
             type: "plan",
-            parentId: parent ? parent.id : '',
+            parentId: [parent.id],
+            childs: childIds,
             completeFeeling: '',
             cancelReason: '',
-        }).then(() => {
-            makeChilds(targetId).then(() => {
-                makeSteps(targetId).then(() => {
-                    alert('성공적으로 계획을 세우셨어요!');
-                    navigate('/blueprint')
-                })
-            }).catch((error) => {
+        }).then(async () => {
+            await dbService.collection('targets').doc(`${parent.id}`)
+            .update({
+                childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetId)
+            }).then(() => {
+                console.log('success')
+                alert('뜬구름이 조금 더 명확해졌어요!');
+                navigate("/blueprint")        
+            }).catch(error => {
                 console.log(error.message);
             })
         }).catch(error => {
@@ -155,53 +173,42 @@ const PlanFactory = ({userObj, parent}) => {
         })
     }
 
-    const makeSteps = (parentId) => {
-        return new Promise(function(resolve, reject){
-            explainArr.forEach(async (el, index) => {
-                const newId = uuidv4();
-                await dbService.collection('steps').doc(newId).set({
-                    id : newId,
-                    uid: userObj.uid,
-                    name : name,
-                    explain: el,
-                    deadline : new Date(deadlineArr[index]),
-                    createdAt: Date.now(),
-                    modifiedAt: 0,
-                    isComplished: false,
-                    parentId,
-                    completeFeeling: '',
-                })            
-            })
-            resolve();
-        })
+    const makeStep = async (step, childId, parentId, index) => {
+        await dbService.collection('steps').doc(childId).set({
+            id : childId,
+            uid: userObj.uid,
+            name : name,
+            explain: step,
+            deadline : new Date(deadlineArr[index]),
+            createdAt: Date.now(),
+            modifiedAt: 0,
+            isComplished: false,
+            parentId : [parentId],
+            completeFeeling: '',
+        })          
     }
 
-    const makeChilds = (parentId) => {
-        return new Promise(function(resolve, reject){
-            needArr.forEach(async (el) => {
-                const newId = uuidv4();
-                await dbService.collection('targets').doc(newId).set({
-                    id : newId,
-                    uid: userObj.uid,
-                    name : el,
-                    desire : '',
-                    explain : '',
-                    deadline : '',
-                    prize : '',
-                    needArr : [],
-                    createdAt: Date.now(),
-                    modifiedAt: 0,
-                    isComplete: false,
-                    isComplished: false,
-                    isOpen: true,
-                    type: "incomplete",
-                    parentId,
-                    completeFeeling: '',
-                    cancelReason: '',
-                })            
-            })
-            resolve();
-        })
+    const makeChild = async (need, childId, targetId) => {
+        await dbService.collection('targets').doc(childId).set({
+            id : childId,
+            uid: userObj.uid,
+            name : need,
+            desire : '',
+            explain : '',
+            deadline : '',
+            prize : '',
+            needArr : [],
+            createdAt: Date.now(),
+            modifiedAt: 0,
+            isComplete: false,
+            isComplished: false,
+            isOpen: true,
+            type: "incomplete",
+            parentId : [targetId],
+            childs: [],
+            completeFeeling: '',
+            cancelReason: '',
+        })            
     }
 
     const onChange = (e) => {

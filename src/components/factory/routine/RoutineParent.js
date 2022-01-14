@@ -69,9 +69,11 @@ const RoutineParent = ({userObj, parent}) => {
                 <Explain>
                     {parent.explain}
                 </Explain>
-                <Deadline>
-                    {deadlineTime}까지
-                </Deadline>
+                {parent.deadline && 
+                    <Deadline>
+                        {deadlineTime}까지
+                    </Deadline>
+                }
             </Content>
             <BottomCloud src={cloud} />
         </Container>

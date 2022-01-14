@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { defaultContainer } from '../../../css/styleConstants';
 import cloud from "../../../img/bottom-cloud.png"
@@ -52,25 +52,43 @@ const BottomCloud = styled.img`
 `;
 
 const LongtermParent = ({userObj, parent}) => {
-    const Time = new Date(parent.deadline.seconds * 1000);
-    console.log(Time);
-    const Year = Time.getFullYear();
-    const Month = Time.getMonth() + 1;
-    const DateTime = Time.getDate();
-    const deadlineTime = `${Year}-${Month > 9 ? Month : '0' + Month}-${DateTime > 9 ? DateTime : '0' + DateTime}`;
+    const [deadlineTime, setDeadlineTime] = useState('');
+    
+    const getTime = () => {
+        if(parent.daedline) {
+            const Time = new Date(parent.deadline.seconds * 1000);
+            console.log(Time);
+            const Year = Time.getFullYear();
+            const Month = Time.getMonth() + 1;
+            const DateTime = Time.getDate();
+            const deadlineTimeStr = `${Year}-${Month > 9 ? Month : '0' + Month}-${DateTime > 9 ? DateTime : '0' + DateTime}`;
+            setDeadlineTime(deadlineTimeStr)    
+        }
+    }
+
+    useEffect(() => {
+        console.log(parent)
+        if (parent) {
+            getTime();
+        }
+    }, [])
 
     return (
         <Container>
             <Title>
-                <Bold>{parent.name}</Bold>(을)를 위한 <br />
+                {parent && parent.id !== 'new' && 
+                    <>
+                        <Bold>{parent.name}</Bold>(을)를 위한 <br />
+                    </>
+                }
                 <Bold>장기 목표</Bold>를 만들어봅시다!
             </Title>
             <Content>
                 <Explain>
-                    {parent.explain}
+                    {parent && parent.explain}
                 </Explain>
                 <Deadline>
-                    {deadlineTime}까지
+                    {deadlineTime && `${deadlineTime}까지`}
                 </Deadline>
             </Content>
             <BottomCloud src={cloud} />

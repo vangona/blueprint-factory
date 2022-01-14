@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
-import { dbService } from '../../fBase';
+import { dbService, firebaseInstance } from '../../fBase';
 import { v4 as uuidv4 } from "uuid";
 import BackgroundTopCloud from '../background/BackgroundTopCloud';
 import LongtermParent from './longterm/LongtermParent';
@@ -108,13 +108,19 @@ const LongtermFactory = ({userObj, parent}) => {
 
     const onSubmit = async (e) => {
         const targetId = uuidv4();
+        const childIds = [];
+        needArr.forEach(async (need) => {
+            const childId = uuidv4();
+            childIds.push(childId);
+            await makeChild(need, childId, targetId)
+        })
         await dbService.collection('targets').doc(targetId).set({
             id: targetId,
             uid: userObj.uid,
             name,
             desire,
             explain,
-            deadline : new Date(deadline),
+            deadline : deadline ? new Date(deadline) : '',
             prize,
             needArr,
             createdAt: Date.now(),
@@ -123,48 +129,54 @@ const LongtermFactory = ({userObj, parent}) => {
             isComplished: false,
             isOpen: true,
             type: "longterm",
-            parentId: parent ? parent.id : '',
+            parentId: [parent.id],
+            childs: childIds,
             completeFeeling: '',
             cancelReason: '',
         }).then(() => {
-            makeChilds(targetId).then(() => {
+            if (parent.id !== 'new') {
+                dbService.collection('targets').doc(`${parent.id}`)
+                .update({
+                    childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetId)
+                }).then(() => {
+                    console.log('success')
+                    alert('큰 구름이 하나 만들어졌어요!');
+                    navigate("/blueprint")        
+                }).catch(error => {
+                    console.log(error.message);
+                })
+            } else {
                 alert('큰 구름이 하나 만들어졌어요!');
-                navigate("/blueprint")
-            }).catch((error) => {
-                console.log(error.message);
-            })
+                navigate("/blueprint")    
+            }
         }).catch(error => {
             console.log(error.message);
         })
     }
 
-    const makeChilds = (parentId) => {
-        return new Promise(function(resolve, reject){
-            needArr.forEach(async (el) => {
-                const newId = uuidv4();
-                await dbService.collection('targets').doc(newId).set({
-                    id : newId,
-                    uid: userObj.uid,
-                    name : el,
-                    desire : '',
-                    explain : '',
-                    deadline : '',
-                    prize : '',
-                    needArr : [],
-                    createdAt: Date.now(),
-                    modifiedAt: 0,
-                    isComplete: false,
-                    isComplished: false,
-                    isOpen: true,
-                    type: "incomplete",
-                    parentId,
-                    completeFeeling: '',
-                    cancelReason: '',
-                })            
-            })
-            resolve();
-        })
+    const makeChild = async (need, childId, parentId) => {
+        await dbService.collection('targets').doc(childId).set({
+            id : childId,
+            uid: userObj.uid,
+            name : need,
+            desire : '',
+            explain : '',
+            deadline : '',
+            prize : '',
+            needArr : [],
+            createdAt: Date.now(),
+            modifiedAt: 0,
+            isComplete: false,
+            isComplished: false,
+            isOpen: true,
+            type: "incomplete",
+            parentId: [parentId],
+            childs: [],
+            completeFeeling: '',
+            cancelReason: '',
+        })            
     }
+    
 
     const onChange = (e) => {
         const inputName = e.target.id;
@@ -188,11 +200,11 @@ const LongtermFactory = ({userObj, parent}) => {
         }
     }
 
-    const onClickPlus = e => {
-        e.preventDefault();
-        if (need !== '') {
+    const onClickPlus = value => {
+        console.log(value);
+        if (value !== '') {
             let needArray = [...needArr];
-            needArray.push(need);
+            needArray.push(value);
             setNeed('');
             setNeedArr(needArray);
         }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
-import { dbService } from '../../fBase';
+import { dbService, firebaseInstance } from '../../fBase';
 import { v4 as uuidv4 } from "uuid";
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -138,12 +138,21 @@ const RoutineFactory = ({userObj, parent}) => {
             isComplished: false,
             isOpen: true,
             type: "routine",
-            parentId: parent ? parent.id : '',
+            parentId: [parent.id],
+            childs: [],
             completeFeeling: '',
             cancelReason: '',
-        }).then(() => {
-                alert('루틴을 만들었어요!');
-                navigate('/blueprint')
+        }).then(async () => {
+            await dbService.collection('targets').doc(`${parent.id}`)
+            .update({
+                childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetId)
+            }).then(() => {
+                console.log('success')
+                alert('내일부터 뭘 할 수 있을까요?');
+                navigate("/blueprint")        
+            }).catch(error => {
+                console.log(error.message);
+            })
         }).catch(error => {
             console.log(error.message);
         })

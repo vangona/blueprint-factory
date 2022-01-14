@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { defaultBtnAction, defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
 import img from "../../../img/need.png";
@@ -96,6 +96,9 @@ const LongtermNeed = ({getNeed, need, needArr, onClickPlus, onClickDelete, targe
         getNeed(e.target.value);
     }
 
+    useEffect(() => {
+    }, [])
+
     return (
         <Container>
             <Title>
@@ -109,7 +112,7 @@ const LongtermNeed = ({getNeed, need, needArr, onClickPlus, onClickDelete, targe
             </Explain>
             <InputBox>    
                 <Input type="text" value={need} placeholder='없다면 넘어가도 괜찮아요!' onChange={onChange}/>
-                <Plus onClick={onClickPlus}>+</Plus>
+                <Plus onClick={() => onClickPlus(need)}>+</Plus>
             </InputBox>
             <NeedContainer>
                 {needArr.map((need, index) => (

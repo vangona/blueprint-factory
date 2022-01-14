@@ -42,13 +42,23 @@ const BlueprintMaker = ({userObj}) => {
     }
 
     const getParent = async () => {
-        await dbService.collection('targets').where('id', '==', id).get().then(snapshot => {
-            const data = snapshot.docs.map(el => el.data());
-            setParent(...data);
+        if(id){
+            await dbService.collection('targets').where('id', '==', id).get().then(snapshot => {
+                const data = snapshot.docs.map(el => el.data());
+                setParent(...data);
+                setIsLoading(false);
+            }).catch(error => {
+                console.log(error.message);
+            })
+        } else {
+            const initParent = {
+                name: "new",
+                id: "new",
+                deadline: '',
+            }
+            setParent(initParent);
             setIsLoading(false);
-        }).catch(error => {
-            console.log(error.message);
-        })
+        }
     }
 
     const getTypeName = () => {
@@ -65,11 +75,7 @@ const BlueprintMaker = ({userObj}) => {
 
     useEffect(() => {
         getTypeName();
-        if (id) {
-            getParent();
-        } else {
-            setIsLoading(false);
-        }
+        getParent();
     }, [])
 
     return (

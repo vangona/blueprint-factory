@@ -101,10 +101,10 @@ const TermChoice = ({userObj, parent}) => {
     const onClick = (e) => {
         const name = e.target.getAttribute('name');
         if (name === "longterm") {
-            navigate(`/blueprint/longterm/${parent.id}`);
+            navigate(`/blueprint/longterm${parent ? '/' +  parent.id : ''}`);
         }
         if (name === "shortterm") {
-            navigate(`/blueprint/shortterm/${parent.id}`);
+            navigate(`/blueprint/shortterm${parent ? '/' +  parent.id : ''}`);
         }
     }
 

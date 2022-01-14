@@ -51,7 +51,7 @@ const BottomCloud = styled.img`
     max-height: 20%;
 `;
 
-const ShorttermParent = ({userObj, parent}) => {
+const PlanParent = ({userObj, parent}) => {
     const Time = new Date(parent.deadline.seconds * 1000);
     console.log(Time);
     const Year = Time.getFullYear();
@@ -69,13 +69,15 @@ const ShorttermParent = ({userObj, parent}) => {
                 <Explain>
                     {parent.explain}
                 </Explain>
-                <Deadline>
-                    {deadlineTime}까지
-                </Deadline>
+                {parent.deadline &&
+                    <Deadline>
+                        {deadlineTime}까지
+                    </Deadline>
+                }
             </Content>
             <BottomCloud src={cloud} />
         </Container>
     );
 };
 
-export default ShorttermParent;
+export default PlanParent;

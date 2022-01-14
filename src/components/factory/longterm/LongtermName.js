@@ -70,8 +70,17 @@ const LongtermName = ({parent, target, getTarget}) => {
         <>
         <Container>
             <Title>
-                <Bold>{parent.name}</Bold>을(를) 위해 <br />
-                필요한 <Bold>장기 목표</Bold>가 무엇인가요?
+                {parent && parent.id !== 'new' 
+                ?
+                    <>
+                        <Bold>{parent.name}</Bold>을(를) 위해 <br />
+                        필요한 <Bold>장기 목표</Bold>가 무엇인가요?
+                    </>
+                :
+                    <> 
+                        <Bold>이루고 싶은 목표</Bold>가 무엇인가요?
+                    </>
+                }
             </Title>
             <CloudBox>
                 <TargetName>

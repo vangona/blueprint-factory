@@ -81,7 +81,7 @@ const CommunityWindow = ({userObj, user}) => {
 
     const onClickUser = (e) => {
         e.preventDefault();
-        navigate(`/blueprint/view/${user.uid}`)
+        navigate(`/${user.uid}/blueprint`)
     }
 
     return (

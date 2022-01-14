@@ -33,7 +33,7 @@ const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
                     <Route path="/calendar" element={
                         <CalendarRoute userObj={userObj} />
                     } />                                
-                    <Route path="/blueprint/view/:id" element={
+                    <Route path="/:id/blueprint" element={
                         <SomeonesBlueprint userObj={userObj} />
                     } />   
                     <Route path="/blueprint/:type" element={
