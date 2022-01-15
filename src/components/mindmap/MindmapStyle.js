@@ -34,7 +34,6 @@ export const MindmapStyle = [ // the stylesheet for the graph
             'border-width': '1px',
             'border-style': 'solid',
             'border-color': 'blue',
-            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -49,7 +48,6 @@ export const MindmapStyle = [ // the stylesheet for the graph
             'border-width': '1px',
             'border-style': 'solid',
             'border-color': 'red',
-            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -64,7 +62,6 @@ export const MindmapStyle = [ // the stylesheet for the graph
             'border-width': '1px',
             'border-style': 'solid',
             'border-color': 'skyblue',
-            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -79,7 +76,6 @@ export const MindmapStyle = [ // the stylesheet for the graph
             'border-width': '1px',
             'border-style': 'solid',
             'border-color': 'yellow',
-            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -94,7 +90,6 @@ export const MindmapStyle = [ // the stylesheet for the graph
             'border-width': '1px',
             'border-style': 'solid',
             'border-color': 'green',
-            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -109,7 +104,6 @@ export const MindmapStyle = [ // the stylesheet for the graph
             'border-width': '1px',
             'border-style': 'solid',
             'border-color': 'brown',
-            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'

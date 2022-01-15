@@ -3,4 +3,5 @@ export const MindmapLayout = {
     animate: true,
     animationEasing: 'ease-in-out',
     rankDir: 'TB',
+    minLen: (edge) => { return 2; },
 };

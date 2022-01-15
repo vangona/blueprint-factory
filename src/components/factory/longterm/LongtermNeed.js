@@ -108,7 +108,7 @@ const LongtermNeed = ({getNeed, need, needArr, onClickPlus, onClickDelete, targe
             <Img src={img}/>
             <Explain>
                 Hint : 이것들은 {target}의 <br />
-                하위 단기 목표가 될거에요.
+                하위 목표가 될거에요.
             </Explain>
             <InputBox>    
                 <Input type="text" value={need} placeholder='없다면 넘어가도 괜찮아요!' onChange={onChange}/>

@@ -31,7 +31,7 @@ const BackBtn = styled.button`
 `;
 
 const BlueprintMaker = ({userObj}) => {
-    const { id, type } = useParams();
+    const { id, type, incomplete } = useParams();
     const navigate = useNavigate();
     const [typeName, setTypeName] = useState('');
     const [parent, setParent] = useState('');
@@ -88,17 +88,20 @@ const BlueprintMaker = ({userObj}) => {
                 <Title>
                     {typeName ? typeName : "뀨"}
                 </Title>
-                {type === "targets" && 
-                <TermChoice userObj={userObj} parent={parent ? parent : undefined} /> 
+                {type === "targets" | type === 'incomplete' && 
+                    <TermChoice userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
                 {type === "longterm" && 
-                <LongtermFactory userObj={userObj} parent={parent ? parent : undefined} />}
+                    <LongtermFactory userObj={userObj} parent={parent ? parent : undefined} />
+                }
                 {type === "shortterm" && 
-                <ShorttermFactory userObj={userObj} parent={parent ? parent : undefined} /> 
+                    <ShorttermFactory userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
-                {type === "plan" && <PlanFactory userObj={userObj} parent={parent ? parent : undefined} /> 
+                {type === "plan" && 
+                    <PlanFactory userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
-                {type === "routine" && <RoutineFactory userObj={userObj} parent={parent ? parent : undefined} /> 
+                {type === "routine" && 
+                    <RoutineFactory userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
                 {/* <BackBtn onClick={onClick}>돌아가기</BackBtn> */}
             </Container>

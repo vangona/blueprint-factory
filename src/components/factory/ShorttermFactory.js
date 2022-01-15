@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -104,8 +104,8 @@ const ShorttermFactory = ({userObj, parent}) => {
     const [prize, setPrize] = useState(''); 
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);
-
     const [target, setTarget] = useState('');
+    const [isInComplete, setIsInComplete] = useState(false);
 
     const onSubmit = async (e) => {
         const targetId = uuidv4();
@@ -113,46 +113,74 @@ const ShorttermFactory = ({userObj, parent}) => {
         needArr.forEach(async (need) => {
             const childId = uuidv4();
             childIds.push(childId);
-            await makeChild(need, childId, targetId)
+            await makeChild(need, childId, isInComplete ? parent.id : targetId);
         })
-        await dbService.collection('targets').doc(targetId).set({
-            id: targetId,
-            uid: userObj.uid,
-            name,
-            desire,
-            explain,
-            deadline : new Date(deadline),
-            prize,
-            needArr,
-            createdAt: Date.now(),
-            modifiedAt: 0,
-            isComplete: true,
-            isComplished: false,
-            isOpen: true,
-            type: "shortterm",
-            parentId: [parent.id],
-            childs: childIds,
-            completeFeeling: '',
-            cancelReason: '',
-        }).then(() => {
-            if (parent.id !== 'new') {
-                dbService.collection('targets').doc(`${parent.id}`)
-                .update({
-                    childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetId)
-                }).then(() => {
-                    console.log('success')
-                    alert('작은 구름이 하나 만들어졌어요!');
-                    navigate("/blueprint")        
-                }).catch(error => {
-                    console.log(error.message);
-                })
-            } else {
+        if (isInComplete) {
+            await dbService.collection('targets').doc(parent.id).update({
+                id: parent.id,
+                uid: userObj.uid,
+                name,
+                desire,
+                explain,
+                deadline : new Date(deadline),
+                prize,
+                needArr,
+                createdAt: Date.now(),
+                modifiedAt: 0,
+                isComplete: true,
+                isComplished: false,
+                isOpen: true,
+                type: "shortterm",
+                parentId: [parent.parentId[0]],
+                childs: childIds,
+                completeFeeling: '',
+                cancelReason: '',
+            }).then(() => {
                 alert('작은 구름이 하나 만들어졌어요!');
                 navigate("/blueprint")    
-            }
-        }).catch(error => {
-            console.log(error.message);
-        })
+            }).catch(error => {
+                console.log(error.message);
+            })            
+        } else {
+            await dbService.collection('targets').doc(targetId).set({
+                id: targetId,
+                uid: userObj.uid,
+                name,
+                desire,
+                explain,
+                deadline : new Date(deadline),
+                prize,
+                needArr,
+                createdAt: Date.now(),
+                modifiedAt: 0,
+                isComplete: true,
+                isComplished: false,
+                isOpen: true,
+                type: "shortterm",
+                parentId: [parent.id],
+                childs: childIds,
+                completeFeeling: '',
+                cancelReason: '',
+            }).then(() => {
+                if (parent.id !== 'new') {
+                    dbService.collection('targets').doc(`${parent.id}`)
+                    .update({
+                        childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetId)
+                    }).then(() => {
+                        console.log('success')
+                        alert('작은 구름이 하나 만들어졌어요!');
+                        navigate("/blueprint")        
+                    }).catch(error => {
+                        console.log(error.message);
+                    })
+                } else {
+                    alert('작은 구름이 하나 만들어졌어요!');
+                    navigate("/blueprint")    
+                }
+            }).catch(error => {
+                console.log(error.message);
+            })
+        }
     }
 
     const makeChild = async (need, childId, parentId) => {
@@ -251,6 +279,15 @@ const ShorttermFactory = ({userObj, parent}) => {
         e.preventDefault();
         setPage(page + 1);
     }
+
+    useEffect(() => {
+        if(parent.type === 'incomplete') {
+            setIsInComplete(true);
+            setTarget(parent.name);
+            setName(parent.name);
+            setPage(3);
+        }
+    }, [])
 
     return (
         <Container>

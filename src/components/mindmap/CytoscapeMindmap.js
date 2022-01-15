@@ -8,7 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { dbService, firebaseInstance } from '../../fBase';
 import { EdgeHandlesOptions } from './EdgeHandlesOptions';
 import styled from 'styled-components';
-import { defaultContainer } from '../../css/styleConstants';
+import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
 import { MindmapStyle } from './MindmapStyle';
 import { MindmapLayout } from './MindmapLayout';
 
@@ -18,7 +18,20 @@ const Container = styled.div`
 
 const MindmapContainer = styled.div``;
 
-const DrawBtn = styled.button``
+const BtnBox = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const DrawBtn = styled.button`
+  font-family: Ssurround;
+  padding: 5px 10px;
+  border: 1px solid rgba(0,0,0,0.5);
+  border-radius: 10px;
+  background-color: white;
+  color: var(--main-blue);
+  ${defaultBtnAction};
+`
 
 const CytoscapeMindmap = ({userObj}) => {
     const navigate = useNavigate();
@@ -29,8 +42,12 @@ const CytoscapeMindmap = ({userObj}) => {
     let cyRef = useRef();
 
     cytoscape.use(dagre);
-    cytoscape.use(cxtmenu);
-    cytoscape.use(domNode);
+    if (typeof cytoscape("core", "cxtmenu") === "undefined") {
+      cxtmenu(cytoscape);
+    }
+    if (typeof cytoscape("core", "domNode") === "undefined") {
+      domNode(cytoscape);
+    }
     if (typeof cytoscape("core", "edgehandles") === "undefined") {
         edgehandles(cytoscape);
     }
@@ -290,7 +307,7 @@ const CytoscapeMindmap = ({userObj}) => {
             contentStyle: {}, 
             select: function(ele){ 
               navigate({
-                pathname: `/blueprint/targets/${ele.id()}`,
+                pathname: `/blueprint/incomplete/${ele.id()}`,
               })
             },
             enabled: true,
@@ -520,7 +537,7 @@ const CytoscapeMindmap = ({userObj}) => {
         })
     };
 
-    const fillCy = () => {
+    const fillCy = async () => {
 
         const cy = cytoscape({
             container: document.getElementById('cy'),
@@ -530,18 +547,43 @@ const CytoscapeMindmap = ({userObj}) => {
             wheelSensitivity: 0.2
         });
 
+        // node 그리기
         cy.domNode();
 
-        snapshot.forEach(targetData => {
-          makeNode(targetData);
-        })
+        if(snapshot.length) {
+          snapshot.forEach(targetData => {
+            makeNode(targetData);
+          })
+  
+          snapshot.forEach(targetData => {
+            makeEdge(targetData);
+          })  
+        } else {
+          let initNode;
 
-        snapshot.forEach(targetData => {
-          makeEdge(targetData);
-        })
 
-        const layout = cy.layout(MindmapLayout);
-        layout.run();
+          if (id) {                
+            await dbService.collection("users").doc(`${id}`).get().then(snapshot => {
+              const userData = snapshot.data();
+                initNode = {
+                  "data": {
+                      "id" : "a",
+                      "label" : `${userData.displayName}님은 아직 청사진을 그리지 않으셨어요.`
+                  }
+                }
+              }).catch(error => {
+                console.log(error.message)
+              })
+            } else {
+              initNode = {
+                "data": {
+                    "id" : "a",
+                    "label" : "배경을 길게 터치해보세요."
+                }
+              }
+            }
+          cy.add(initNode);
+        }
 
         cy.nodes().forEach(node => {
           if(node.data().type === "longterm") {
@@ -564,6 +606,11 @@ const CytoscapeMindmap = ({userObj}) => {
           }
         })
 
+        // 레이아웃 런
+        const layout = cy.layout(MindmapLayout);
+        layout.run();
+
+        // 내 마인드맵 일 때 메뉴 추가
         if (!id) {
             const longtermMenu = cy.cxtmenu( ContextLongtermMenuOptions );
             const shorttermMenu = cy.cxtmenu( ContextShorttermMenuOptions );
@@ -632,6 +679,7 @@ const CytoscapeMindmap = ({userObj}) => {
           container.style.textAlign = 'center';
           container.style.wordBreak = 'keep-all';
           container.style.width = 'max-content';
+          container.style.userSelect = 'none';
 
           // 마감기한 / 헤더 스타일링
           title.innerHTML = `${targetData.deadline ? deadlineTime : ''}까지`;
@@ -641,11 +689,13 @@ const CytoscapeMindmap = ({userObj}) => {
 
           // 설명 스타일링
           content.innerHTML = `${
-            targetData.explain 
-            ? Array.isArray(targetData.explain)
-              ? targetData.explain.join('\n')
-              : targetData.explain
-            : '쓸 설명이 없어오'
+            targetData.desire
+            ? targetData.desire 
+            : targetData.explain 
+              ? Array.isArray(targetData.explain)
+                ? targetData.explain.join('\n')
+                : targetData.explain
+            : ''
           }`;
           content.style.fontFamily = 'SsurroundAir';
           content.style.fontSize = '10px';
@@ -705,12 +755,14 @@ const CytoscapeMindmap = ({userObj}) => {
         <Container>
             <MindmapContainer id="cy" style={{width: '100%', height: '95vh'}}>
             </MindmapContainer>
-            <DrawBtn id="draw-on">
-                그리기
-            </DrawBtn>
-            <DrawBtn id="draw-off">
-                안그리기
-            </DrawBtn>
+            <BtnBox>
+              <DrawBtn id="draw-on">
+                  그리기
+              </DrawBtn>
+              <DrawBtn id="draw-off">
+                  안그리기
+              </DrawBtn>
+            </BtnBox>
         </Container>
     );
 };
