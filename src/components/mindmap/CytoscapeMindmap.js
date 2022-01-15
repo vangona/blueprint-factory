@@ -3,6 +3,7 @@ import cytoscape from "cytoscape";
 import dagre from "cytoscape-dagre";
 import cxtmenu from "cytoscape-cxtmenu";
 import edgehandles from "cytoscape-edgehandles";
+import domNode from "cytoscape-dom-node";
 import { useNavigate, useParams } from 'react-router-dom';
 import { dbService, firebaseInstance } from '../../fBase';
 import { EdgeHandlesOptions } from './EdgeHandlesOptions';
@@ -23,15 +24,16 @@ const CytoscapeMindmap = ({userObj}) => {
     const navigate = useNavigate();
     const {id} = useParams();
     const [isLoading, setIsLoading] = useState(true);
+    const [snapshot, setSnapshot] = useState([]);
     const [data, setData] = useState('');
-    const [cy, setCy] = useState('');
     let cyRef = useRef();
 
     cytoscape.use(dagre);
     cytoscape.use(cxtmenu);
+    cytoscape.use(domNode);
     if (typeof cytoscape("core", "edgehandles") === "undefined") {
         edgehandles(cytoscape);
-      }
+    }
 
     const removeTarget = async (ele) => {
         await dbService.collection('targets').doc(`${ele.id()}`).delete()
@@ -438,7 +440,17 @@ const CytoscapeMindmap = ({userObj}) => {
         outsideMenuCancel: 10 
     };
 
-    const getData = async (id) => { 
+    const getSnapshot = () => {
+      dbService.collection('targets').where('uid', '==', `${id ? id : userObj.uid}`).onSnapshot(querySnapshot => {
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        setSnapshot(data);
+      })
+    }
+
+    const getData = async () => { 
         dbService.collection('targets').where('uid', '==', `${id ? id : userObj.uid}`).onSnapshot(async (querySnapshot) => {
             if (querySnapshot.docs.length) {
                 const nodeArr = querySnapshot.docs.map((doc) => {
@@ -480,7 +492,6 @@ const CytoscapeMindmap = ({userObj}) => {
                         edgeArr.push(dataArr[i]);
                     }
                 });
-                console.log(edgeArr)
                 setData([...nodeArr, ...edgeArr]);
                 setIsLoading(false);
             } else {
@@ -520,24 +531,25 @@ const CytoscapeMindmap = ({userObj}) => {
         });
 
         cy.nodes().forEach(node => {
-            if(node.data().type === "longterm") {
-                node.addClass('longterm');
-            }
-            if(node.data().type === 'shortterm') {
-                node.addClass('shortterm');
-            }
-            if(node.data().type === 'plan') {
-                node.addClass('plan');
-            }
-            if(node.data().type === 'routine') {
-                node.addClass('routine');
-            }
-            if(node.data().type === 'incomplete') {
-                node.addClass('incomplete');
-            }
-            if(node.data().isComplished) {
-                node.addClass('isComplished');
-            }
+          if(node.data().type === "longterm") {
+              node.addClass('longterm');
+          }
+          if(node.data().type === 'shortterm') {
+              node.addClass('shortterm');
+          }
+          if(node.data().type === 'plan') {
+              node.addClass('plan');
+          }
+          if(node.data().type === 'routine') {
+              node.addClass('routine');
+          }
+          if(node.data().type === 'incomplete') {
+              node.addClass('incomplete');
+          }
+          if(node.data().isComplished) {
+              node.addClass('isComplished');
+          }
+          node.data();
         })
 
         if (!id) {
@@ -584,7 +596,8 @@ const CytoscapeMindmap = ({userObj}) => {
     
     useEffect(() => {
         if (!data) {
-            getData(id);
+            getSnapshot();
+            getData();
         } else {
             fillCy();
         }

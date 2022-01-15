@@ -7,7 +7,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
             'background-color': '#666',
             "shape": "round-rectangle",
             "width": '100px',
-            'label': 'data(label)'
+            'label': 'data(label)',
         }
     },
 
