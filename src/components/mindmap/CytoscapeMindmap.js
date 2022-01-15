@@ -16,6 +16,17 @@ const Container = styled.div`
     ${defaultContainer};
 `;
 
+const Title = styled.div`
+  position: absolute;
+  top: 30px;
+  font-size: 20px;
+  font-family: Ssurround;
+`;
+
+const Bold = styled.span`
+  color: var(--main-blue);
+`;
+
 const MindmapContainer = styled.div``;
 
 const BtnBox = styled.div`
@@ -36,9 +47,9 @@ const DrawBtn = styled.button`
 const CytoscapeMindmap = ({userObj}) => {
     const navigate = useNavigate();
     const {id} = useParams();
-    const [isLoading, setIsLoading] = useState(true);
-    const [snapshot, setSnapshot] = useState([]);
-    const [data, setData] = useState('');
+    const [userData, setUserData] = useState('');
+    const [snapshot, setSnapshot] = useState('');
+    // const [data, setData] = useState('');
     let cyRef = useRef();
 
     cytoscape.use(dagre);
@@ -84,6 +95,16 @@ const CytoscapeMindmap = ({userObj}) => {
         })
     }
 
+    const complishTarget = async (ele) => {
+      await dbService.collection('targets').doc(`${ele.id()}`).update({
+        isComplished: true,
+      }).then(() => {
+        alert('정말 고생 많으셨습니다.')
+      }).catch(error => {
+        console.log(error.message);
+      })
+    }
+
     const ContextLongtermMenuOptions = {
         menuRadius: function(ele){ return 80; },
         selector: '.longterm', 
@@ -124,6 +145,15 @@ const CytoscapeMindmap = ({userObj}) => {
               },
               {
                 fillColor: 'rgba(200, 200, 200, 0.75)',
+                content: '목표를 달성했어요!',
+                contentStyle: {}, 
+                select: function(ele){
+                  complishTarget(ele);
+                },
+                enabled: true,
+              },
+              {
+                fillColor: 'rgba(200, 200, 200, 0.75)',
                 content: '삭제하기',
                 contentStyle: {}, 
                 select: function(ele){
@@ -150,92 +180,124 @@ const CytoscapeMindmap = ({userObj}) => {
     };
 
     const ContextShorttermMenuOptions = {
-        menuRadius: function(ele){ return 80; },
-        selector: '.shortterm', 
-        commands: [ 
+      menuRadius: function(ele){ return 80; },
+      selector: '.shortterm', 
+      commands: [ 
           {
-            fillColor: 'rgba(200, 200, 200, 0.75)', 
-            content: '하위 목표 만들기', 
-            
-            contentStyle: {}, 
-            select: function(ele){ 
-              navigate({
-                pathname: `/blueprint/targets/${ele.id()}`,
-              })
+              fillColor: 'rgba(200, 200, 200, 0.75)', 
+              content: '하위 목표 만들기', 
+              
+              contentStyle: {}, 
+              select: function(ele){ 
+                navigate({
+                  pathname: `/blueprint/targets/${ele.id()}`,
+                })
+              },
+              enabled: true,
             },
-            enabled: true,
-          },
-          {
-            fillColor: 'rgba(200, 200, 200, 0.75)',
-            content: '계획 세우기',
-            contentStyle: {}, 
-            select: function(ele){
-              console.log( ele.id() ) 
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '계획 세우기',
+              contentStyle: {}, 
+              select: function(ele){
+                  navigate({
+                      pathname: `/blueprint/plan/${ele.id()}`,
+                  })
+              },
+              enabled: true,
             },
-            enabled: true,
-          },
-          {
-            fillColor: 'rgba(200, 200, 200, 0.75)',
-            content: '루틴 만들기',
-            contentStyle: {}, 
-            select: function(ele){
-              console.log( ele.id() ) 
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '루틴 만들기',
+              contentStyle: {}, 
+              select: function(ele){                    
+                  navigate({
+                      pathname: `/blueprint/routine/${ele.id()}`,
+                  })                
+              },
+              enabled: true,
             },
-            enabled: true,
-          },
-          {
-            fillColor: 'rgba(200, 200, 200, 0.75)',
-            content: '삭제하기',
-            contentStyle: {}, 
-            select: function(ele){
-              removeTarget( ele ) 
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '목표를 달성했어요!',
+              contentStyle: {}, 
+              select: function(ele){
+                complishTarget(ele);
+              },
+              enabled: true,
             },
-            enabled: true,
-          }
-        ],
-        fillColor: 'rgba(0, 0, 0, 0.75)', 
-        activeFillColor: 'rgba(1, 105, 217, 0.75)',
-        activePadding: 20, 
-        indicatorSize: 24, 
-        separatorWidth: 3,
-        spotlightPadding: 4, 
-        adaptativeNodeSpotlightRadius: true, 
-        minSpotlightRadius: 24, 
-        maxSpotlightRadius: 38, 
-        openMenuEvents: 'cxttapstart taphold', 
-        itemColor: 'white', 
-        itemTextShadowColor: 'transparent', 
-        zIndex: 9999, 
-        atMouse: false, 
-        outsideMenuCancel: 10 
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '삭제하기',
+              contentStyle: {}, 
+              select: function(ele){
+                removeTarget(ele);
+              },
+              enabled: true,
+            }
+      ],
+      fillColor: 'rgba(0, 0, 0, 0.75)', 
+      activeFillColor: 'rgba(1, 105, 217, 0.75)',
+      activePadding: 20, 
+      indicatorSize: 24, 
+      separatorWidth: 3,
+      spotlightPadding: 4, 
+      adaptativeNodeSpotlightRadius: true, 
+      minSpotlightRadius: 24, 
+      maxSpotlightRadius: 38, 
+      openMenuEvents: 'cxttapstart taphold', 
+      itemColor: 'white', 
+      itemTextShadowColor: 'transparent', 
+      zIndex: 9999, 
+      atMouse: false, 
+      outsideMenuCancel: 10 
     };
 
     const ContextPlanMenuOptions = {
         menuRadius: function(ele){ return 80; },
         selector: '.plan', 
         commands: [ 
-          {
-            fillColor: 'rgba(200, 200, 200, 0.75)', 
-            content: '루틴 만들기', 
-            
-            contentStyle: {}, 
-            select: function(ele){ 
-              navigate({
-                pathname: `/blueprint/targets/${ele.id()}`,
-              })
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '할 일 쓰기',
+              contentStyle: {}, 
+              select: function(ele){                    
+                  navigate({
+                      pathname: `/blueprint/todo/${ele.id()}`,
+                  })                
+              },
+              enabled: true,
             },
-            enabled: true,
-          },
-          {
-            fillColor: 'rgba(200, 200, 200, 0.75)',
-            content: '삭제하기',
-            contentStyle: {}, 
-            select: function(ele){
-                removeTarget( ele ) 
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '루틴 만들기',
+              contentStyle: {}, 
+              select: function(ele){                    
+                  navigate({
+                      pathname: `/blueprint/routine/${ele.id()}`,
+                  })                
+              },
+              enabled: true,
             },
-            enabled: true,
-          }
-        ],
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '계획을 마쳤어요!',
+              contentStyle: {}, 
+              select: function(ele){
+                complishTarget(ele);
+              },
+              enabled: true,
+            },
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '삭제하기',
+              contentStyle: {}, 
+              select: function(ele){
+                removeTarget(ele);
+              },
+              enabled: true,
+            }
+      ],
         fillColor: 'rgba(0, 0, 0, 0.75)', 
         activeFillColor: 'rgba(1, 105, 217, 0.75)',
         activePadding: 20, 
@@ -271,6 +333,15 @@ const CytoscapeMindmap = ({userObj}) => {
           },
           {
             fillColor: 'rgba(200, 200, 200, 0.75)',
+            content: '루틴으로 목표에 도달했어요!',
+            contentStyle: {}, 
+            select: function(ele){
+              complishTarget(ele);
+            },
+            enabled: true,
+          },
+          {
+            fillColor: 'rgba(200, 200, 200, 0.75)',
             content: '삭제하기',
             contentStyle: {}, 
             select: function(ele){
@@ -295,6 +366,46 @@ const CytoscapeMindmap = ({userObj}) => {
         atMouse: false, 
         outsideMenuCancel: 10 
     };
+
+    const ContextTodoMenuOptions = {
+      menuRadius: function(ele){ return 80; },
+      selector: '.routine', 
+      commands: [ 
+        {
+          fillColor: 'rgba(200, 200, 200, 0.75)',
+          content: '할 일을 마쳤어요!',
+          contentStyle: {}, 
+          select: function(ele){
+            complishTarget(ele);
+          },
+          enabled: true,
+        },
+        {
+          fillColor: 'rgba(200, 200, 200, 0.75)',
+          content: '삭제하기',
+          contentStyle: {}, 
+          select: function(ele){
+              removeTarget( ele ) 
+          },
+          enabled: true,
+        }
+      ],
+      fillColor: 'rgba(0, 0, 0, 0.75)', 
+      activeFillColor: 'rgba(1, 105, 217, 0.75)',
+      activePadding: 20, 
+      indicatorSize: 24, 
+      separatorWidth: 3,
+      spotlightPadding: 4, 
+      adaptativeNodeSpotlightRadius: true, 
+      minSpotlightRadius: 24, 
+      maxSpotlightRadius: 38, 
+      openMenuEvents: 'cxttapstart taphold', 
+      itemColor: 'white', 
+      itemTextShadowColor: 'transparent', 
+      zIndex: 9999, 
+      atMouse: false, 
+      outsideMenuCancel: 10 
+  };
 
     const ContextIncompleteMenuOptions = {
         menuRadius: function(ele){ return 80; },
@@ -463,79 +574,91 @@ const CytoscapeMindmap = ({userObj}) => {
           id: doc.id,
           ...doc.data(),
         }))
+        console.log(data);
         setSnapshot(data);
       })
     }
 
-    const getData = async () => { 
-        dbService.collection('targets').where('uid', '==', `${id ? id : userObj.uid}`).onSnapshot(async (querySnapshot) => {
-            if (querySnapshot.docs.length) {
-                const nodeArr = querySnapshot.docs.map((doc) => {
-                    const target = {
-                        id: doc.id,
-                        ...doc.data(),
-                    }
-                    return ({
-                        "data": {
-                            "id" : `${target.id}`,
-                            "parentId" : `${target.parentId}`,
-                            "label" : `${target.name}`,
-                            "type" : `${target.type}`,
-                            "explain" : `${target.explain}`,
-                            "deadline" : new Date(target.deadline.seconds * 1000),
-                            "isComplete" : target.isComplete,
-                            "isComplished" : target.isComplished,
-                        },
-                    })
-                });
-                let edgeArr = [];
-                querySnapshot.docs.forEach((doc) => {
-                    const target = {
-                        id: doc.id,
-                        ...doc.data(),
-                    }
-                    const dataArr = target.childs.map(child => {
-                        const childData = {
-                            "data": {
-                                "id" : `${target.id}->${child}`,
-                                "source" : `${target.id}`,
-                                "target" : `${child}`
-                            }
-                        }   
-                        return childData;
-                    })
+    const getUserData = async (id) => {
+      await dbService.collection('users').doc(`${id}`)
+      .get()
+      .then(snapshot => {
+        const user = snapshot.data();
+        setUserData(user);
+      }).catch(error => {
+        console.log(error.message);
+      })
+    }
+
+    // const getData = async () => { 
+    //     dbService.collection('targets').where('uid', '==', `${id ? id : userObj.uid}`).onSnapshot(async (querySnapshot) => {
+    //         if (querySnapshot.docs.length) {
+    //             const nodeArr = querySnapshot.docs.map((doc) => {
+    //                 const target = {
+    //                     id: doc.id,
+    //                     ...doc.data(),
+    //                 }
+    //                 return ({
+    //                     "data": {
+    //                         "id" : `${target.id}`,
+    //                         "parentId" : `${target.parentId}`,
+    //                         "label" : `${target.name}`,
+    //                         "type" : `${target.type}`,
+    //                         "explain" : `${target.explain}`,
+    //                         "deadline" : new Date(target.deadline.seconds * 1000),
+    //                         "isComplete" : target.isComplete,
+    //                         "isComplished" : target.isComplished,
+    //                     },
+    //                 })
+    //             });
+    //             let edgeArr = [];
+    //             querySnapshot.docs.forEach((doc) => {
+    //                 const target = {
+    //                     id: doc.id,
+    //                     ...doc.data(),
+    //                 }
+    //                 const dataArr = target.childs.map(child => {
+    //                     const childData = {
+    //                         "data": {
+    //                             "id" : `${target.id}->${child}`,
+    //                             "source" : `${target.id}`,
+    //                             "target" : `${child}`
+    //                         }
+    //                     }   
+    //                     return childData;
+    //                 })
                     
-                    for(let i = 0; i < dataArr.length; i++) {
-                        edgeArr.push(dataArr[i]);
-                    }
-                });
-                setData([...nodeArr, ...edgeArr]);
-                setIsLoading(false);
-            } else {
-                await dbService.collection("users").doc(`${id ? id : userObj.uid}`).get().then(snapshot => {
-                    const userData = snapshot.data();
-                    let initNode
-                    if (id) {
-                        initNode = {
-                            "data": {
-                                "id" : "a",
-                                "label" : `${userData.displayName}님은 아직 청사진을 그리지 않으셨어요.`
-                            }
-                        }    
-                    } else {
-                        initNode = {
-                            "data": {
-                                "id" : "a",
-                                "label" : "새로운 목표를 만들어 봅시다."
-                            }
-                        }
-                    }
-                    setData([initNode]);        
-                    setIsLoading(false);
-                })
-            }
-        })
-    };
+    //                 for(let i = 0; i < dataArr.length; i++) {
+    //                     edgeArr.push(dataArr[i]);
+    //                 }
+    //             });
+    //             setData([...nodeArr, ...edgeArr]);
+    //             setIsLoading(false);
+    //         } else {
+    //             await dbService.collection("users").doc(`${id ? id : userObj.uid}`).get().then(snapshot => {
+    //                 const userData = snapshot.data();
+    //                 let initNode
+    //                 if (id) {
+    //                     initNode = {
+    //                         "data": {
+    //                             "id" : "a",
+    //                             "label" : `${userData.displayName}님은 아직 청사진을 그리지 않으셨어요.`
+    //                         }
+    //                     }    
+    //                 } else {
+    //                     initNode = {
+    //                         "data": {
+    //                             "id" : "a",
+    //                             "label" : "새로운 목표를 만들어 봅시다."
+    //                         }
+    //                     }
+    //                 }
+    //                 setData([initNode]);        
+    //                 setIsLoading(false);
+    //             })
+    //         }
+    //     })
+    // };
 
     const fillCy = async () => {
 
@@ -550,7 +673,7 @@ const CytoscapeMindmap = ({userObj}) => {
         // node 그리기
         cy.domNode();
 
-        if(snapshot.length) {
+        if(snapshot.length !== 0) {
           snapshot.forEach(targetData => {
             makeNode(targetData);
           })
@@ -564,11 +687,11 @@ const CytoscapeMindmap = ({userObj}) => {
 
           if (id) {                
             await dbService.collection("users").doc(`${id}`).get().then(snapshot => {
-              const userData = snapshot.data();
+              const user = snapshot.data();
                 initNode = {
                   "data": {
                       "id" : "a",
-                      "label" : `${userData.displayName}님은 아직 청사진을 그리지 않으셨어요.`
+                      "label" : `${user.displayName}님은 아직 청사진을 그리지 않으셨어요.`
                   }
                 }
               }).catch(error => {
@@ -598,6 +721,9 @@ const CytoscapeMindmap = ({userObj}) => {
           if(node.data().type === 'routine') {
               node.addClass('routine');
           }
+          if(node.data().type === 'todo') {
+              node.addClass('todo');
+          }
           if(node.data().type === 'incomplete') {
               node.addClass('incomplete');
           }
@@ -612,10 +738,12 @@ const CytoscapeMindmap = ({userObj}) => {
 
         // 내 마인드맵 일 때 메뉴 추가
         if (!id) {
+            setUserData(userObj);
             const longtermMenu = cy.cxtmenu( ContextLongtermMenuOptions );
             const shorttermMenu = cy.cxtmenu( ContextShorttermMenuOptions );
             const planMenu = cy.cxtmenu( ContextPlanMenuOptions );
             const routineMenu = cy.cxtmenu( ContextRoutineMenuOptions );
+            const todoMenu = cy.cxtmenu( ContextTodoMenuOptions );
             const complishedMenu = cy.cxtmenu( ContextComplishedMenuOptions );
             const incompleteMenu = cy.cxtmenu( ContextIncompleteMenuOptions );
             const edgeMenu = cy.cxtmenu( ContextEdgeMenuOptions );
@@ -623,12 +751,18 @@ const CytoscapeMindmap = ({userObj}) => {
         
             const eh = cy.edgehandles( EdgeHandlesOptions );
 
-            document.querySelector('#draw-on').addEventListener('click', function() {
+            const drawOn = document.querySelector('#draw-on');
+            drawOn.addEventListener('click', function() {
                 eh.enableDrawMode();
+                drawOn.classList.add('hide');
+                drawOff.classList.remove('hide');
             });
 
-            document.querySelector('#draw-off').addEventListener('click', function() {
+            const drawOff = document.querySelector('#draw-off');
+            drawOff.addEventListener('click', function() {
                 eh.disableDrawMode();
+                drawOff.classList.add('hide');
+                drawOn.classList.remove('hide');
             });
 
             cy.on('ehcomplete', async (event, sourceNode, targetNode, addedEdge) => {
@@ -652,6 +786,7 @@ const CytoscapeMindmap = ({userObj}) => {
             })
         }
 
+        // 노드 만들기
         function makeNode(targetData) {
           // 변수 선언
           const container = document.createElement('div');
@@ -676,10 +811,11 @@ const CytoscapeMindmap = ({userObj}) => {
           container.style.justifyContent = 'center';
           container.style.alignItems = 'center';
           container.style.padding = '15px';
+          container.style.width = 'max-content';
           container.style.textAlign = 'center';
           container.style.wordBreak = 'keep-all';
-          container.style.width = 'max-content';
           container.style.userSelect = 'none';
+          container.style.maxWidth = '150px';
 
           // 마감기한 / 헤더 스타일링
           title.innerHTML = `${targetData.deadline ? deadlineTime : ''}까지`;
@@ -699,7 +835,8 @@ const CytoscapeMindmap = ({userObj}) => {
           }`;
           content.style.fontFamily = 'SsurroundAir';
           content.style.fontSize = '10px';
-          content.style.whiteSpace = 'pre'
+          content.style.whiteSpace = 'pre-wrap';
+          content.style.lineHeight = '150%';
 
           if(targetData.deadline) {
             container.appendChild(title);
@@ -723,7 +860,8 @@ const CytoscapeMindmap = ({userObj}) => {
 
           cy.add(node)
         }
-
+        
+        // 선 만들기
         function makeEdge(targetData) {
           const dataArr = targetData.childs.map(child => {
             const childData = {
@@ -743,26 +881,33 @@ const CytoscapeMindmap = ({userObj}) => {
     }
     
     useEffect(() => {
-        if (!data) {
+        if (!snapshot) {
             getSnapshot();
-            getData();
+            if (id) {
+              getUserData(id);
+            } else {
+              setUserData(userObj);
+            }
         } else {
             fillCy();
         }
-    }, [data])
+    }, [snapshot])
 
     return (   
         <Container>
+            <Title>
+              {userData.displayName}님의 <Bold>청사진</Bold>  
+            </Title>
             <MindmapContainer id="cy" style={{width: '100%', height: '95vh'}}>
             </MindmapContainer>
-            <BtnBox>
+            {!id && <BtnBox>
               <DrawBtn id="draw-on">
-                  그리기
+                  목표 잇기
               </DrawBtn>
-              <DrawBtn id="draw-off">
-                  안그리기
+              <DrawBtn id="draw-off" className='hide'>
+                  목표 잇기 끄기
               </DrawBtn>
-            </BtnBox>
+            </BtnBox>}
         </Container>
     );
 };

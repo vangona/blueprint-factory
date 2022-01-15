@@ -13,14 +13,11 @@ export const MindmapStyle = [ // the stylesheet for the graph
 
     {
         selector: 'edge',
-        style: {
-            'width': 3,
-            'curve-style': 'bezier',
-            'line-color': '#ccc',
-          // 변경된 부분
-            'source-arrow-color': '#ccc',
-            'source-arrow-shape': 'triangle'
-          //
+        "style": {
+          "curve-style": "taxi",
+          "taxi-direction": "downward",
+          "taxi-turn": 20,
+          "taxi-turn-min-distance": 5
         }
     },
 
@@ -82,6 +79,20 @@ export const MindmapStyle = [ // the stylesheet for the graph
         }
     },
     {
+      selector: '.todo',
+      style: {
+          'font-family': 'Ssurround',
+          'font-size': '14px',
+          'background-color': 'white',
+          'border-width': '1px',
+          'border-style': 'solid',
+          'border-color': 'purple',
+          "shape": "round-rectangle",
+          "width": '100px',
+          'label': 'data(label)'
+      }
+  },
+    {
         selector: '.incomplete',
         style: {
             'font-family': 'Ssurround',
@@ -100,10 +111,10 @@ export const MindmapStyle = [ // the stylesheet for the graph
         style: {
             'font-family': 'Ssurround',
             'font-size': '14px',
-            'background-color': 'white',
+            'background-color': 'green',
             'border-width': '1px',
             'border-style': 'solid',
-            'border-color': 'brown',
+            'border-color': 'blue',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'

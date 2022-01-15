@@ -8,6 +8,7 @@ import RoutineFactory from '../components/factory/RoutineFactory';
 import ShorttermBackground from '../components/factory/shortterm/ShorttermBackground';
 import ShorttermFactory from '../components/factory/ShorttermFactory';
 import TermChoice from '../components/factory/TermChoice';
+import TodoFactory from '../components/factory/todo/TodoFactory';
 import Loading from '../components/loading/Loading';
 import { defaultContainer, defaultTitle } from '../css/styleConstants';
 import { dbService } from '../fBase';
@@ -102,6 +103,9 @@ const BlueprintMaker = ({userObj}) => {
                 }
                 {type === "routine" && 
                     <RoutineFactory userObj={userObj} parent={parent ? parent : undefined} /> 
+                }
+                {type === "todo" && 
+                    <TodoFactory userObj={userObj} parent={parent ? parent : undefined} /> 
                 }
                 {/* <BackBtn onClick={onClick}>돌아가기</BackBtn> */}
             </Container>
