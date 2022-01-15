@@ -30,7 +30,11 @@ export const MindmapStyle = [ // the stylesheet for the graph
         style: {
             'font-family': 'Ssurround',
             'font-size': '14px',
-            'background-color': 'blue',
+            'background-color': 'white',
+            'border-width': '1px',
+            'border-style': 'solid',
+            'border-color': 'blue',
+            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -41,7 +45,11 @@ export const MindmapStyle = [ // the stylesheet for the graph
         style: {
             'font-family': 'Ssurround',
             'font-size': '14px',
-            'background-color': 'red',
+            'background-color': 'white',
+            'border-width': '1px',
+            'border-style': 'solid',
+            'border-color': 'red',
+            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -52,7 +60,11 @@ export const MindmapStyle = [ // the stylesheet for the graph
         style: {
             'font-family': 'Ssurround',
             'font-size': '14px',
-            'background-color': 'skyblue',
+            'background-color': 'white',
+            'border-width': '1px',
+            'border-style': 'solid',
+            'border-color': 'skyblue',
+            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -63,7 +75,11 @@ export const MindmapStyle = [ // the stylesheet for the graph
         style: {
             'font-family': 'Ssurround',
             'font-size': '14px',
-            'background-color': 'yellow',
+            'background-color': 'white',
+            'border-width': '1px',
+            'border-style': 'solid',
+            'border-color': 'yellow',
+            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -74,7 +90,11 @@ export const MindmapStyle = [ // the stylesheet for the graph
         style: {
             'font-family': 'Ssurround',
             'font-size': '14px',
-            'background-color': 'green',
+            'background-color': 'white',
+            'border-width': '1px',
+            'border-style': 'solid',
+            'border-color': 'green',
+            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'
@@ -85,7 +105,11 @@ export const MindmapStyle = [ // the stylesheet for the graph
         style: {
             'font-family': 'Ssurround',
             'font-size': '14px',
-            'background-color': 'brown',
+            'background-color': 'white',
+            'border-width': '1px',
+            'border-style': 'solid',
+            'border-color': 'brown',
+            'border-opacity': '50%',
             "shape": "round-rectangle",
             "width": '100px',
             'label': 'data(label)'

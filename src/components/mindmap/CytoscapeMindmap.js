@@ -524,11 +524,24 @@ const CytoscapeMindmap = ({userObj}) => {
 
         const cy = cytoscape({
             container: document.getElementById('cy'),
-            elements: data,
+            elements: [],
             style: MindmapStyle,
-            layout: MindmapLayout,
+            layout: {},
             wheelSensitivity: 0.2
         });
+
+        cy.domNode();
+
+        snapshot.forEach(targetData => {
+          makeNode(targetData);
+        })
+
+        snapshot.forEach(targetData => {
+          makeEdge(targetData);
+        })
+
+        const layout = cy.layout(MindmapLayout);
+        layout.run();
 
         cy.nodes().forEach(node => {
           if(node.data().type === "longterm") {
@@ -549,7 +562,6 @@ const CytoscapeMindmap = ({userObj}) => {
           if(node.data().isComplished) {
               node.addClass('isComplished');
           }
-          node.data();
         })
 
         if (!id) {
@@ -591,6 +603,92 @@ const CytoscapeMindmap = ({userObj}) => {
                 console.log(error.message);
                 })
             })
+        }
+
+        function makeNode(targetData) {
+          // 변수 선언
+          const container = document.createElement('div');
+          const title = document.createElement('h1');
+          const content = document.createElement('div');
+          const hr = document.createElement('hr');
+
+          // 시간 문자열 만들기
+          let deadlineTime = ''
+          if (targetData.deadline) {
+            const Time = new Date(targetData.deadline.seconds * 1000);
+            const Year = Time.getFullYear();
+            const Month = Time.getMonth() + 1;
+            const DateTime = Time.getDate();
+            const remainTime = Time - Date.now();
+            deadlineTime = `${Year}-${Month > 9 ? Month : '0' + Month}-${DateTime > 9 ? DateTime : '0' + DateTime}`;
+          }
+
+          // 컨테이너 스타일링
+          container.style.display = 'flex';
+          container.style.flexDirection = 'column';
+          container.style.justifyContent = 'center';
+          container.style.alignItems = 'center';
+          container.style.padding = '15px';
+          container.style.textAlign = 'center';
+          container.style.wordBreak = 'keep-all';
+          container.style.width = 'max-content';
+
+          // 마감기한 / 헤더 스타일링
+          title.innerHTML = `${targetData.deadline ? deadlineTime : ''}까지`;
+          title.width = '200px';
+          title.style.fontFamily = 'Ssurround';
+          title.style.fontSize = '12px';
+
+          // 설명 스타일링
+          content.innerHTML = `${
+            targetData.explain 
+            ? Array.isArray(targetData.explain)
+              ? targetData.explain.join('\n')
+              : targetData.explain
+            : '쓸 설명이 없어오'
+          }`;
+          content.style.fontFamily = 'SsurroundAir';
+          content.style.fontSize = '10px';
+          content.style.whiteSpace = 'pre'
+
+          if(targetData.deadline) {
+            container.appendChild(title);
+            container.appendChild(hr);
+          }
+          container.appendChild(content);
+
+          const node = {
+            "data": {
+              "id" : `${targetData.id}`,
+              "parentId" : `${targetData.parentId}`,
+              "label" : `${targetData.name}`,
+              "type" : `${targetData.type}`,
+              "explain" : `${targetData.explain}`,
+              "deadline" : new Date(targetData.deadline.seconds * 1000),
+              "isComplete" : targetData.isComplete,
+              "isComplished" : targetData.isComplished,
+              'dom': container,
+            },
+          } 
+
+          cy.add(node)
+        }
+
+        function makeEdge(targetData) {
+          const dataArr = targetData.childs.map(child => {
+            const childData = {
+                "data": {
+                    "id" : `${targetData.id}->${child}`,
+                    "source" : `${targetData.id}`,
+                    "target" : `${child}`
+                }
+            }   
+            return childData;
+          })
+        
+          for(let i = 0; i < dataArr.length; i++) {
+              cy.add(dataArr[i]);
+          }
         }
     }
     
