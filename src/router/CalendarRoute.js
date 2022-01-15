@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { defaultContainer } from '../css/styleConstants';
 import CalendarComponent from '../components/calendar/CalendarComponent';
 import EventComponent from '../components/calendar/EventComponent';
+import Loading from '../components/loading/Loading';
 
 const Container = styled.div`
     ${defaultContainer};
-    padding-top: 70px;
+    padding: 40px 0 var(--nav-height) 0;
     height: auto;
 `;
 
@@ -40,7 +41,7 @@ const CalendarRoute = ({userObj}) => {
     return (
         <>
         {isLoading
-        ? "Loading..."
+        ? <Loading />
         : <Container>
             <CalendarComponent getSelected={getSelected} schedules={schedules} />
             <EventComponent selected={selected} />

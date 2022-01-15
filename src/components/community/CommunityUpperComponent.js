@@ -21,13 +21,13 @@ const Cloud = styled.div`
     transform: scaleX(-1);
 `;
 
-const UpperComponent = () => {
+const UpperComponent = ({ userObj, users, getSearchWord, searchWord }) => {
     return (
         <Container>
             <Cloud>
                 <ImCloud style={{fill: "white", color: "white"}} />
             </Cloud>
-            <SearchBar />
+            <SearchBar getSearchWord={getSearchWord} searchWord={searchWord} />
         </Container>
     );
 };

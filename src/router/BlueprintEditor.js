@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PlanEdit from '../components/edit/PlanEdit';
 import RoutineEdit from '../components/edit/RoutineEdit';
 import TargetEdit from '../components/edit/TargetEdit';
+import Loading from '../components/loading/Loading';
 import { defaultContainer, defaultTitle } from '../css/styleConstants';
 import { dbService } from '../fBase';
 
@@ -63,7 +64,7 @@ const BlueprintEditor = ({userObj}) => {
             <Title>
                 {typeName}
             </Title>
-            {isLoading ? "Loading..."
+            {isLoading ? <Loading />
             :
             <>
                 {type === "target" && <TargetEdit userObj={userObj} element={element} /> 

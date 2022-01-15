@@ -87,3 +87,7 @@ export const sumbitBlockBtn = css`
     width: 200px;
     height: 50px;
 `;
+
+export const navHeight = css`
+    height: 50px;
+`;

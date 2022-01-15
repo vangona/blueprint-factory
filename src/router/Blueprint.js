@@ -6,7 +6,7 @@ import { defaultContainer } from '../css/styleConstants';
 
 const Container = styled.div`
     ${defaultContainer};
-    padding-bottom: 65px;
+    padding-bottom: var(--nav-height);
     box-sizing: border-box;
 `;
 

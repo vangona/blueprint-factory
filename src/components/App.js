@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { authService, dbService } from "../fBase";
+import Loading from "./loading/Loading";
 import AppRouter from "./Router";
 
 const App = () => {
@@ -80,7 +81,7 @@ const App = () => {
         <>
         {init 
         ? <AppRouter isLoggedIn={Boolean(userObj)} refreshUser={refreshUser} userObj={ userObj } /> 
-        : "Loading..."
+        : <Loading />
         }
         </>
     )

@@ -12,17 +12,17 @@ const Container = styled.div`
     position: fixed;
     bottom: 0;
     flex-direction: row;
-    height: 65px;
     z-index: 5;
     justify-content: space-between;
     background-color: white;
+    height: var(--nav-height);
 `;
 
 const NavBox = styled.div`
     display: flex;
     text-align: center;
     padding: 0 5%;
-    font-size: 40px;
+    font-size: 30px;
     z-index: 6;
     :hover {
         cursor: pointer;

@@ -20,12 +20,13 @@ const Container = styled.div`
 const Title = styled.h1`
     font-family: SsurroundAir;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 18px;
 `;
 
 const Explain = styled.span`
     font-family: SsurroundAir;
     color: gray;
+    font-size: 14px;
 `;
 
 const UsersContainer = styled.div`

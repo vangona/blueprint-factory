@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import HomeLowerComponent from '../components/home/HomeLowerComponent';
 import HomeUpperComponent from '../components/home/HomeUpperComponent';
+import Loading from '../components/loading/Loading';
 import { defaultContainer } from '../css/styleConstants';
 import { dbService } from '../fBase';
 
 const Container = styled.div`
   ${ defaultContainer }
-  padding-top: 30px;
+  padding-top: var(--nav-height);
 `;
 
 const Home = ({userObj}) => {
@@ -55,7 +56,7 @@ const Home = ({userObj}) => {
   return (
     <Container>
       {isLoading 
-      ? "Loading..."
+      ? <Loading />
       : 
       <>
         <HomeUpperComponent userObj={userObj} todayTargets={todayTargets} todaySteps={todaySteps} />

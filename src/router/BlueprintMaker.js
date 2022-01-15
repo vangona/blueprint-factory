@@ -8,6 +8,7 @@ import RoutineFactory from '../components/factory/RoutineFactory';
 import ShorttermBackground from '../components/factory/shortterm/ShorttermBackground';
 import ShorttermFactory from '../components/factory/ShorttermFactory';
 import TermChoice from '../components/factory/TermChoice';
+import Loading from '../components/loading/Loading';
 import { defaultContainer, defaultTitle } from '../css/styleConstants';
 import { dbService } from '../fBase';
 
@@ -81,7 +82,7 @@ const BlueprintMaker = ({userObj}) => {
     return (
         <>
         {isLoading
-        ? "Loading..."
+        ? <Loading />
             :
             <Container>
                 <Title>
