@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -120,6 +120,7 @@ const PlanFactory = ({userObj, parent}) => {
     const [prize, setPrize] = useState(''); 
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);
+    const [isInComplete, setIsInComplete] = useState(false);
 
     const onSubmit = async (e) => {
         const targetId = uuidv4();
@@ -129,63 +130,99 @@ const PlanFactory = ({userObj, parent}) => {
         needArr.forEach(async (need) => {
             const childId = uuidv4();
             childIds.push(childId);
-            await makeChild(need, childId, targetId);
+            await makeChild(need, childId, isInComplete ? parent.id : targetId);
         })
 
         explainArr.forEach(async (step, index) => {
             const stepId = uuidv4();
             stepIds.push(stepId);
-            await makeStep(step, stepId, targetId, index);
+            await makeStep(step, stepId, isInComplete ? parent.id : targetId, index);
         })
-
-        await dbService.collection('targets').doc(targetId).set({
-            id: targetId,
-            uid: userObj.uid,
-            name,
-            desire,
-            explain : explainArr,
-            deadline : new Date(deadlineArr[deadlineArr.length - 1]),
-            prize,
-            needArr,
-            createdAt: Date.now(),
-            modifiedAt: 0,
-            isComplete: true,
-            isComplished: false,
-            isOpen: true,
-            type: "plan",
-            parentId: [parent.id],
-            childs: childIds,
-            completeFeeling: '',
-            cancelReason: '',
-        }).then(async () => {
-            await dbService.collection('targets').doc(`${parent.id}`)
-            .update({
-                childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetId)
-            }).then(() => {
-                console.log('success')
+        
+        if (isInComplete) {
+            await dbService.collection('targets').doc(parent.id).update({
+                id: parent.id,
+                uid: userObj.uid,
+                name,
+                desire,
+                explain : explainArr,
+                deadline : new Date(deadlineArr[deadlineArr.length - 1]),
+                prize,
+                needArr,
+                createdAt: Date.now(),
+                modifiedAt: 0,
+                isComplete: true,
+                isComplished: false,
+                isOpen: true,
+                type: "plan",
+                parentId: [parent.parentId[0]],
+                childs: childIds,
+                completeFeeling: '',
+                cancelReason: '',
+            }).then(async () => {
                 alert('뜬구름이 조금 더 명확해졌어요!');
                 navigate("/blueprint")        
             }).catch(error => {
                 console.log(error.message);
             })
-        }).catch(error => {
-            console.log(error.message);
-        })
+        } else {
+            await dbService.collection('targets').doc(targetId).set({
+                id: targetId,
+                uid: userObj.uid,
+                name,
+                desire,
+                explain : explainArr,
+                deadline : new Date(deadlineArr[deadlineArr.length - 1]),
+                prize,
+                needArr,
+                createdAt: Date.now(),
+                modifiedAt: 0,
+                isComplete: true,
+                isComplished: false,
+                isOpen: true,
+                type: "plan",
+                parentId: [parent.id],
+                childs: childIds,
+                completeFeeling: '',
+                cancelReason: '',
+            }).then(async () => {
+                await dbService.collection('targets').doc(`${parent.id}`)
+                .update({
+                    childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetId)
+                }).then(() => {
+                    console.log('success')
+                    alert('뜬구름이 조금 더 명확해졌어요!');
+                    navigate("/blueprint")        
+                }).catch(error => {
+                    console.log(error.message);
+                })
+            }).catch(error => {
+                console.log(error.message);
+            })
+        }
     }
 
     const makeStep = async (step, childId, parentId, index) => {
-        await dbService.collection('steps').doc(childId).set({
-            id : childId,
+        await dbService.collection('targets').doc(childId).set({
+            id: childId,
             uid: userObj.uid,
-            name : name,
-            explain: step,
+            name: step,
+            desire: '',
+            explain: '',
             deadline : new Date(deadlineArr[index]),
+            prize: '',
+            needArr : [],
             createdAt: Date.now(),
             modifiedAt: 0,
+            isComplete: true,
             isComplished: false,
-            parentId : [parentId],
+            isOpen: true,
+            type: "todo",
+            parentId: [parentId],
+            childs: [],
             completeFeeling: '',
-        })          
+            cancelReason: '',
+        })
     }
 
     const makeChild = async (need, childId, targetId) => {
@@ -301,8 +338,14 @@ const PlanFactory = ({userObj, parent}) => {
 
     const getNeed = value => {
         setNeed(value);
-
     }
+
+    useEffect(() => {
+        if(parent.type === 'incomplete') {
+            setIsInComplete(true);
+            setName(parent.name);
+        }
+    }, [])
 
     return (
         <Container>
@@ -315,7 +358,6 @@ const PlanFactory = ({userObj, parent}) => {
             {page === 6 && 
                 <PlanCheck explainArr={explainArr} needArr={needArr} deadlineArr={deadlineArr} target={name} />            
             }
-
 
             <TargetForm display="none" onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>

@@ -319,18 +319,18 @@ const CytoscapeMindmap = ({userObj}) => {
         menuRadius: function(ele){ return 80; },
         selector: '.routine', 
         commands: [ 
-          {
-            fillColor: 'rgba(200, 200, 200, 0.75)', 
-            content: '루틴 수정하기', 
+          // {
+          //   fillColor: 'rgba(200, 200, 200, 0.75)', 
+          //   content: '루틴 수정하기', 
             
-            contentStyle: {}, 
-            select: function(ele){ 
-              navigate({
-                pathname: `/blueprint/targets/${ele.id()}`,
-              })
-            },
-            enabled: true,
-          },
+          //   contentStyle: {}, 
+          //   select: function(ele){ 
+          //     navigate({
+          //       pathname: `/blueprint/targets/${ele.id()}`,
+          //     })
+          //   },
+          //   enabled: true,
+          // },
           {
             fillColor: 'rgba(200, 200, 200, 0.75)',
             content: '루틴으로 목표에 도달했어요!',
@@ -424,6 +424,18 @@ const CytoscapeMindmap = ({userObj}) => {
             enabled: true,
           },
           {
+            fillColor: 'rgba(200, 200, 200, 0.75)', 
+            content: '계획으로 만들기', 
+            
+            contentStyle: {}, 
+            select: function(ele){ 
+              navigate({
+                pathname: `/blueprint/plan/${ele.id()}`,
+              })
+            },
+            enabled: true,
+          },
+          {
             fillColor: 'rgba(200, 200, 200, 0.75)',
             content: '삭제하기',
             contentStyle: {}, 
@@ -460,21 +472,10 @@ const CytoscapeMindmap = ({userObj}) => {
             
             contentStyle: {}, 
             select: function(ele){ 
-              navigate({
-                pathname: `/blueprint/targets/${ele.id()}`,
-              })
+              alert('어제의 나보다 오늘의 나는 얼마나 성장했을까요?')
             },
             enabled: true,
           },
-          {
-            fillColor: 'rgba(200, 200, 200, 0.75)',
-            content: 'a command name',
-            contentStyle: {}, 
-            select: function(ele){
-              console.log( ele.id() ) 
-            },
-            enabled: true,
-          }
         ],
         fillColor: 'rgba(0, 0, 0, 0.75)', 
         activeFillColor: 'rgba(1, 105, 217, 0.75)',
@@ -709,26 +710,29 @@ const CytoscapeMindmap = ({userObj}) => {
         }
 
         cy.nodes().forEach(node => {
-          if(node.data().type === "longterm") {
-              node.addClass('longterm');
-          }
-          if(node.data().type === 'shortterm') {
-              node.addClass('shortterm');
-          }
-          if(node.data().type === 'plan') {
-              node.addClass('plan');
-          }
-          if(node.data().type === 'routine') {
-              node.addClass('routine');
-          }
-          if(node.data().type === 'todo') {
-              node.addClass('todo');
-          }
-          if(node.data().type === 'incomplete') {
-              node.addClass('incomplete');
-          }
           if(node.data().isComplished) {
+            if(node.data().isComplished) {
               node.addClass('isComplished');
+          }
+          } else {
+            if(node.data().type === "longterm") {
+              node.addClass('longterm');
+            }
+            if(node.data().type === 'shortterm') {
+                node.addClass('shortterm');
+            }
+            if(node.data().type === 'plan') {
+                node.addClass('plan');
+            }
+            if(node.data().type === 'routine') {
+                node.addClass('routine');
+            }
+            if(node.data().type === 'todo') {
+                node.addClass('todo');
+            }
+            if(node.data().type === 'incomplete') {
+                node.addClass('incomplete');
+            }
           }
         })
 

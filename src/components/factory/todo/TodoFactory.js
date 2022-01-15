@@ -77,10 +77,10 @@ const TodoFactory = ({userObj, parent}) => {
         }
     }
 
-    const onSubmit = e => {
+    const onSubmit = async (e) => {
         e.preventDefault();
         const targetId = uuidv4();
-        dbService.collection('targets').doc(targetId).set({
+        await dbService.collection('targets').doc(targetId).set({
             id: targetId,
             uid: userObj.uid,
             name: todo,
