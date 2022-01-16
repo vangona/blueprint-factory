@@ -121,6 +121,7 @@ const PlanFactory = ({userObj, parent}) => {
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);
     const [isInComplete, setIsInComplete] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(false);
 
     const onSubmit = async (e) => {
         const targetId = uuidv4();
@@ -154,6 +155,7 @@ const PlanFactory = ({userObj, parent}) => {
                 isComplete: true,
                 isComplished: false,
                 isOpen: true,
+                isPrivate,
                 type: "plan",
                 parentId: [parent.parentId[0]],
                 childs: childIds,
@@ -161,7 +163,7 @@ const PlanFactory = ({userObj, parent}) => {
                 cancelReason: '',
             }).then(async () => {
                 alert('뜬구름이 조금 더 명확해졌어요!');
-                navigate("/blueprint")        
+                navigate("/")        
             }).catch(error => {
                 console.log(error.message);
             })
@@ -180,6 +182,7 @@ const PlanFactory = ({userObj, parent}) => {
                 isComplete: true,
                 isComplished: false,
                 isOpen: true,
+                isPrivate,
                 type: "plan",
                 parentId: [parent.id],
                 childs: childIds,
@@ -192,7 +195,7 @@ const PlanFactory = ({userObj, parent}) => {
                 }).then(() => {
                     console.log('success')
                     alert('뜬구름이 조금 더 명확해졌어요!');
-                    navigate("/blueprint")        
+                    navigate("/")        
                 }).catch(error => {
                     console.log(error.message);
                 })
@@ -217,6 +220,7 @@ const PlanFactory = ({userObj, parent}) => {
             isComplete: true,
             isComplished: false,
             isOpen: true,
+            isPrivate,
             type: "todo",
             parentId: [parentId],
             childs: [],
@@ -240,6 +244,7 @@ const PlanFactory = ({userObj, parent}) => {
             isComplete: false,
             isComplished: false,
             isOpen: true,
+            isPrivate,
             type: "incomplete",
             parentId : [targetId],
             childs: [],
@@ -305,7 +310,7 @@ const PlanFactory = ({userObj, parent}) => {
 
     const onClickReturn = e => {
         e.preventDefault();
-        navigate("/blueprint")
+        navigate("/")
     }
 
     const onClickPrev = e => {
@@ -340,6 +345,10 @@ const PlanFactory = ({userObj, parent}) => {
         setNeed(value);
     }
 
+    const getIsPrivate = value => {
+        setIsPrivate(value);
+    }
+
     useEffect(() => {
         if(parent.type === 'incomplete') {
             setIsInComplete(true);
@@ -356,7 +365,7 @@ const PlanFactory = ({userObj, parent}) => {
             {page === 4 && <PlanDeadline getDeadlineArr={getDeadlineArr} deadlineArr={deadlineArr} deadlineState={deadlineState} explainArr={explainArr} target={name} /> }
             {page === 5 && <PlanNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDeleteNeed} target={name} /> }
             {page === 6 && 
-                <PlanCheck explainArr={explainArr} needArr={needArr} deadlineArr={deadlineArr} target={name} />            
+                <PlanCheck explainArr={explainArr} needArr={needArr} deadlineArr={deadlineArr} target={name} isPrivate={isPrivate} getIsPrivate={getIsPrivate} />            
             }
 
             <TargetForm display="none" onSubmit={handleSubmit(onSubmit)}>

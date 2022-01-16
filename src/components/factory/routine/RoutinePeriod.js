@@ -82,7 +82,19 @@ const SubmitBlockBtn = styled.div`
     height: 50px;
 `;
 
-const RoutinePeriod = ({getPeriod, getFrequency, period, frequency, need}) => {
+const PrivateBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: SsurroundAir;
+    gap: 5px;
+`;
+
+const CheckBox = styled.input``;
+
+const PrivateLabel = styled.label``;
+
+const RoutinePeriod = ({getPeriod, getFrequency, period, frequency, need, getIsPrivate, isPrivate}) => {
 
     const onChange = e => {
         const name = e.target.getAttribute('name');
@@ -91,6 +103,9 @@ const RoutinePeriod = ({getPeriod, getFrequency, period, frequency, need}) => {
         }
         if (name === "frequency") {
             getFrequency(e.target.value);
+        }
+        if (name === 'isPrivate') {
+            getIsPrivate(e.target.checked);
         }
     }
     
@@ -116,6 +131,10 @@ const RoutinePeriod = ({getPeriod, getFrequency, period, frequency, need}) => {
                 <Label>빈도 수</Label>
                 <Input name="frequency" value={frequency} type="text" onChange={onChange} placeholder={period ? `${period}에 몇 번 할까요?` : "몇 번이나 할까요?"} />
             </RoutineBox>
+            <PrivateBox>
+                <CheckBox name="isPrivate" id="is-private" type="checkbox" checked={isPrivate} onChange={onChange} />
+                <PrivateLabel htmlFor='is-private'>이 루틴은 비밀로 할래요.</PrivateLabel>
+            </PrivateBox>
         </Container>
         {!frequency | !period && <SubmitBlockBtn></SubmitBlockBtn>}
         </>

@@ -11,6 +11,7 @@ import Blueprint from "../router/Blueprint";
 import Setting from "../router/Setting";
 import CalendarRoute from "../router/CalendarRoute";
 import SomeonesBlueprint from "../router/SomeonesBlueprint";
+import NotFound from "./error/NotFound";
 
 const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
     return (
@@ -20,12 +21,12 @@ const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
                 {isLoggedIn
                 ? 
                 <>
-                    <Route path="/" element={<Home userObj={userObj} />} />
+                    <Route path="/" element={<Blueprint userObj={userObj} />} />
                     <Route path="/community" element={
                         <Community userObj={userObj} />
                     } />
                     <Route path="/blueprint" element={
-                        <Blueprint userObj={userObj} />
+                        <Home userObj={userObj} />
                     } />         
                     <Route path="/setting" element={
                         <Setting userObj={userObj} />
@@ -52,6 +53,7 @@ const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
                 : 
                     <Route path="/" element={<Auth />} />
                 }
+                <Route path='*' element={<NotFound />} />
             </Routes>
         </Router>
     )

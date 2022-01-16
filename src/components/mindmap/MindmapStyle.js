@@ -120,6 +120,20 @@ export const MindmapStyle = [ // the stylesheet for the graph
             'label': 'data(label)'
         }
     },
+    {
+      selector: '.isPrivate',
+      style: {
+          'font-family': 'Ssurround',
+          'font-size': '14px',
+          'background-color': 'white',
+          'border-width': '1px',
+          'border-style': 'solid',
+          'border-color': 'black',
+          "shape": "round-rectangle",
+          "width": '100px',
+          'label': '(비공개)'
+      }
+  },
 
     // edgehandles
     {

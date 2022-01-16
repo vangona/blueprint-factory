@@ -55,10 +55,28 @@ const Input = styled.textarea`
     height: 120px;
 `;
 
-const ShorttermCheck = ({getExplain, explain, name, needArr, deadline}) => {
+const PrivateBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: SsurroundAir;
+    gap: 5px;
+`;
+
+const CheckBox = styled.input``;
+
+const Label = styled.label``;
+
+const ShorttermCheck = ({getExplain, explain, name, needArr, deadline, getIsPrivate, isPrivate}) => {
 
     const onChange = e => {
-        getExplain(e.target.value);
+        const name = e.target.getAttribute('name');
+        if (name === 'explain') {
+            getExplain(e.target.value);
+        } 
+        if (name === 'isPrivate') {
+            getIsPrivate(e.target.checked);
+        }
     }
 
     return (
@@ -86,6 +104,10 @@ const ShorttermCheck = ({getExplain, explain, name, needArr, deadline}) => {
                 싶은 것이 있다면 적어보세요.
             </Explain>
             <Input type="text" value={explain} onChange={onChange}/>
+            <PrivateBox>
+                <CheckBox name="isPrivate" id="is-private" type="checkbox" checked={isPrivate} onChange={onChange} />
+                <Label htmlFor='is-private'>이 목표는 비밀로 할래요.</Label>
+            </PrivateBox>
             <Explain>
                 목표를 달성하고자 하는 <br />
                 이유를 적어두면 아주 좋아요!

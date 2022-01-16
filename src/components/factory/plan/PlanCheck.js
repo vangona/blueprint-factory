@@ -62,7 +62,23 @@ const Line = styled.hr`
     width: 90%;
 `;
 
-const PlanCheck = ({explainArr, deadlineArr, target, needArr, deadline}) => {
+const PrivateBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: SsurroundAir;
+    gap: 5px;
+`;
+
+const CheckBox = styled.input``;
+
+const Label = styled.label``;
+
+const PlanCheck = ({explainArr, deadlineArr, target, needArr, deadline, isPrivate, getIsPrivate}) => {
+
+    const onChange = e =>{
+        getIsPrivate(e.target.checked);
+    }
 
     return (
         <Container>
@@ -100,6 +116,10 @@ const PlanCheck = ({explainArr, deadlineArr, target, needArr, deadline}) => {
                 ))}
                 </NeedContainer>
             </Content>
+            <PrivateBox>
+                    <CheckBox name="isPrivate" id="is-private" type="checkbox" checked={isPrivate} onChange={onChange} />
+                    <Label htmlFor='is-private'>이 계획은 비밀로 할래요.</Label>
+                </PrivateBox>
         </Container>
     );
 };

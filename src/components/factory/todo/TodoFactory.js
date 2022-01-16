@@ -61,10 +61,25 @@ const SubmitBtn = styled.input`
     ${defaultBtnAction};
 `;
 
+const PrivateBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: SsurroundAir;
+    gap: 5px;
+    color: black;
+    z-index: 99;
+`;
+
+const CheckBox = styled.input``;
+
+const Label = styled.label``;
+
 const TodoFactory = ({userObj, parent}) => {
     const navigate = useNavigate();
     const [todo, setTodo] = useState('');
     const [deadline, setDeadline] = useState('');
+    const [isPrivate, setIsPrivate] = useState(false);
 
     const onChange = e =>{
         e.preventDefault();
@@ -74,6 +89,9 @@ const TodoFactory = ({userObj, parent}) => {
         } 
         if (name === 'deadline') {
             setDeadline(e.target.value);
+        }
+        if (name === 'isPrivate') {
+            setIsPrivate(e.target.checked);
         }
     }
 
@@ -94,6 +112,7 @@ const TodoFactory = ({userObj, parent}) => {
             isComplete: true,
             isComplished: false,
             isOpen: true,
+            isPrivate,
             type: "todo",
             parentId: [parent.id],
             childs: [],
@@ -106,7 +125,7 @@ const TodoFactory = ({userObj, parent}) => {
             }).then(() => {
                 console.log('success')
                 alert('할 수 있습니다!');
-                navigate("/blueprint")        
+                navigate("/")        
             }).catch(error => {
                 console.log(error.message);
             })
@@ -122,9 +141,17 @@ const TodoFactory = ({userObj, parent}) => {
             <TargetName>
                 {deadline && `${deadline}까지`} {todo && `${todo} 해내기`}
             </TargetName>
-            할일 : <Input name="todo" value={todo} type="text" onChange={onChange} />
-            기간 : <Input name="deadline" value={deadline} type="date" onChange={onChange} />
-            {todo && deadline && <SubmitBtn type="submit" onClick={onSubmit} value="제출하기" />}
+            <Input name="todo" value={todo} type="text" onChange={onChange} />
+            <Input name="deadline" value={deadline} type="date" onChange={onChange} />
+
+            <PrivateBox>
+                <CheckBox name="isPrivate" id="is-private" type="checkbox" checked={isPrivate} onChange={onChange} />
+                <Label htmlFor='is-private'>이 할 일은 비밀로 할래요.</Label>
+            </PrivateBox>
+
+            {
+                todo && deadline && <SubmitBtn type="submit" onClick={onSubmit} value="제출하기" />
+            }
         </Container>
     );
 };

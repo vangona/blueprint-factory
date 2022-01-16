@@ -44,6 +44,7 @@ const App = () => {
                     displayName: user.displayName ? user.displayName : "익명",
                     photoURL: user.photoURL,
                     bio: "",
+                    isPrivate: false,
                 })
             }
         })
@@ -52,6 +53,7 @@ const App = () => {
     const getUserObj = () => {
         authService.onAuthStateChanged(async (user) => {
             if (user) {
+                const userData = (await dbService.collection('users').doc(`${user.uid}`).get()).data()
                 const targetData = await getTargetData(user.uid);
                 const stepData = await getSteps(user.uid);
                 if (user.email) {
@@ -61,6 +63,7 @@ const App = () => {
                     uid: user.uid,
                     targets: targetData,
                     steps: stepData,
+                    isPrivate: userData.isPrivate,
                     photoURL: user.photoURL ? user.photoURL : '',
                     displayName: (user.displayName ? user.displayName : "익명"),
                     updateProfile: (args) => user.updateProfile(args),

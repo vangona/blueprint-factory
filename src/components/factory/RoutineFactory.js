@@ -97,6 +97,7 @@ const RoutineFactory = ({userObj, parent}) => {
     const [frequency, setFrequency] = useState('');
     const [deadline, setDeadline] = useState('');
     const [prize, setPrize] = useState(''); 
+    const [isPrivate, setIsPrivate] = useState(false);
 
     const onChange = (e) => {
         const inputName = e.target.id;
@@ -137,6 +138,7 @@ const RoutineFactory = ({userObj, parent}) => {
             isComplete: true,
             isComplished: false,
             isOpen: true,
+            isPrivate,
             type: "routine",
             parentId: [parent.id],
             childs: [],
@@ -148,8 +150,8 @@ const RoutineFactory = ({userObj, parent}) => {
                 childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetId)
             }).then(() => {
                 console.log('success')
-                alert('내일부터 뭘 할 수 있을까요?');
-                navigate("/blueprint")        
+                alert('화이팅이에요!');
+                navigate("/")        
             }).catch(error => {
                 console.log(error.message);
             })
@@ -160,7 +162,7 @@ const RoutineFactory = ({userObj, parent}) => {
 
     const onClickReturn = e => {
         e.preventDefault();
-        navigate("/blueprint")
+        navigate("/")
     }
 
     const onClickPrev = e => {
@@ -189,13 +191,17 @@ const RoutineFactory = ({userObj, parent}) => {
         setFrequency(value);
     }
 
+    const getIsPrivate = value => {
+        setIsPrivate(value);
+    }
+
     return (
         <Container>
             {page === 1 && <RoutineParent parent={parent} />}
             {page > 1 && <ShorttermBackground />}
             {page === 2 && <RoutineName getName={getName} name={name} parent={parent} />}
             {page === 3 && <RoutineTodo getNeed={getNeed} parent={parent} need={need} />}
-            {page === 4 && <RoutinePeriod getPeriod={getPeriod} getFrequency={getFrequency} period={period} frequency={frequency} need={need} />}
+            {page === 4 && <RoutinePeriod getPeriod={getPeriod} getFrequency={getFrequency} period={period} frequency={frequency} need={need} getIsPrivate={getIsPrivate} isPrivate={isPrivate} />}
 
 
             <RoutineTitle>{parent.name}에 대한 루틴을 세워봅시다.</RoutineTitle>

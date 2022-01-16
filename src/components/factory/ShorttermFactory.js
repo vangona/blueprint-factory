@@ -106,6 +106,7 @@ const ShorttermFactory = ({userObj, parent}) => {
     const [needArr, setNeedArr] = useState([]);
     const [target, setTarget] = useState('');
     const [isInComplete, setIsInComplete] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(false);
 
     const onSubmit = async (e) => {
         const targetId = uuidv4();
@@ -130,6 +131,7 @@ const ShorttermFactory = ({userObj, parent}) => {
                 isComplete: true,
                 isComplished: false,
                 isOpen: true,
+                isPrivate,
                 type: "shortterm",
                 parentId: [parent.parentId[0]],
                 childs: childIds,
@@ -156,6 +158,7 @@ const ShorttermFactory = ({userObj, parent}) => {
                 isComplete: true,
                 isComplished: false,
                 isOpen: true,
+                isPrivate,
                 type: "shortterm",
                 parentId: [parent.id],
                 childs: childIds,
@@ -169,13 +172,13 @@ const ShorttermFactory = ({userObj, parent}) => {
                     }).then(() => {
                         console.log('success')
                         alert('작은 구름이 하나 만들어졌어요!');
-                        navigate("/blueprint")        
+                        navigate("/")        
                     }).catch(error => {
                         console.log(error.message);
                     })
                 } else {
                     alert('작은 구름이 하나 만들어졌어요!');
-                    navigate("/blueprint")    
+                    navigate("/")    
                 }
             }).catch(error => {
                 console.log(error.message);
@@ -198,6 +201,7 @@ const ShorttermFactory = ({userObj, parent}) => {
             isComplete: false,
             isComplished: false,
             isOpen: true,
+            isPrivate,
             type: "incomplete",
             parentId: [parentId],
             childs: [],
@@ -265,9 +269,13 @@ const ShorttermFactory = ({userObj, parent}) => {
         setExplain(value);
     }
 
+    const getIsPrivate = value => {
+        setIsPrivate(value);
+    }
+
     const onClickReturn = e => {
         e.preventDefault();
-        navigate("/blueprint")
+        navigate("/")
     }
 
     const onClickPrev = e => {
@@ -310,9 +318,8 @@ const ShorttermFactory = ({userObj, parent}) => {
                 <ShorttermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={target} />
             }
             {page === 6 && 
-                <ShorttermCheck getExplain={getExplain} explain={explain} name={name} needArr={needArr} deadline={deadline} target={target} />
+                <ShorttermCheck getExplain={getExplain} explain={explain} name={name} needArr={needArr} deadline={deadline} target={target} getIsPrivate={getIsPrivate} isPrivate={isPrivate} />
             }
-
 
 
             <TargetForm display="none" onSubmit={handleSubmit(onSubmit)}>

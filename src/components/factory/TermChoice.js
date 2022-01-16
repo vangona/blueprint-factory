@@ -126,9 +126,6 @@ const TermChoice = ({userObj, parent}) => {
                     </ChoiceBtn>
                     <ExplainBox>
                     <Explain>
-                        불가능 할 것 같아요
-                    </Explain>
-                    <Explain>
                         1년 이상의 시간이 <br/> 
                         걸릴 것 같아요
                     </Explain>
@@ -136,8 +133,7 @@ const TermChoice = ({userObj, parent}) => {
                         많은 노력이 필요해요
                     </Explain>
                     <Explain>
-                        계획이 쉽게 <br /> 
-                        세워지지 않아요
+                        남들은 불가능하다고 해요
                     </Explain>
                     </ExplainBox>
                 </Longterm>
@@ -147,15 +143,10 @@ const TermChoice = ({userObj, parent}) => {
                     </ChoiceBtn>
                     <ExplainBox>
                     <Explain>
-                        1년 내 이룰 수 있어요    
+                        1년 내 이룰 목표에요.
                     </Explain>
-                    <Explain>
-                        계획을 세울 수 <br />
-                        있을 것 같아요
-                    </Explain>
-                    <Explain>
-                        당장 불가능할 것 <br />
-                        같지 않아요
+                    <Explain>   
+                        이걸 위해 뭘해야하는지 조금 알고 있어요.
                     </Explain>
                     </ExplainBox>
                 </Shortterm>

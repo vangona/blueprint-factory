@@ -47,6 +47,18 @@ const DisplayName = styled.h1`
 
 const DisplayNameInput = styled.input``;
 
+const PrivateBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: SsurroundAir;
+    gap: 5px;
+`;
+
+const CheckBox = styled.input``;
+
+const Label = styled.label``;
+
 const BioLabel = styled.label``;
 
 const BioTextarea = styled.textarea``;
@@ -55,6 +67,7 @@ const SubmitBtn = styled.button``;
 
 const SettingUpperComponent = ({userObj, refreshUser}) => {
     const [newName, setNewName] = useState(userObj.displayName);
+    const [isPrivate, setIsPrivate] = useState(userObj.isPrivate);
     const [attachment, setAttachment] = useState('');
     const [newBio, setNewBio] = useState('');
 
@@ -87,7 +100,16 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
             await dbService.collection('users').doc(`${userObj.uid}`).update({
                 bio: newBio
             }).then(() => {
-                alert('굿')
+                alert('성공적으로 변경되었습니다.')
+            })
+        }
+        if (isPrivate !== userObj.isPrivate) {
+            await dbService.collection('users').doc(`${userObj.uid}`).update({
+                isPrivate,
+            }).then(() => {
+                alert('성공적으로 변경되었습니다.');
+            }).catch((error) => {
+                console.log(error.message);
             })
         }
     }
@@ -99,6 +121,9 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
         } 
         if (name === 'bio') {
             setNewBio(e.target.value);
+        }
+        if (name === 'isPrivate') {
+            setIsPrivate(e.target.checked);
         }
     }
 
@@ -134,6 +159,10 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
                 <PicUploader id="profile__pic" onChange={onFileChange} type="file" accept='image/*' />
                 <DisplayName>{userObj.displayName}</DisplayName>
                 <DisplayNameInput value={newName} name="displayname" onChange={onChange} type="text" />
+                <PrivateBox>
+                    <CheckBox name='isPrivate' type="checkbox" id='is-private' onChange={onChange} checked={isPrivate} />
+                    <Label htmlFor='is-private'>제 청사진은 비밀로 할게요.</Label>
+                </PrivateBox>
                 <BioLabel></BioLabel>
                 <BioTextarea value={newBio} name="bio" onChange={onChange} />
                 <SubmitBtn onClick={onSubmit}>변경사항 적용하기</SubmitBtn>

@@ -105,6 +105,26 @@ const CytoscapeMindmap = ({userObj}) => {
       })
     }
 
+    const openTarget = async (ele) => {
+      await dbService.collection('targets').doc(`${ele.id()}`).update({
+        isPrivate: false,
+      }).then(() => {
+        alert('정말 고생 많으셨습니다.')
+      }).catch(error => {
+        console.log(error.message);
+      })
+    }
+
+    const privateTarget = async (ele) => {
+      await dbService.collection('targets').doc(`${ele.id()}`).update({
+        isPrivate: true,
+      }).then(() => {
+        alert('정말 고생 많으셨습니다.')
+      }).catch(error => {
+        console.log(error.message);
+      })
+    }
+
     const ContextLongtermMenuOptions = {
         menuRadius: function(ele){ return 80; },
         selector: '.longterm', 
@@ -149,6 +169,15 @@ const CytoscapeMindmap = ({userObj}) => {
                 contentStyle: {}, 
                 select: function(ele){
                   complishTarget(ele);
+                },
+                enabled: true,
+              },
+              {
+                fillColor: 'rgba(200, 200, 200, 0.75)',
+                content: '비밀로 할래요',
+                contentStyle: {}, 
+                select: function(ele){
+                  privateTarget(ele);
                 },
                 enabled: true,
               },
@@ -228,6 +257,15 @@ const CytoscapeMindmap = ({userObj}) => {
             },
             {
               fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '비밀로 할래요',
+              contentStyle: {}, 
+              select: function(ele){
+                privateTarget(ele);
+              },
+              enabled: true,
+            },
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
               content: '삭제하기',
               contentStyle: {}, 
               select: function(ele){
@@ -290,6 +328,15 @@ const CytoscapeMindmap = ({userObj}) => {
             },
             {
               fillColor: 'rgba(200, 200, 200, 0.75)',
+              content: '비밀로 할래요',
+              contentStyle: {}, 
+              select: function(ele){
+                privateTarget(ele);
+              },
+              enabled: true,
+            },
+            {
+              fillColor: 'rgba(200, 200, 200, 0.75)',
               content: '삭제하기',
               contentStyle: {}, 
               select: function(ele){
@@ -342,6 +389,15 @@ const CytoscapeMindmap = ({userObj}) => {
           },
           {
             fillColor: 'rgba(200, 200, 200, 0.75)',
+            content: '비밀로 할래요',
+            contentStyle: {}, 
+            select: function(ele){
+              privateTarget(ele);
+            },
+            enabled: true,
+          },
+          {
+            fillColor: 'rgba(200, 200, 200, 0.75)',
             content: '삭제하기',
             contentStyle: {}, 
             select: function(ele){
@@ -369,7 +425,7 @@ const CytoscapeMindmap = ({userObj}) => {
 
     const ContextTodoMenuOptions = {
       menuRadius: function(ele){ return 80; },
-      selector: '.routine', 
+      selector: '.todo', 
       commands: [ 
         {
           fillColor: 'rgba(200, 200, 200, 0.75)',
@@ -377,6 +433,15 @@ const CytoscapeMindmap = ({userObj}) => {
           contentStyle: {}, 
           select: function(ele){
             complishTarget(ele);
+          },
+          enabled: true,
+        },
+        {
+          fillColor: 'rgba(200, 200, 200, 0.75)',
+          content: '비밀로 할래요',
+          contentStyle: {}, 
+          select: function(ele){
+            privateTarget(ele);
           },
           enabled: true,
         },
@@ -405,7 +470,47 @@ const CytoscapeMindmap = ({userObj}) => {
       zIndex: 9999, 
       atMouse: false, 
       outsideMenuCancel: 10 
-  };
+    };
+
+    const ContextPrivateMenuOptions = {
+      menuRadius: function(ele){ return 80; },
+      selector: '.private', 
+      commands: [ 
+        {
+          fillColor: 'rgba(200, 200, 200, 0.75)',
+          content: '다시 공개 할게요',
+          contentStyle: {}, 
+          select: function(ele){
+            openTarget(ele);
+          },
+          enabled: true,
+        },
+        {
+          fillColor: 'rgba(200, 200, 200, 0.75)',
+          content: '삭제하기',
+          contentStyle: {}, 
+          select: function(ele){
+              removeTarget( ele ) 
+          },
+          enabled: true,
+        }
+      ],
+      fillColor: 'rgba(0, 0, 0, 0.75)', 
+      activeFillColor: 'rgba(1, 105, 217, 0.75)',
+      activePadding: 20, 
+      indicatorSize: 24, 
+      separatorWidth: 3,
+      spotlightPadding: 4, 
+      adaptativeNodeSpotlightRadius: true, 
+      minSpotlightRadius: 24, 
+      maxSpotlightRadius: 38, 
+      openMenuEvents: 'cxttapstart taphold', 
+      itemColor: 'white', 
+      itemTextShadowColor: 'transparent', 
+      zIndex: 9999, 
+      atMouse: false, 
+      outsideMenuCancel: 10 
+    };
 
     const ContextIncompleteMenuOptions = {
         menuRadius: function(ele){ return 80; },
@@ -575,7 +680,6 @@ const CytoscapeMindmap = ({userObj}) => {
           id: doc.id,
           ...doc.data(),
         }))
-        console.log(data);
         setSnapshot(data);
       })
     }
@@ -710,10 +814,10 @@ const CytoscapeMindmap = ({userObj}) => {
         }
 
         cy.nodes().forEach(node => {
-          if(node.data().isComplished) {
-            if(node.data().isComplished) {
+          if(node.data().isPrivate && id) {
+            node.addClass('isPrivate') 
+          } else if (node.data().isComplished) {
               node.addClass('isComplished');
-          }
           } else {
             if(node.data().type === "longterm") {
               node.addClass('longterm');
@@ -842,11 +946,13 @@ const CytoscapeMindmap = ({userObj}) => {
           content.style.whiteSpace = 'pre-wrap';
           content.style.lineHeight = '150%';
 
-          if(targetData.deadline) {
+          if(targetData.deadline && !targetData.isPrivate) {
             container.appendChild(title);
             container.appendChild(hr);
           }
-          container.appendChild(content);
+          if(!targetData.isPrivate) {
+            container.appendChild(content);
+          }
 
           const node = {
             "data": {
@@ -858,6 +964,7 @@ const CytoscapeMindmap = ({userObj}) => {
               "deadline" : new Date(targetData.deadline.seconds * 1000),
               "isComplete" : targetData.isComplete,
               "isComplished" : targetData.isComplished,
+              "isPrivate" : targetData.isPrivate,
               'dom': container,
             },
           } 

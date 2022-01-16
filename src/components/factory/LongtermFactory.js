@@ -105,6 +105,7 @@ const LongtermFactory = ({userObj, parent}) => {
     const [prize, setPrize] = useState(''); 
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);
+    const [isPrivate, setIsPrivate] = useState(false);
     const [isInComplete, setIsInComplete] = useState(false);
 
     const onSubmit = async (e) => {
@@ -130,6 +131,7 @@ const LongtermFactory = ({userObj, parent}) => {
                 isComplete: true,
                 isComplished: false,
                 isOpen: true,
+                isPrivate,
                 type: "longterm",
                 parentId: [parent.parentId[0]],
                 childs: childIds,
@@ -137,7 +139,7 @@ const LongtermFactory = ({userObj, parent}) => {
                 cancelReason: '',
             }).then(() => {
                     alert('구름이 완성 됐어요!');
-                    navigate("/blueprint")    
+                    navigate("/")    
             }).catch(error => {
                 console.log(error.message);
             })
@@ -156,6 +158,7 @@ const LongtermFactory = ({userObj, parent}) => {
                 isComplete: true,
                 isComplished: false,
                 isOpen: true,
+                isPrivate,
                 type: "longterm",
                 parentId: [parent.id],
                 childs: childIds,
@@ -169,13 +172,13 @@ const LongtermFactory = ({userObj, parent}) => {
                     }).then(() => {
                         console.log('success')
                         alert('큰 구름이 하나 만들어졌어요!');
-                        navigate("/blueprint")        
+                        navigate("/")        
                     }).catch(error => {
                         console.log(error.message);
                     })
                 } else {
                     alert('큰 구름이 하나 만들어졌어요!');
-                    navigate("/blueprint")    
+                    navigate("/")    
                 }
             }).catch(error => {
                 console.log(error.message);
@@ -198,6 +201,7 @@ const LongtermFactory = ({userObj, parent}) => {
             isComplete: false,
             isComplished: false,
             isOpen: true,
+            isPrivate,
             type: "incomplete",
             parentId: [parentId],
             childs: [],
@@ -248,7 +252,7 @@ const LongtermFactory = ({userObj, parent}) => {
 
     const onClickReturn = e => {
         e.preventDefault();
-        navigate("/blueprint")
+        navigate("/")
     }
 
     const onClickPrev = e => {
@@ -281,6 +285,10 @@ const LongtermFactory = ({userObj, parent}) => {
         setExplain(value);
     }
 
+    const getIsPrivate = value => {
+        setIsPrivate(value);
+    }
+
     useEffect(() => {
         if(parent.type === 'incomplete') {
             setIsInComplete(true);
@@ -298,7 +306,7 @@ const LongtermFactory = ({userObj, parent}) => {
             {page === 3 && <LongtermDesire getDesire={getDesire} desire={desire} target={name} /> }
             {page === 4 && <LongtermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={name} />}
             {page === 5 && <LongtermDeadline getDeadline={getDeadline} deadline={deadline} target={name} />}
-            {page === 6 && <LongtermCheck getExplain={getExplain} explain={explain} name={name} desire={desire} needArr={needArr} deadline={deadline} target={target} />}
+            {page === 6 && <LongtermCheck getExplain={getExplain} explain={explain} name={name} desire={desire} needArr={needArr} deadline={deadline} getIsPrivate={getIsPrivate} isPrivate={isPrivate} target={target} />}
 
             <TargetForm onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>

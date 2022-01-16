@@ -73,7 +73,7 @@ const CommunityLowerComponent = ({userObj, users, searchWord}) => {
                 </NavBox>
             </NavContainer>
             <ContentContainer>
-                {users.filter(el => el.displayName.includes(searchWord) || el.bio.includes(searchWord)).map((user, index) => (
+                {users.filter(el => !el.isPrivate).filter(el => el.displayName.includes(searchWord) || el.bio.includes(searchWord)).map((user, index) => (
                     <CommunityWindow key={index} userObj={userObj} user={user} />
                 ))}
             </ContentContainer>
