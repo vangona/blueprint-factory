@@ -6,7 +6,6 @@ import AppRouter from "./Router";
 const App = () => {
     const [init, setInit] = useState(false);
     const [userObj, setUserObj] = useState(null);
-    const [isVisitor, setIsVisitor] = useState(false);
 
     const getTargetData = async (uid) => {
         let targetArray = [];
@@ -64,8 +63,12 @@ const App = () => {
                 if (userData) {
                     isPrivate = userData.isPrivate
                 }
-                if (!userData) {
-                    setIsVisitor(true);
+
+                console.log(user.providerData)
+
+                let isVisitor = false;
+                if (user.providerData.length === 0) {
+                    isVisitor = true;
                 }
 
                 if (user.displayName) {

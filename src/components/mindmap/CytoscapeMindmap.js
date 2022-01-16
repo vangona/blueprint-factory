@@ -803,27 +803,34 @@ const CytoscapeMindmap = ({userObj}) => {
                 console.log(error.message)
               })
             } else {
-              const loginBtn = document.createElement('div');
-              loginBtn.innerHTML = '로그인하러가기';
-              loginBtn.style.width = 'max-content';
-              loginBtn.style.padding = '10px 15px';
-              loginBtn.style.backgroundColor = 'white';
-              loginBtn.style.border = '1px solid rgba(0, 0, 0, 0.5)';
-              loginBtn.style.borderRadius = '10px';
-              loginBtn.style.fontFamily = 'SsurroundAir';
-              loginBtn.style.fontSize = '12px';
-              loginBtn.addEventListener('click', () => {navigate('/signout')});
-              loginBtn.addEventListener('mouseover', () => {loginBtn.style.cursor = 'pointer'});
-
               let label = "배경을 길게 터치해보세요.";
-              if (userObj.isVisitor) {
-                label = "청사진을 그리려면 로그인 해주세요.";
-              }
               initNode = {
                 "data": {
-                    "id" : "a",
-                    "label" : label,
-                    'dom': loginBtn,
+                  "id" : "a",
+                  "label" : label,
+                }
+              }
+
+              if (userObj.isVisitor) {
+                const loginBtn = document.createElement('div');
+                loginBtn.innerHTML = '로그인하러가기';
+                loginBtn.style.width = 'max-content';
+                loginBtn.style.padding = '10px 15px';
+                loginBtn.style.backgroundColor = 'white';
+                loginBtn.style.border = '1px solid rgba(0, 0, 0, 0.5)';
+                loginBtn.style.borderRadius = '10px';
+                loginBtn.style.fontFamily = 'SsurroundAir';
+                loginBtn.style.fontSize = '12px';
+                loginBtn.addEventListener('click', () => {navigate('/signout')});
+                loginBtn.addEventListener('mouseover', () => {loginBtn.style.cursor = 'pointer'});
+                
+                label = "청사진을 그리려면 로그인 해주세요.";
+                initNode = {
+                  "data": {
+                      "id" : "a",
+                      "label" : label,
+                      'dom': loginBtn,
+                  }
                 }
               }
             }
