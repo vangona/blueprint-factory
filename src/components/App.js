@@ -17,16 +17,6 @@ const App = () => {
         return targetArray;
     }
 
-    const getSteps = async(uid) => {
-        let targetArray = [];
-        await dbService.collection('steps').where('uid', '==', uid).get().then(snapshot => {
-            snapshot.docs.forEach(doc => {
-                targetArray.push({...doc.data()});
-            })
-        })
-        return targetArray;
-    }
-
     const refreshUser = async () => {
         const user = authService.currentUser;
         setUserObj({
@@ -38,7 +28,7 @@ const App = () => {
 
     const getUserData = async (user) => {
         await dbService.collection("users").doc(`${user.uid}`).get().then((snapshot) => {
-            if(!snapshot.exists) {
+            if(!snapshot.exists && user.providerData[0].providerId === 'password') {
                 dbService.collection("users").doc(`${user.uid}`).set({
                     uid: user.uid,
                     displayName: user.displayName ? user.displayName : "익명",
@@ -55,37 +45,37 @@ const App = () => {
             if (user) {
                 let displayName = '익명';
                 let isPrivate = false;
+                let isVisitor = false;
+                let bio = '';
 
                 const userData = (await dbService.collection('users').doc(`${user.uid}`).get()).data()
                 const targetData = await getTargetData(user.uid);
-                const stepData = await getSteps(user.uid);
 
                 if (userData) {
-                    isPrivate = userData.isPrivate
+                    getUserData(user);
+                    isPrivate = userData.isPrivate;
+                    if(userData.bio) {
+                        bio = userData.bio;
+                    }
                 }
 
-                console.log(user.providerData)
-
-                let isVisitor = false;
-                if (user.providerData.length === 0) {
+                if (user.providerData[0].providerId !== 'password') {
                     isVisitor = true;
+                    displayName = '방문객';
                 }
 
                 if (user.displayName) {
                     displayName = user.displayName;
                 }
 
-                if (user.email) {
-                    getUserData(user);
-                }
                 setUserObj({
                     uid: user.uid,
                     targets: targetData,
-                    steps: stepData,
                     isPrivate,
                     isVisitor,
                     photoURL: user.photoURL ? user.photoURL : '',
                     displayName,
+                    bio,
                     updateProfile: (args) => user.updateProfile(args),
                 });
                 setInit(true);
@@ -97,7 +87,9 @@ const App = () => {
     }
 
     useEffect(() => {
-        getUserObj();
+        if (!userObj) {
+            getUserObj();
+        }
     }, [init])
 
     return (

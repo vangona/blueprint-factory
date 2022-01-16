@@ -139,7 +139,7 @@ const ShorttermFactory = ({userObj, parent}) => {
                 cancelReason: '',
             }).then(() => {
                 alert('작은 구름이 하나 만들어졌어요!');
-                navigate("/blueprint")    
+                navigate("/")    
             }).catch(error => {
                 console.log(error.message);
             })            

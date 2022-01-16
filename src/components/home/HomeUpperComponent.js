@@ -36,16 +36,15 @@ const ChartContainer = styled.div`
     align-items: center;
 `;
 
-const HomeUpperComponent = ({userObj, todayTargets, todaySteps}) => {
+const HomeUpperComponent = ({userObj, todayTargets}) => {
     const [compishmentRate, setComplishmentRate] = useState(0);
 
     const getComplishmentRate = () => {
-        if (todayTargets.length === 0 && todaySteps.length === 0) {
+        if (todayTargets.length === 0) {
             setComplishmentRate(100);
         } else {
-            const complishedStep = todaySteps.filter(step => step.isComplished === true);
             const complishedTarget = todayTargets.filter(target => target.isComplished === true);
-            const rate = ((complishedStep.length + complishedTarget.length) / (todaySteps.length + todayTargets.length)) * 100;
+            const rate = (complishedTarget.length / todayTargets.length) * 100;
             setComplishmentRate(rate);
         }
     }

@@ -16,8 +16,8 @@ export const MindmapStyle = [ // the stylesheet for the graph
         "style": {
           "curve-style": "taxi",
           "taxi-direction": "downward",
-          "taxi-turn": 20,
-          "taxi-turn-min-distance": 5
+          "taxi-turn": 50,
+          "taxi-turn-min-distance": 10
         }
     },
 

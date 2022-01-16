@@ -11,10 +11,6 @@ const Container = styled.div`
 `;
 
 const Blueprint = ({userObj}) => {
-    useEffect(() => {
-        console.log(userObj)
-    })
-
     return (
         <Container>
             <CytoscapeMindmap userObj={userObj} />

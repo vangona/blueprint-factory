@@ -60,40 +60,34 @@ const CytoscapeMindmap = ({userObj}) => {
       domNode(cytoscape);
     }
     if (typeof cytoscape("core", "edgehandles") === "undefined") {
-        edgehandles(cytoscape);
+      edgehandles(cytoscape);
     }
 
     const removeTarget = async (ele) => {
-        await dbService.collection('targets').doc(`${ele.id()}`).delete()
-        .then(async () => {
-            if(ele.data().parentId !== 'new') {
-                await dbService.collection('targets').doc(`${ele.data().parentId}`).update({
-                    childs: firebaseInstance.firestore.FieldValue.arrayRemove(ele.id())
-                })
-                .then(async () => {
-                    if (ele.data().type === 'plan') {
-                        await dbService.collection('steps').where('parentId', '==', ele.id())
-                        .get().then((snapshot) => {
-                            snapshot.docs.forEach(async (doc) => {
-                                await dbService.collection('steps').doc(`${doc.data().id}`).delete();
-                            })
-                            console.log('delete');
-                        }).catch(error => {
-                            console.log(error);
-                        })
-                    } else {
-                        console.log('delete');
-                    }
-                }).catch(error => {
-                    console.log(error.message);
-                })
-            } else {
+
+      if(ele.data().parentId !== 'new') {
+        await dbService.collection('targets').doc(`${ele.data().parentId}`).update({
+            childs: firebaseInstance.firestore.FieldValue.arrayRemove(ele.id())
+          })
+          .then(async () => {
+              await dbService.collection('targets').doc(`${ele.id()}`).delete()
+              .then(async () => {
                 console.log('delete');
-            }
-        }).catch(error => {
-            console.log(error.message)
-        })
-    }
+            }).catch((error) => {
+              console.log(error.message);
+            })
+          }).catch(async (error) => {
+            await dbService.collection('targets')
+            .doc(`${ele.id()}`).delete().then(() => {
+              console.log('delete')
+            }).catch(error => {
+              console.log(error.message);
+            })
+          })
+        } else {
+          console.log('delete');
+        }
+      }
 
     const complishTarget = async (ele) => {
       await dbService.collection('targets').doc(`${ele.id()}`).update({
@@ -1010,7 +1004,12 @@ const CytoscapeMindmap = ({userObj}) => {
           })
         
           for(let i = 0; i < dataArr.length; i++) {
+            try {
               cy.add(dataArr[i]);
+            } catch (error) {
+              console.log(error);
+            }
+              
           }
         }
     }

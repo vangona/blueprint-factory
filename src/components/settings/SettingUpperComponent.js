@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AiOutlineUser } from 'react-icons/ai';
 import styled from 'styled-components';
-import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
+import { defaultBtn, defaultBtnAction, defaultContainer, returnBtn } from '../../css/styleConstants';
 import { v4 as uuidv4} from "uuid";
 import { authService, dbService, storageService } from '../../fBase';
 import imageCompression from "browser-image-compression";
+import BackgroundBottomCloud from '../background/BackgroundBottomCloud';
+import { RiArrowGoBackLine } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -16,15 +19,16 @@ const ProfileContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
+    z-index: 99;
 `;
 
 const ProfileBox = styled.label`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     font-size: 30px;
     border: 1px solid rgba(0, 0, 0, 0.5);
@@ -41,35 +45,46 @@ const ProfilePic = styled.img`
     border-radius: 50%;
 `;
 
-const DisplayName = styled.h1`
+const Label = styled.label`
     font-family: Ssurround;
+    ${defaultBtnAction};
 `;
 
-const DisplayNameInput = styled.input``;
+const DisplayNameInput = styled.input`
+    border-radius: 10px;
+    padding: 5px 10px;
+`;
 
-const PrivateBox = styled.div`
+const Box = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: SsurroundAir;
-    gap: 5px;
+    gap: 10px;
 `;
 
 const CheckBox = styled.input``;
 
-const Label = styled.label``;
+const BioTextarea = styled.textarea`
+    padding: 10px;
+    border-radius: 10px;
+`;
 
-const BioLabel = styled.label``;
+const SubmitBtn = styled.button`
+    ${defaultBtnAction};
+    ${defaultBtn};
+`;
 
-const BioTextarea = styled.textarea``;
-
-const SubmitBtn = styled.button``;
+const ReturnBtn = styled.button`
+    ${returnBtn};
+`;
 
 const SettingUpperComponent = ({userObj, refreshUser}) => {
+    const navigate = useNavigate();
     const [newName, setNewName] = useState(userObj.displayName);
     const [isPrivate, setIsPrivate] = useState(userObj.isPrivate);
     const [attachment, setAttachment] = useState('');
-    const [newBio, setNewBio] = useState('');
+    const [newBio, setNewBio] = useState(userObj.bio);
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -92,8 +107,6 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
                     displayName: newName,
                 })
                 alert('성공적으로 변경되었습니다.')
-                setNewName('');
-                refreshUser();
             })
         }
         if (newBio) {
@@ -116,7 +129,7 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
 
     const onChange = e => {
         const name = e.target.getAttribute('name');
-        if (name === 'displayName') {
+        if (name === 'displayname') {
             setNewName(e.target.value);
         } 
         if (name === 'bio') {
@@ -147,24 +160,42 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
         };
     }
 
+    const onClickReturn = e => {
+        e.preventDefault();
+        navigate("/")
+    }
+
     return (
         <Container>
+            <BackgroundBottomCloud />
+            
+            <ReturnBtn onClick={onClickReturn} >
+                <RiArrowGoBackLine />
+            </ReturnBtn>
+
             <ProfileContainer>
-                <ProfileBox htmlFor="profile__pic">
-                    {userObj.photoURL 
-                        ? <ProfilePic src={userObj.photoURL} />
-                        : <AiOutlineUser />
-                    }
-                </ProfileBox>
+                <Box style={{flexDirection: 'column'}}>
+                    <ProfileBox htmlFor="profile__pic">
+                        {userObj.photoURL 
+                            ? <ProfilePic src={userObj.photoURL} />
+                            : <AiOutlineUser />
+                        }
+                    </ProfileBox>
+                    <Label htmlFor='profile__pic'>프로필 변경하기</Label>
+                </Box>
                 <PicUploader id="profile__pic" onChange={onFileChange} type="file" accept='image/*' />
-                <DisplayName>{userObj.displayName}</DisplayName>
-                <DisplayNameInput value={newName} name="displayname" onChange={onChange} type="text" />
-                <PrivateBox>
+                <Box>
+                    <Label>이름 : </Label>
+                    <DisplayNameInput value={newName} name="displayname" onChange={onChange} type="text" />
+                </Box>
+                <Box>
+                    <Label>소개글 : </Label>
+                    <BioTextarea value={newBio} name="bio" onChange={onChange} />
+                </Box>
+                <Box>
                     <CheckBox name='isPrivate' type="checkbox" id='is-private' onChange={onChange} checked={isPrivate} />
-                    <Label htmlFor='is-private'>제 청사진은 비밀로 할게요.</Label>
-                </PrivateBox>
-                <BioLabel></BioLabel>
-                <BioTextarea value={newBio} name="bio" onChange={onChange} />
+                    <Label htmlFor='is-private'>제 청사진은 비밀로 할래요.</Label>
+                </Box>
                 <SubmitBtn onClick={onSubmit}>변경사항 적용하기</SubmitBtn>
             </ProfileContainer>
         </Container>

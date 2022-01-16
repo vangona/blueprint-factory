@@ -146,7 +146,7 @@ const TermChoice = ({userObj, parent}) => {
                         1년 내 이룰 목표에요.
                     </Explain>
                     <Explain>   
-                        이걸 위해 뭘해야하는지 조금 알고 있어요.
+                        이걸 위해 뭘해야하는지 <br /> 조금 알고 있어요.
                     </Explain>
                     </ExplainBox>
                 </Shortterm>

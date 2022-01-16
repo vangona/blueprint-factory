@@ -17,9 +17,8 @@ const CalendarRoute = ({userObj}) => {
     const [schedules, setSchedules] = useState([]);
 
     const getDeadlines = () => {
-        const steps = userObj.steps;
         const filtered = userObj.targets.filter(el => el.deadline);
-        setSchedules([...filtered, ...steps]);
+        setSchedules([...filtered]);
         setIsLoading(false);
     }
 

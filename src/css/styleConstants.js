@@ -28,12 +28,44 @@ export const spreadShadow = css`
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.3);
 `;
 
+export const defaultBtn = css`
+    font-family: SsurroundAir;
+    font-size: 14px;
+    background-color: var(--main-blue);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 10px;
+    z-index: 30;
+`;
+
 export const defaultBtnAction = css`
     :hover {
         cursor: pointer;
     }
     :active {
         transform: scale(0.98);
+    }
+`;
+
+export const returnBtn = css`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 50;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    transform: scaleY(-1);
+    :hover {
+        cursor: pointer;
+    }
+    :active {
+        transform: scaleY(-1) scale(0.98);
     }
 `;
 

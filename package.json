@@ -12,7 +12,6 @@
     "browser-image-compression": "^1.0.17",
     "chart.js": "^3.7.0",
     "cytoscape": "^3.20.0",
-    "cytoscape-cose-bilkent": "^4.1.0",
     "cytoscape-cxtmenu": "^3.4.0",
     "cytoscape-dagre": "^2.3.2",
     "cytoscape-dom-node": "^1.1.0",

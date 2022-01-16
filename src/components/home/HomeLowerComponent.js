@@ -48,7 +48,7 @@ const TodoCheckBox = styled.input`
     ${defaultBtnAction};
 `;
 
-const HomeLowerComponent = ({userObj, todayTargets, todaySteps}) => {
+const HomeLowerComponent = ({userObj, todayTargets}) => {
 
     const onClickCheckBox = (e, target) => {
         const name = e.target.getAttribute('name');
@@ -70,7 +70,7 @@ const HomeLowerComponent = ({userObj, todayTargets, todaySteps}) => {
                 <TodoTitle>
                     오늘 마감인 목표
                 </TodoTitle>
-                {todayTargets.length || todaySteps.length
+                {todayTargets.length 
                 ? 
                 <>
                     {todayTargets.map((target, index) => (
@@ -87,22 +87,6 @@ const HomeLowerComponent = ({userObj, todayTargets, todaySteps}) => {
                             }} />
                             <Todo style={{color: target.isComplished ? "yellow" : null, textDecorationLine: target.isComplished ? 'line-through' : null}} 
                                 htmlFor={target.id}>{target.name}</Todo>
-                        </TodoBox>
-                    ))}
-                    {todaySteps.map((target, index) => (
-                        <TodoBox key={index}>
-                            <TodoCheckBox id={target.id} type="checkbox" name="step" checked={target.isComplished} readOnly onClick={(e) => {
-                                e.preventDefault();
-                                if (target.isComplished) {
-                                    window.confirm("앗 실수로 누르셨었나요?") &&
-                                    onClickCheckBox(e, target);    
-                                } else {
-                                    window.confirm("목표를 달성 하셨나요?") &&
-                                    onClickCheckBox(e, target);    
-                                }
-                            }} />
-                            <Todo style={{color: target.isComplished ? "yellow" : null, textDecorationLine: target.isComplished ? 'line-through' : null}}  
-                                htmlFor={target.id}>{target.name} - {target.explain}</Todo>
                         </TodoBox>
                     ))}
                 </>
