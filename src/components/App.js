@@ -6,6 +6,7 @@ import AppRouter from "./Router";
 const App = () => {
     const [init, setInit] = useState(false);
     const [userObj, setUserObj] = useState(null);
+    const [isVisitor, setIsVisitor] = useState(false);
 
     const getTargetData = async (uid) => {
         let targetArray = [];
@@ -53,9 +54,24 @@ const App = () => {
     const getUserObj = () => {
         authService.onAuthStateChanged(async (user) => {
             if (user) {
+                let displayName = '익명';
+                let isPrivate = false;
+
                 const userData = (await dbService.collection('users').doc(`${user.uid}`).get()).data()
                 const targetData = await getTargetData(user.uid);
                 const stepData = await getSteps(user.uid);
+
+                if (userData) {
+                    isPrivate = userData.isPrivate
+                }
+                if (!userData) {
+                    setIsVisitor(true);
+                }
+
+                if (user.displayName) {
+                    displayName = user.displayName;
+                }
+
                 if (user.email) {
                     getUserData(user);
                 }
@@ -63,9 +79,10 @@ const App = () => {
                     uid: user.uid,
                     targets: targetData,
                     steps: stepData,
-                    isPrivate: userData.isPrivate,
+                    isPrivate,
+                    isVisitor,
                     photoURL: user.photoURL ? user.photoURL : '',
-                    displayName: (user.displayName ? user.displayName : "익명"),
+                    displayName,
                     updateProfile: (args) => user.updateProfile(args),
                 });
                 setInit(true);

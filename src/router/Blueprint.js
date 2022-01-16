@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import CytoscapeMindmap from '../components/mindmap/CytoscapeMindmap';
 import TargetMindmap from '../components/TargetMindmap';
@@ -11,6 +11,10 @@ const Container = styled.div`
 `;
 
 const Blueprint = ({userObj}) => {
+    useEffect(() => {
+        console.log(userObj)
+    })
+
     return (
         <Container>
             <CytoscapeMindmap userObj={userObj} />

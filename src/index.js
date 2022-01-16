@@ -5,7 +5,7 @@ import App from './components/App';
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import "./styles.css";
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import * as serviceWorker from './serviceWorkerRegistration';
 
 Sentry.init({
   dsn: "https://5564f12ab54c4c8385cc9c046072be54@o1065943.ingest.sentry.io/6151464",
@@ -25,3 +25,6 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+if ("serviceWorker" in navigator) {
+  serviceWorker.register()
+}

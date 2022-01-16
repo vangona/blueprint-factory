@@ -1,6 +1,7 @@
 {
   "short_name": "청사진 제작소",
   "name": "청사진 제작소",
+  "description": "당장 내일 시작할 수 있는 일로 큰 목표를 쪼개보아요.",
   "icons": [
     {
       "src": "favicon.ico",
@@ -21,6 +22,6 @@
   "start_url": "https://blueprint-maker.netlify.app/",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff",
+  "background_color": "#3e83e1",
   "homepage": "https://blueprint-maker.netlify.app/"
 }

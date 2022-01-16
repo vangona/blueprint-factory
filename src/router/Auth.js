@@ -136,7 +136,7 @@ const Auth = () => {
         } else {
             await authService.signInWithEmailAndPassword(email, password)
             .then(() => {
-                alert('어서오세요.')
+                console.log('success');
             })
             .catch(error => {
                 setError(error.message);
@@ -147,7 +147,7 @@ const Auth = () => {
     const onClickAnonymously = () => {
         authService.signInAnonymously()
         .then(() => {
-            alert('어서오세오')
+            console.log('success');
         }).catch(error => {
             console.log(error.message);
         })
