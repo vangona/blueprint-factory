@@ -6,6 +6,7 @@ import AppRouter from "./Router";
 const App = () => {
     const [init, setInit] = useState(false);
     const [userObj, setUserObj] = useState(null);
+    const [userData, setUserData] = useState(null);
 
     const getTargetData = async (uid) => {
         let targetArray = [];
@@ -27,9 +28,10 @@ const App = () => {
     };
 
     const getUserData = async (user) => {
-        await dbService.collection("users").doc(`${user.uid}`).get().then((snapshot) => {
-            if(!snapshot.exists && user.providerData[0].providerId === 'password') {
-                dbService.collection("users").doc(`${user.uid}`).set({
+        await dbService.collection("users").doc(`${user.uid}`).get().then(async (snapshot) => {
+            setUserData(snapshot.data());
+            if(!snapshot.exists && user.providerData.length) {
+                await dbService.collection("users").doc(`${user.uid}`).set({
                     uid: user.uid,
                     displayName: user.displayName ? user.displayName : "익명",
                     photoURL: user.photoURL,
@@ -48,18 +50,10 @@ const App = () => {
                 let isVisitor = false;
                 let bio = '';
 
-                const userData = (await dbService.collection('users').doc(`${user.uid}`).get()).data()
+                getUserData(user);
                 const targetData = await getTargetData(user.uid);
 
-                if (userData) {
-                    getUserData(user);
-                    isPrivate = userData.isPrivate;
-                    if(userData.bio) {
-                        bio = userData.bio;
-                    }
-                }
-
-                if (user.providerData[0].providerId !== 'password') {
+                if (user.providerData.length === 0) {
                     isVisitor = true;
                     displayName = '방문객';
                 }
@@ -71,11 +65,11 @@ const App = () => {
                 setUserObj({
                     uid: user.uid,
                     targets: targetData,
-                    isPrivate,
+                    isPrivate: userData ? userData.isPrivate : false ,
                     isVisitor,
                     photoURL: user.photoURL ? user.photoURL : '',
                     displayName,
-                    bio,
+                    bio : userData ? userData.bio : '',
                     updateProfile: (args) => user.updateProfile(args),
                 });
                 setInit(true);

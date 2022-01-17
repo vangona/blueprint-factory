@@ -59,10 +59,6 @@ const ShorttermParent = ({userObj, parent}) => {
     const DateTime = Time.getDate();
     const deadlineTime = `${Year}-${Month > 9 ? Month : '0' + Month}-${DateTime > 9 ? DateTime : '0' + DateTime}`;
 
-    useEffect(() => {
-        console.log(parent);
-    })
-
     return (
         <Container>
             <Title>

@@ -162,7 +162,7 @@ const Auth = () => {
     <Container>
         <BackgroundBottomCloud />
         <Title>
-            뜬구름
+            청사진 제작소
         </Title>
         <State>
             {loginState ? "로그인 하기" : "회원가입 하기"}

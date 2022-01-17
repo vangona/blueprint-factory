@@ -67,7 +67,7 @@ const CytoscapeMindmap = ({userObj}) => {
 
       if(ele.data().parentId !== 'new') {
         await dbService.collection('targets').doc(`${ele.data().parentId}`).update({
-            childs: firebaseInstance.firestore.FieldValue.arrayRemove(ele.id())
+            childs: firebaseInstance.firestore.FieldValue.arrayRemove(`${ele.id()}`)
           })
           .then(async () => {
               await dbService.collection('targets').doc(`${ele.id()}`).delete()
@@ -599,7 +599,7 @@ const CytoscapeMindmap = ({userObj}) => {
         commands: [ 
           {
             fillColor: 'rgba(200, 200, 200, 0.75)', 
-            content: 'remove', 
+            content: '선 지우기', 
             contentStyle: {}, 
             select: async function(ele){
                 console.log(ele.data()) 
@@ -1036,10 +1036,10 @@ const CytoscapeMindmap = ({userObj}) => {
             </MindmapContainer>
             {!id && <BtnBox>
               <DrawBtn id="draw-on">
-                  목표 잇기
+                  선 조정 on
               </DrawBtn>
               <DrawBtn id="draw-off" className='hide'>
-                  목표 잇기 끄기
+                  선 조정 off
               </DrawBtn>
             </BtnBox>}
         </Container>

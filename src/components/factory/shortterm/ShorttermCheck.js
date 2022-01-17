@@ -103,7 +103,7 @@ const ShorttermCheck = ({getExplain, explain, name, needArr, deadline, getIsPriv
                 추가로 설명을 남기고 <br />
                 싶은 것이 있다면 적어보세요.
             </Explain>
-            <Input type="text" value={explain} onChange={onChange}/>
+            <Input type="text" value={explain} name="explain" onChange={onChange}/>
             <PrivateBox>
                 <CheckBox name="isPrivate" id="is-private" type="checkbox" checked={isPrivate} onChange={onChange} />
                 <Label htmlFor='is-private'>이 목표는 비밀로 할래요.</Label>

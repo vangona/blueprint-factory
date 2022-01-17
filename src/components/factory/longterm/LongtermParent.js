@@ -67,7 +67,6 @@ const LongtermParent = ({userObj, parent}) => {
     }
 
     useEffect(() => {
-        console.log(parent)
         if (parent) {
             getTime();
         }

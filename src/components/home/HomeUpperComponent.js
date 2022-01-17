@@ -58,7 +58,7 @@ const HomeUpperComponent = ({userObj, todayTargets}) => {
             <Cloud src={cloud} />
             <Title>
                 <Bold>{userObj.displayName}</Bold>님의 <br />
-                오늘의 <Bold>구름</Bold>
+                오늘의 <Bold>뜬구름</Bold>
             </Title>
             <ChartContainer>
                 <DoughnutChart compishmentRate={compishmentRate} />

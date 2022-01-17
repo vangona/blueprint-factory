@@ -111,7 +111,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
         style: {
             'font-family': 'Ssurround',
             'font-size': '14px',
-            'background-color': 'green',
+            'background-color': 'lightgreen',
             'border-width': '1px',
             'border-style': 'solid',
             'border-color': 'blue',
