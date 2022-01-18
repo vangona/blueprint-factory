@@ -4,6 +4,7 @@ import { defaultContainer } from '../css/styleConstants';
 import CalendarComponent from '../components/calendar/CalendarComponent';
 import EventComponent from '../components/calendar/EventComponent';
 import Loading from '../components/loading/Loading';
+import PrevBtn from '../components/btn/PrevBtn';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -42,6 +43,7 @@ const CalendarRoute = ({userObj}) => {
         {isLoading
         ? <Loading />
         : <Container>
+            <PrevBtn />
             <CalendarComponent getSelected={getSelected} schedules={schedules} />
             <EventComponent selected={selected} />
         </Container>}

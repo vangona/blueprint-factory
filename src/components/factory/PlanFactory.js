@@ -54,7 +54,7 @@ const ReturnBtn = styled.button`
     position: fixed;
     top: 20px;
     left: 20px;
-    z-index: 50;
+    z-index: 999;
     width: 40px;
     height: 40px;
     background-color: transparent;
@@ -79,7 +79,7 @@ const PageBtn = styled.button`
     z-index: 50;
     background-color: #3F5DAC;
     border: none;
-    border-radius: 50%;
+    border-radius: 20px;
     width: 40px;
     height: 40px;
     font-size: 30px;

@@ -49,7 +49,7 @@ const CytoscapeMindmap = ({userObj}) => {
     const {id} = useParams();
     const [userData, setUserData] = useState('');
     const [snapshot, setSnapshot] = useState('');
-    // const [data, setData] = useState('');
+    const [dataForRank, setDataForRank] = useState('');
     let cyRef = useRef();
 
     cytoscape.use(dagre);
@@ -99,11 +99,21 @@ const CytoscapeMindmap = ({userObj}) => {
       })
     }
 
+    const unComplishTarget = async (ele) => {
+      await dbService.collection('targets').doc(`${ele.id()}`).update({
+        isComplished: false,
+      }).then(() => {
+        alert('다시 화이팅입니다 :)')
+      }).catch(error => {
+        console.log(error.message);
+      })
+    }
+
     const openTarget = async (ele) => {
       await dbService.collection('targets').doc(`${ele.id()}`).update({
         isPrivate: false,
       }).then(() => {
-        alert('정말 고생 많으셨습니다.')
+        alert('공개로 설정 되었습니다.')
       }).catch(error => {
         console.log(error.message);
       })
@@ -113,7 +123,7 @@ const CytoscapeMindmap = ({userObj}) => {
       await dbService.collection('targets').doc(`${ele.id()}`).update({
         isPrivate: true,
       }).then(() => {
-        alert('정말 고생 많으셨습니다.')
+        alert('비공개로 설정 되었습니다.')
       }).catch(error => {
         console.log(error.message);
       })
@@ -523,6 +533,15 @@ const CytoscapeMindmap = ({userObj}) => {
             enabled: true,
           },
           {
+            fillColor: 'rgba(200, 200, 200, 0.75)',
+            content: '도달했어요!',
+            contentStyle: {}, 
+            select: function(ele){
+              complishTarget(ele);
+            },
+            enabled: true,
+          },
+          {
             fillColor: 'rgba(200, 200, 200, 0.75)', 
             content: '계획으로 만들기', 
             
@@ -572,6 +591,15 @@ const CytoscapeMindmap = ({userObj}) => {
             contentStyle: {}, 
             select: function(ele){ 
               alert('어제의 나보다 오늘의 나는 얼마나 성장했을까요?')
+            },
+            enabled: true,
+          },
+          {
+            fillColor: 'rgba(200, 200, 200, 0.75)', 
+            content: '미달성으로 되돌릴래요.', 
+            contentStyle: {}, 
+            select: function(ele){ 
+              unComplishTarget(ele);
             },
             enabled: true,
           },
@@ -668,12 +696,48 @@ const CytoscapeMindmap = ({userObj}) => {
         outsideMenuCancel: 10 
     };
 
+    const getDataForRank = (snapshot) => {
+      let node = [];
+      let edge = [];
+      snapshot.forEach(el => {
+
+        const nodeData = {
+          "data": {
+            "id" : `${el.id}`,
+            "parentId" : `${el.parentId}`,
+            "label" : `${el.name}`,
+            "type" : `${el.type}`,
+            "explain" : `${el.explain}`,
+            "deadline" : new Date(el.deadline.seconds * 1000),
+            "isComplete" : el.isComplete,
+            "isComplished" : el.isComplished,
+            "isPrivate" : el.isPrivate,
+          },
+        }
+        node.push(nodeData);
+
+        el.childs.forEach(child => {
+          const originEdge = { 
+            "data" : {
+              "id" : `${el.id}->${child}`,
+              "source" : `${el.id}`,
+              "target" : `${child}`
+            }
+          }
+          edge.push(originEdge);
+        })
+      })
+
+      setDataForRank([...node, ...edge]);
+    }
+
     const getSnapshot = () => {
       dbService.collection('targets').where('uid', '==', `${id ? id : userObj.uid}`).onSnapshot(querySnapshot => {
         const data = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         }))
+        getDataForRank(data);
         setSnapshot(data);
       })
     }
@@ -761,10 +825,213 @@ const CytoscapeMindmap = ({userObj}) => {
 
     const fillCy = async () => {
 
+        const cy_for_rank = cytoscape({
+          elements: dataForRank,
+        })
+
+        const pageRank = cy_for_rank.elements().pageRank();
+
+        const nodeMaxSize = 50;
+        const nodeMinSize = 5;
+        const fontMaxSize = 8;
+        const fontMinSize = 5;
+
+        console.log(pageRank)
+
+        const cyStyle = [ // the stylesheet for the graph
+          {
+              selector: 'node',
+              style: {
+                  'font-family': 'SsurroundAir',
+                  'font-size': '14px',
+                  'background-color': '#666',
+                  "shape": "round-rectangle",
+                  "width": '100px',
+                  'label': 'data(label)',
+              }
+          },
+          {
+              selector: 'edge',
+              "style": {
+                "curve-style": "taxi",
+                "taxi-direction": "downward",
+                "taxi-turn": 50,
+                "taxi-turn-min-distance": 10
+              }
+          },
+      
+          // node types
+          {
+              selector: '.longterm',
+              style: {
+                  'font-family': 'SsurroundAir',
+                  'font-size': '14px',
+                  'background-color': 'white',
+                  'border-width': '1px',
+                  'border-style': 'solid',
+                  'border-color': 'blue',
+                  "shape": "round-rectangle",
+                  "width": '100px',
+                  'label': 'data(label)'
+              }
+          },
+          {
+              selector: '.shortterm',
+              style: {
+                  'font-family': 'SsurroundAir',
+                  'font-size': '14px',
+                  'background-color': 'white',
+                  'border-width': '1px',
+                  'border-style': 'solid',
+                  'border-color': 'red',
+                  "shape": "round-rectangle",
+                  "width": '100px',
+                  'label': 'data(label)'
+              }
+          },
+          {
+              selector: '.plan',
+              style: {
+                  'font-family': 'SsurroundAir',
+                  'font-size': '14px',
+                  'background-color': 'white',
+                  'border-width': '1px',
+                  'border-style': 'solid',
+                  'border-color': 'skyblue',
+                  "shape": "round-rectangle",
+                  "width": '100px',
+                  'label': 'data(label)'
+              }
+          },
+          {
+              selector: '.routine',
+              style: {
+                  'font-family': 'SsurroundAir',
+                  'font-size': '14px',
+                  'background-color': 'white',
+                  'border-width': '1px',
+                  'border-style': 'solid',
+                  'border-color': 'yellow',
+                  "shape": "round-rectangle",
+                  "width": '100px',
+                  'label': 'data(label)'
+              }
+          },
+          {
+            selector: '.todo',
+            style: {
+                'font-family': 'SsurroundAir',
+                'font-size': '14px',
+                'background-color': 'white',
+                'border-width': '1px',
+                'border-style': 'solid',
+                'border-color': 'purple',
+                "shape": "round-rectangle",
+                "width": '100px',
+                'label': 'data(label)'
+            }
+        },
+          {
+              selector: '.incomplete',
+              style: {
+                  'font-family': 'SsurroundAir',
+                  'font-size': '14px',
+                  'background-color': 'white',
+                  'border-width': '1px',
+                  'border-style': 'solid',
+                  'border-color': 'green',
+                  "shape": "round-rectangle",
+                  "width": '100px',
+                  'label': 'data(label)'
+              }
+          },
+          {
+              selector: '.isComplished',
+              style: {
+                  'font-family': 'SsurroundAir',
+                  'font-size': '14px',
+                  'background-color': 'lightgreen',
+                  'border-width': '1px',
+                  'border-style': 'solid',
+                  'border-color': 'blue',
+                  "shape": "round-rectangle",
+                  "width": '100px',
+                  'label': 'data(label)'
+              }
+          },
+          {
+            selector: '.isPrivate',
+            style: {
+                'font-family': 'SsurroundAir',
+                'font-size': '14px',
+                'background-color': 'white',
+                'border-width': '1px',
+                'border-style': 'solid',
+                'border-color': 'black',
+                "shape": "round-rectangle",
+                "width": '100px',
+                'label': '(비공개)'
+            }
+        },
+      
+          // edgehandles
+          {
+              selector: '.eh-handle',
+              style: {
+                'background-color': 'red',
+                'width': 12,
+                'height': 12,
+                'shape': 'ellipse',
+                'overlay-opacity': 0,
+                'border-width': 12, // makes the handle easier to hit
+                'border-opacity': 0
+              }
+            },
+      
+            {
+              selector: '.eh-hover',
+              style: {
+                'background-color': 'red'
+              }
+            },
+      
+            {
+              selector: '.eh-source',
+              style: {
+                'border-width': 2,
+                'border-color': 'red'
+              }
+            },
+      
+            {
+              selector: '.eh-target',
+              style: {
+                'border-width': 2,
+                'border-color': 'red'
+              }
+            },
+      
+            {
+              selector: '.eh-preview, .eh-ghost-edge',
+              style: {
+                'background-color': 'red',
+                'line-color': 'red',
+                'target-arrow-color': 'red',
+                'source-arrow-color': 'red'
+              }
+            },
+            {
+              selector: '.eh-ghost-edge.eh-preview-active',
+              style: {
+                'opacity': 0
+              }
+            }
+      ]
+
         const cy = cytoscape({
             container: document.getElementById('cy'),
             elements: [],
-            style: MindmapStyle,
+            style: cyStyle,
             layout: {},
             wheelSensitivity: 0.2
         });
@@ -964,12 +1231,18 @@ const CytoscapeMindmap = ({userObj}) => {
           content.style.whiteSpace = 'pre-wrap';
           content.style.lineHeight = '150%';
 
-          if(targetData.deadline && !targetData.isPrivate) {
-            container.appendChild(title);
-            container.appendChild(hr);
-          }
-          if(!targetData.isPrivate) {
+          if(id && !targetData.isPrivate) {
             container.appendChild(content);
+            if(targetData.deadline) {
+              container.appendChild(title);
+              container.appendChild(hr);
+            }
+          } else if (!id) {
+            container.appendChild(content);
+            if (targetData.deadline) {
+              container.appendChild(title);
+              container.appendChild(hr);
+            }
           }
 
           const node = {

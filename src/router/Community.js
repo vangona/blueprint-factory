@@ -6,6 +6,7 @@ import { defaultContainer } from '../css/styleConstants';
 import CommunityLowerComponent from '../components/community/CommunityLowerComponent';
 import { dbService } from '../fBase';
 import Loading from '../components/loading/Loading';
+import PrevBtn from '../components/btn/PrevBtn';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -39,6 +40,7 @@ const Community = ({userObj}) => {
 
     return (
         <Container>
+            <PrevBtn />
             <CommunityUpperComponent userObj={userObj} users={users} getSearchWord={getSearchWord} searchWord={searchWord} />
             {isLoading 
             ? <Loading />

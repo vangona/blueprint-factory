@@ -2,7 +2,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
     {
         selector: 'node',
         style: {
-            'font-family': 'Ssurround',
+            'font-family': 'SsurroundAir',
             'font-size': '14px',
             'background-color': '#666',
             "shape": "round-rectangle",
@@ -25,7 +25,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
     {
         selector: '.longterm',
         style: {
-            'font-family': 'Ssurround',
+            'font-family': 'SsurroundAir',
             'font-size': '14px',
             'background-color': 'white',
             'border-width': '1px',
@@ -39,7 +39,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
     {
         selector: '.shortterm',
         style: {
-            'font-family': 'Ssurround',
+            'font-family': 'SsurroundAir',
             'font-size': '14px',
             'background-color': 'white',
             'border-width': '1px',
@@ -53,7 +53,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
     {
         selector: '.plan',
         style: {
-            'font-family': 'Ssurround',
+            'font-family': 'SsurroundAir',
             'font-size': '14px',
             'background-color': 'white',
             'border-width': '1px',
@@ -67,7 +67,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
     {
         selector: '.routine',
         style: {
-            'font-family': 'Ssurround',
+            'font-family': 'SsurroundAir',
             'font-size': '14px',
             'background-color': 'white',
             'border-width': '1px',
@@ -81,7 +81,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
     {
       selector: '.todo',
       style: {
-          'font-family': 'Ssurround',
+          'font-family': 'SsurroundAir',
           'font-size': '14px',
           'background-color': 'white',
           'border-width': '1px',
@@ -95,7 +95,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
     {
         selector: '.incomplete',
         style: {
-            'font-family': 'Ssurround',
+            'font-family': 'SsurroundAir',
             'font-size': '14px',
             'background-color': 'white',
             'border-width': '1px',
@@ -109,7 +109,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
     {
         selector: '.isComplished',
         style: {
-            'font-family': 'Ssurround',
+            'font-family': 'SsurroundAir',
             'font-size': '14px',
             'background-color': 'lightgreen',
             'border-width': '1px',
@@ -123,7 +123,7 @@ export const MindmapStyle = [ // the stylesheet for the graph
     {
       selector: '.isPrivate',
       style: {
-          'font-family': 'Ssurround',
+          'font-family': 'SsurroundAir',
           'font-size': '14px',
           'background-color': 'white',
           'border-width': '1px',

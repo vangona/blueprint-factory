@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { blockBtn, defaultBtnAction, defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
+import { blockBtn, defaultBtnAction, defaultContainer, factoryImg, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
 import img from "../../../img/deadline.png";
 import StepInput from './StepInput';
 
@@ -21,7 +21,7 @@ const Bold = styled.span`
 `;
 
 const Img = styled.img`
-    width: 40%;
+    ${factoryImg};
 `;
 
 const Explain = styled.div`

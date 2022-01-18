@@ -123,3 +123,8 @@ export const sumbitBlockBtn = css`
 export const navHeight = css`
     height: 50px;
 `;
+
+export const factoryImg = css`
+    max-height: 50%;
+    max-width: 70%;
+`;

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { blockBtn, defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
+import { blockBtn, defaultContainer, factoryImg, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
 import img from "../../../img/deadline.png";
 
 const Container = styled.div`
@@ -20,7 +20,7 @@ const Bold = styled.span`
 `;
 
 const Img = styled.img`
-    width: 70%;
+    ${factoryImg};
 `;
 
 const Explain = styled.div`

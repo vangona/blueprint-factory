@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { defaultBtnAction, defaultContainer, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
+import { defaultBtnAction, defaultContainer, factoryImg, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
 import img from "../../../img/need.png";
 
 const Container = styled.div`
@@ -20,7 +20,7 @@ const Bold = styled.span`
 `;
 
 const Img = styled.img`
-    width: 70%;
+    ${factoryImg};
 `;
 
 const Explain = styled.div`

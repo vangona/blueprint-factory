@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { blockBtn, defaultBtnAction, defaultContainer } from '../../../css/styleConstants';
 import { dbService, firebaseInstance } from '../../../fBase';
 import BackgroundTopCloud from '../../background/BackgroundTopCloud';
+import PrevBtn from '../../btn/PrevBtn';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -134,6 +135,7 @@ const TodoFactory = ({userObj, parent}) => {
 
     return (
         <Container>
+            <PrevBtn />
             <BackgroundTopCloud />
             <Title>
                 할 일 쓰기

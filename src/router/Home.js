@@ -5,6 +5,7 @@ import HomeUpperComponent from '../components/home/HomeUpperComponent';
 import Loading from '../components/loading/Loading';
 import { defaultContainer } from '../css/styleConstants';
 import { dbService } from '../fBase';
+import PrevBtn from '../components/btn/PrevBtn';
 
 const Container = styled.div`
   ${ defaultContainer }
@@ -44,6 +45,7 @@ const Home = ({userObj}) => {
       ? <Loading />
       : 
       <>
+        <PrevBtn />
         <HomeUpperComponent userObj={userObj} todayTargets={todayTargets}/>
         <HomeLowerComponent userObj={userObj} todayTargets={todayTargets}/>
       </>
