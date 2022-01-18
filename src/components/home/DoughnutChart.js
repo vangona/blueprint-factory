@@ -3,7 +3,13 @@ import { PieChart } from 'react-minimal-pie-chart';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  width: 50%;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 70%;
+  max-height: 70%;
 `;
 
 const DoughnutChart = ({compishmentRate}) => {

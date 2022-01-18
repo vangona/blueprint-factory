@@ -1,17 +1,5 @@
 export const MindmapStyle = [ // the stylesheet for the graph
     {
-        selector: 'node',
-        style: {
-            'font-family': 'SsurroundAir',
-            'font-size': '14px',
-            'background-color': '#666',
-            "shape": "round-rectangle",
-            "width": '100px',
-            'label': 'data(label)',
-        }
-    },
-
-    {
         selector: 'edge',
         "style": {
           "curve-style": "taxi",
@@ -134,6 +122,17 @@ export const MindmapStyle = [ // the stylesheet for the graph
           'label': '(비공개)'
       }
   },
+  {
+    selector: 'node',
+    style: {
+        'font-family': 'SsurroundAir',
+        'font-size': '14px',
+        'background-color': '#666',
+        "shape": "round-rectangle",
+        "width": '100px',
+        'label': 'data(label)',
+    }
+},
 
     // edgehandles
     {

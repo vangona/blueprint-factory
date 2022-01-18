@@ -720,8 +720,8 @@ const CytoscapeMindmap = ({userObj}) => {
           const originEdge = { 
             "data" : {
               "id" : `${el.id}->${child}`,
-              "source" : `${el.id}`,
-              "target" : `${child}`
+              "source" : `${child}`,
+              "target" : `${el.id}`
             }
           }
           edge.push(originEdge);
@@ -825,30 +825,26 @@ const CytoscapeMindmap = ({userObj}) => {
 
     const fillCy = async () => {
 
-        const cy_for_rank = cytoscape({
-          elements: dataForRank,
-        })
+        let pageRank = {rank: () => {return 0.0001;}};
+        if(dataForRank.length) {
+          const cy_for_rank = cytoscape({
+            elements: dataForRank,
+          })
+          pageRank = cy_for_rank.elements().pageRank();
+        }
 
-        const pageRank = cy_for_rank.elements().pageRank();
-
-        const nodeMaxSize = 50;
-        const nodeMinSize = 5;
-        const fontMaxSize = 8;
-        const fontMinSize = 5;
-
-        console.log(pageRank)
+        const titleFontMaxSize = 120;
+        const fontMinSize = 14;
 
         const cyStyle = [ // the stylesheet for the graph
           {
-              selector: 'node',
-              style: {
-                  'font-family': 'SsurroundAir',
-                  'font-size': '14px',
-                  'background-color': '#666',
-                  "shape": "round-rectangle",
-                  "width": '100px',
-                  'label': 'data(label)',
-              }
+            selector: 'node',
+            "style" :{
+              'background-color': '#666',
+              "shape": "round-rectangle",
+              "width": '100px',
+              'label': 'data(label)',
+            }
           },
           {
               selector: 'edge',
@@ -973,6 +969,14 @@ const CytoscapeMindmap = ({userObj}) => {
                 'label': '(비공개)'
             }
         },
+          {
+            selector: 'node',
+            style: {
+                'font-size': function (ele) {
+                  return `${titleFontMaxSize * pageRank.rank('#' + ele.id()) + fontMinSize}px`;
+                }
+            }
+        },
       
           // edgehandles
           {
@@ -1026,7 +1030,7 @@ const CytoscapeMindmap = ({userObj}) => {
                 'opacity': 0
               }
             }
-      ]
+        ]
 
         const cy = cytoscape({
             container: document.getElementById('cy'),
@@ -1049,7 +1053,6 @@ const CytoscapeMindmap = ({userObj}) => {
           })  
         } else {
           let initNode;
-
 
           if (id) {                
             await dbService.collection("users").doc(`${id}`).get().then(snapshot => {
@@ -1129,6 +1132,15 @@ const CytoscapeMindmap = ({userObj}) => {
         const layout = cy.layout(MindmapLayout);
         layout.run();
 
+        // cy.on('tapstart mouseover', 'node', function(e){
+        //     console.log("in");
+        // });
+
+
+        // cy.on('tapend mouseout', 'node', function(e){
+        //     console.log("out");
+        // });
+
         // 내 마인드맵 일 때 메뉴 추가
         if (!id) {
             setUserData(userObj);
@@ -1181,6 +1193,9 @@ const CytoscapeMindmap = ({userObj}) => {
 
         // 노드 만들기
         function makeNode(targetData) {
+          const fontMaxSize = 60;
+          const nodeFontSize = `${fontMaxSize * pageRank.rank('#' + targetData.id) + fontMinSize}px`;
+
           // 변수 선언
           const container = document.createElement('div');
           const title = document.createElement('h1');
@@ -1204,17 +1219,20 @@ const CytoscapeMindmap = ({userObj}) => {
           container.style.justifyContent = 'center';
           container.style.alignItems = 'center';
           container.style.padding = '15px';
-          container.style.width = 'max-content';
           container.style.textAlign = 'center';
           container.style.wordBreak = 'keep-all';
           container.style.userSelect = 'none';
-          container.style.maxWidth = '150px';
+          container.style.width = 'max-content';
+          container.style.maxWidth = '200px';
+
+          // Container Width with Depth
+          container.style.fontSize = nodeFontSize;
 
           // 마감기한 / 헤더 스타일링
           title.innerHTML = `${targetData.deadline ? deadlineTime : ''}까지`;
           title.width = '200px';
           title.style.fontFamily = 'Ssurround';
-          title.style.fontSize = '12px';
+          title.style.fontSize = nodeFontSize;
 
           // 설명 스타일링
           content.innerHTML = `${
@@ -1227,22 +1245,22 @@ const CytoscapeMindmap = ({userObj}) => {
             : ''
           }`;
           content.style.fontFamily = 'SsurroundAir';
-          content.style.fontSize = '10px';
+          content.style.fontSize = nodeFontSize;
           content.style.whiteSpace = 'pre-wrap';
           content.style.lineHeight = '150%';
 
           if(id && !targetData.isPrivate) {
-            container.appendChild(content);
             if(targetData.deadline) {
               container.appendChild(title);
               container.appendChild(hr);
             }
-          } else if (!id) {
             container.appendChild(content);
+          } else if (!id) {
             if (targetData.deadline) {
               container.appendChild(title);
               container.appendChild(hr);
             }
+            container.appendChild(content);
           }
 
           const node = {

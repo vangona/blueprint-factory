@@ -1,7 +1,7 @@
 export const MindmapLayout = { 
     name: 'dagre',
     rankDir: 'TB',
-    minLen: (edge) => { return 3; },
+    minLen: (edge) => { return 4; },
     edgeWeight: function( edge ){ return 1; }, // higher weight edges are generally made shorter and straighter than lower weight edges
 
     // general layout options
