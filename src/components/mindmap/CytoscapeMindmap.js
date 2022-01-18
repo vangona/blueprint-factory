@@ -14,6 +14,7 @@ import { MindmapLayout } from './MindmapLayout';
 
 const Container = styled.div`
     ${defaultContainer};
+    padding: 10px;
 `;
 
 const Title = styled.div`
@@ -833,7 +834,7 @@ const CytoscapeMindmap = ({userObj}) => {
           pageRank = cy_for_rank.elements().pageRank();
         }
 
-        const titleFontMaxSize = 120;
+        const titleFontMaxSize = 30;
         const fontMinSize = 14;
 
         const cyStyle = [ // the stylesheet for the graph
@@ -1191,9 +1192,19 @@ const CytoscapeMindmap = ({userObj}) => {
             })
         }
 
+        let resizeTimer;
+
+        window.addEventListener('resize', function () {
+            this.clearTimeout(resizeTimer);
+            resizeTimer = this.setTimeout(function(){
+                cy.fit();
+            },200);
+        });
+//
+
         // 노드 만들기
         function makeNode(targetData) {
-          const fontMaxSize = 60;
+          const fontMaxSize = 18;
           const nodeFontSize = `${fontMaxSize * pageRank.rank('#' + targetData.id) + fontMinSize}px`;
 
           // 변수 선언
