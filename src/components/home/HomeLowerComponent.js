@@ -52,11 +52,6 @@ const HomeLowerComponent = ({userObj, todayTargets}) => {
 
     const onClickCheckBox = (e, target) => {
         const name = e.target.getAttribute('name');
-        if (name === 'step') {
-            dbService.collection('steps').doc(`${target.id}`).update({
-                isComplished: !target.isComplished,
-            })
-        }
         if (name === 'target') {
             dbService.collection('targets').doc(`${target.id}`).update({
                 isComplished: !target.isComplished,

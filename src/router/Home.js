@@ -16,9 +16,9 @@ const Home = ({userObj}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [todayTargets, setTodayTargets] = useState([]);
 
-  const getTodayTarget = () => {
+  const getTodayTarget = async () => {
       const today = new Date(Date.now());
-      dbService.collection("targets").where("uid", "==", `${userObj.uid}`).onSnapshot(snapshot => {
+      await dbService.collection("targets").where("uid", "==", `${userObj.uid}`).where('deadline', '!=', '').get().then(snapshot => {
         const targets = snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()

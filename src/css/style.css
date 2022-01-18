@@ -6,6 +6,10 @@ body,
   background-color: white;
 }
 
+body {
+  overscroll-behavior-y: none;
+}
+
 @font-face {
   font-family: "Kyobo Handwriting";
   src: url("/src/fonts/KyoboHandwriting2020pdy.ttf") format("truetype");

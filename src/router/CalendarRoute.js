@@ -5,6 +5,7 @@ import CalendarComponent from '../components/calendar/CalendarComponent';
 import EventComponent from '../components/calendar/EventComponent';
 import Loading from '../components/loading/Loading';
 import PrevBtn from '../components/btn/PrevBtn';
+import { dbService } from '../fBase';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -17,10 +18,15 @@ const CalendarRoute = ({userObj}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [schedules, setSchedules] = useState([]);
 
-    const getDeadlines = () => {
-        const filtered = userObj.targets.filter(el => el.deadline);
-        setSchedules([...filtered]);
-        setIsLoading(false);
+    const getDeadlines = async () => {
+        await dbService.collection('targets').where('uid', '==', `${userObj.uid}`).where('deadline', '!=', '')
+        .get().then((snapshot) => {
+            const data = snapshot.docs.map(doc => ({
+                ...doc.data(),
+            }))
+            setSchedules([...data]);
+            setIsLoading(false);    
+        })
     }
 
     const getSelected = (value) => {

@@ -732,7 +732,19 @@ const CytoscapeMindmap = ({userObj}) => {
       setDataForRank([...node, ...edge]);
     }
 
-    const getSnapshot = () => {
+    const getSnapshot = async () => {
+      await dbService.collection('targets').where('uid', '==', `${id ? id : userObj.uid}`).get()
+      .then(querySnapshot => {
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        getDataForRank(data);
+        setSnapshot(data);
+      })
+    }
+
+    const userSnapshot = () => {
       dbService.collection('targets').where('uid', '==', `${id ? id : userObj.uid}`).onSnapshot(querySnapshot => {
         const data = querySnapshot.docs.map(doc => ({
           id: doc.id,
@@ -834,8 +846,8 @@ const CytoscapeMindmap = ({userObj}) => {
           pageRank = cy_for_rank.elements().pageRank();
         }
 
-        const titleFontMaxSize = 30;
-        const fontMinSize = 14;
+        const titleFontMaxSize = 20;
+        const fontMinSize = 12;
 
         const cyStyle = [ // the stylesheet for the graph
           {
@@ -1204,7 +1216,7 @@ const CytoscapeMindmap = ({userObj}) => {
 
         // 노드 만들기
         function makeNode(targetData) {
-          const fontMaxSize = 18;
+          const fontMaxSize = 12;
           const nodeFontSize = `${fontMaxSize * pageRank.rank('#' + targetData.id) + fontMinSize}px`;
 
           // 변수 선언
@@ -1318,12 +1330,13 @@ const CytoscapeMindmap = ({userObj}) => {
     
     useEffect(() => {
         if (!snapshot) {
+          if (id) {
+            getUserData(id);
             getSnapshot();
-            if (id) {
-              getUserData(id);
-            } else {
-              setUserData(userObj);
-            }
+          } else {
+            userSnapshot();
+            setUserData(userObj);
+          }
         } else {
             fillCy();
         }

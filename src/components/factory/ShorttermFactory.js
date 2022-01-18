@@ -164,7 +164,7 @@ const ShorttermFactory = ({userObj, parent}) => {
                 childs: childIds,
                 completeFeeling: '',
                 cancelReason: '',
-            }).then(() => {
+            }).then(async () => {
                 if (parent.id !== 'new') {
                     dbService.collection('targets').doc(`${parent.id}`)
                     .update({
@@ -177,8 +177,14 @@ const ShorttermFactory = ({userObj, parent}) => {
                         console.log(error.message);
                     })
                 } else {
-                    alert('작은 구름이 하나 만들어졌어요!');
-                    navigate("/")    
+                    await dbService.collection('users').doc(`${userObj.uid}`).update({
+                        isBlueprint: true,
+                    }).then(() => {
+                        alert('큰 구름이 하나 만들어졌어요!');
+                        navigate("/")    
+                    }).catch(error => {
+                        console.log(error.message);
+                    })
                 }
             }).catch(error => {
                 console.log(error.message);

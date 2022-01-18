@@ -1,7 +1,7 @@
 export const MindmapLayout = { 
     name: 'dagre',
     rankDir: 'TB',
-    minLen: (edge) => { return 4; },
+    minLen: (edge) => { return 3; },
     edgeWeight: function( edge ){ return 1; }, // higher weight edges are generally made shorter and straighter than lower weight edges
 
     // general layout options
@@ -12,7 +12,6 @@ export const MindmapLayout = {
     animate: false, // whether to transition the node positions
     animateFilter: function( node, i ){ return true; }, // whether to animate specific nodes when animation is on; non-animated nodes immediately go to their final positions
     animationDuration: 500, // duration of animation in ms if enabled
-    animationEasing: 'ease-in', // easing of animation if enabled
     boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
     transform: function( node, pos ){ return pos; }, // a function that applies a transform to the final node position
     ready: function(){}, // on layoutready

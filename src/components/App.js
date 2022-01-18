@@ -8,15 +8,15 @@ const App = () => {
     const [userObj, setUserObj] = useState(null);
     const [userData, setUserData] = useState(null);
 
-    const getTargetData = async (uid) => {
-        let targetArray = [];
-        await dbService.collection('targets').where('uid', '==', uid).get().then(snapshot => {
-            snapshot.docs.forEach(doc => {
-                targetArray.push({...doc.data()});
-            })
-        })
-        return targetArray;
-    }
+    // const getTargetData = async (uid) => {
+    //     let targetArray = [];
+    //     dbService.collection('targets').where('uid', '==', uid).onSnapshot(snapshot => {
+    //         snapshot.docs.forEach(doc => {
+    //             targetArray.push({...doc.data()});
+    //         })
+    //     })
+    //     return targetArray;
+    // }
 
     const refreshUser = async () => {
         const user = authService.currentUser;
@@ -50,13 +50,6 @@ const App = () => {
                 let isVisitor = false;
 
                 getUserData(user);
-                const targetData = await getTargetData(user.uid);
-
-                if(targetData.length) {
-                    await dbService.collection('users').doc(`${user.uid}`).update({
-                        isBlueprint: true,
-                    })
-                }
 
                 if (user.providerData.length === 0) {
                     isVisitor = true;
@@ -69,7 +62,6 @@ const App = () => {
 
                 setUserObj({
                     uid: user.uid,
-                    targets: targetData,
                     isPrivate: userData ? userData.isPrivate : false ,
                     isVisitor,
                     photoURL: user.photoURL ? user.photoURL : '',
