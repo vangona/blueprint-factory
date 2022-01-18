@@ -37,6 +37,7 @@ const App = () => {
                     photoURL: user.photoURL,
                     bio: "",
                     isPrivate: false,
+                    isBlueprint: false,
                 })
             }
         })
@@ -46,12 +47,16 @@ const App = () => {
         authService.onAuthStateChanged(async (user) => {
             if (user) {
                 let displayName = '익명';
-                let isPrivate = false;
                 let isVisitor = false;
-                let bio = '';
 
                 getUserData(user);
                 const targetData = await getTargetData(user.uid);
+
+                if(targetData.length) {
+                    await dbService.collection('users').doc(`${user.uid}`).update({
+                        isBlueprint: true,
+                    })
+                }
 
                 if (user.providerData.length === 0) {
                     isVisitor = true;
