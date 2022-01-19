@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { defaultBtnAction, defaultContainer, outliner } from '../css/styleConstants';
-import { AiOutlineHome, AiOutlineUser } from "react-icons/ai"
+import { AiOutlineHome } from "react-icons/ai"
 import { FiUsers } from "react-icons/fi"
 import { GiArcheryTarget } from "react-icons/gi"
-import { FaRegCalendarAlt } from "react-icons/fa"
+import { FaRegCalendarAlt, FaUserCircle } from "react-icons/fa"
+
+const profileSize = '40px';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -92,7 +94,7 @@ const Navigation = ({userObj}) => {
             <ProfileBox onClick={onClickSetting}>
                 {userObj.photoURL 
                     ? <ProfilePic src={userObj.photoURL} />
-                    : <AiOutlineUser />
+                    : <FaUserCircle fontSize={profileSize} fill={'#3e83e1'} />
                 }
             </ProfileBox>
         </Container>

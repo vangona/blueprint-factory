@@ -6,7 +6,6 @@ import AppRouter from "./Router";
 const App = () => {
     const [init, setInit] = useState(false);
     const [userObj, setUserObj] = useState(null);
-    const [userData, setUserData] = useState(null);
 
     // const getTargetData = async (uid) => {
     //     let targetArray = [];
@@ -27,29 +26,28 @@ const App = () => {
         });
     };
 
-    const getUserData = async (user) => {
-        await dbService.collection("users").doc(`${user.uid}`).get().then(async (snapshot) => {
-            setUserData(snapshot.data());
-            if(!snapshot.exists && user.providerData.length) {
-                await dbService.collection("users").doc(`${user.uid}`).set({
-                    uid: user.uid,
-                    displayName: user.displayName ? user.displayName : "익명",
-                    photoURL: user.photoURL,
-                    bio: "",
-                    isPrivate: false,
-                    isBlueprint: false,
-                })
-            }
-        })
-    }
-
     const getUserObj = () => {
         authService.onAuthStateChanged(async (user) => {
             if (user) {
                 let displayName = '익명';
                 let isVisitor = false;
+                let isPrivate = false;
+                let bio = '';
 
-                getUserData(user);
+                await dbService.collection("users").doc(`${user.uid}`).get().then(async (snapshot) => {
+                    isPrivate = snapshot.data().isPrivate;
+                    bio = snapshot.data().bio;
+                    if(!snapshot.exists && user.providerData.length) {
+                        await dbService.collection("users").doc(`${user.uid}`).set({
+                            uid: user.uid,
+                            displayName: user.displayName ? user.displayName : "익명",
+                            photoURL: user.photoURL,
+                            bio: "",
+                            isPrivate: false,
+                            isBlueprint: false,
+                        })
+                    }
+                })
 
                 if (user.providerData.length === 0) {
                     isVisitor = true;
@@ -62,11 +60,11 @@ const App = () => {
 
                 setUserObj({
                     uid: user.uid,
-                    isPrivate: userData ? userData.isPrivate : false ,
+                    isPrivate,
                     isVisitor,
                     photoURL: user.photoURL ? user.photoURL : '',
                     displayName,
-                    bio : userData ? userData.bio : '',
+                    bio,
                     updateProfile: (args) => user.updateProfile(args),
                 });
                 setInit(true);

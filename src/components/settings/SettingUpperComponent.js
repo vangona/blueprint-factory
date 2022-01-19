@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { AiOutlineUser } from 'react-icons/ai';
 import styled from 'styled-components';
 import { defaultBtn, defaultBtnAction, defaultContainer, returnBtn } from '../../css/styleConstants';
 import { v4 as uuidv4} from "uuid";
@@ -8,27 +7,32 @@ import imageCompression from "browser-image-compression";
 import BackgroundBottomCloud from '../background/BackgroundBottomCloud';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { useNavigate } from 'react-router-dom';
+import { FaUserCircle } from 'react-icons/fa';
+
+const profileSize = '80px';
 
 const Container = styled.div`
     ${defaultContainer};
+    height: 300vh;
 `;
 
 const ProfileContainer = styled.div`
     margin-top: 100px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 30px;
     z-index: 99;
+    width: 100%;
+    height: 100%;
 `;
 
 const ProfileBox = styled.label`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100px;
-    height: 100px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     font-size: 30px;
     border: 1px solid rgba(0, 0, 0, 0.5);
@@ -46,7 +50,7 @@ const ProfilePic = styled.img`
 `;
 
 const Label = styled.label`
-    font-family: Ssurround;
+    font-family: SsurroundAir;
     ${defaultBtnAction};
 `;
 
@@ -57,13 +61,64 @@ const DisplayNameInput = styled.input`
 
 const Box = styled.div`
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    width: 70%;
+    justify-content: space-between;
     align-items: center;
     font-family: SsurroundAir;
+    gap: 20px;
+`;
+
+const InnerBox = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+`;
+
+const Line = styled.hr`
+    width: 100%;
+`;
+
+const ToggleBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
     gap: 10px;
 `;
 
-const CheckBox = styled.input``;
+const ToggleSwitch = styled.label`
+    position: relative;
+    display: inline-block;
+    width: 58px;
+    height: 30px;
+    background-color: var(--main-blue);
+    border-radius: 15px;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+`;
+
+const Slider = styled.span`
+    position: absolute;
+    background-color: white;
+    width: 26px;
+    height: 26px;
+    right: 2px;
+    top: 2px;
+    border-radius: 15px;
+    -webkit-transition: 0.4s;
+    transition: 0.4s;
+    :hover {
+        cursor: pointer;
+    }
+`;
+
+const CheckBox = styled.input`
+    opacity: 0;
+    width: 0;
+    height: 0;
+`;
 
 const BioTextarea = styled.textarea`
     padding: 10px;
@@ -168,35 +223,50 @@ const SettingUpperComponent = ({userObj, refreshUser}) => {
     return (
         <Container>
             <BackgroundBottomCloud />
-            
-            <ReturnBtn onClick={onClickReturn} >
-                <RiArrowGoBackLine />
-            </ReturnBtn>
-
             <ProfileContainer>
                 <Box style={{flexDirection: 'column'}}>
                     <ProfileBox htmlFor="profile__pic">
                         {userObj.photoURL 
                             ? <ProfilePic src={userObj.photoURL} />
-                            : <AiOutlineUser />
+                            : <FaUserCircle fontSize={profileSize} style={{fill: '#3e83e1'}} />
                         }
                     </ProfileBox>
-                    <Label htmlFor='profile__pic'>프로필 변경하기</Label>
+                    <Label htmlFor='profile__pic'>프로필 사진 변경하기</Label>
                 </Box>
                 <PicUploader id="profile__pic" onChange={onFileChange} type="file" accept='image/*' />
                 <Box>
-                    <Label>이름 : </Label>
-                    <DisplayNameInput value={newName} name="displayname" onChange={onChange} type="text" />
+                    <InnerBox>
+                        <Label htmlFor='display-name'>이름</Label>
+                        <DisplayNameInput id="display-name" value={newName} name="displayname" onChange={onChange} type="text" />
+                    </InnerBox>
+                    <Line />
                 </Box>
                 <Box>
-                    <Label>소개글 : </Label>
-                    <BioTextarea value={newBio} name="bio" onChange={onChange} />
+                    <InnerBox>
+                        <Label htmlFor='bio'>소개글</Label>
+                        <BioTextarea id="bio" value={newBio} name="bio" onChange={onChange} />
+                    </InnerBox>
+                    <Line />
                 </Box>
                 <Box>
-                    <CheckBox name='isPrivate' type="checkbox" id='is-private' onChange={onChange} checked={isPrivate} />
-                    <Label htmlFor='is-private'>제 청사진은 비밀로 할래요.</Label>
+                    <InnerBox>
+                        <Label htmlFor='is-private'>청사진 공개</Label>
+                        <ToggleBox>
+                            <ToggleSwitch htmlFor='is-private' style={{backgroundColor: isPrivate && '#ccc'}}>
+                                <CheckBox name='isPrivate' type="checkbox" id='is-private' onChange={onChange} checked={isPrivate} />
+                                <Slider style={{left: isPrivate && '2px'}}/>
+                            </ToggleSwitch>
+                            <Label>
+                                {isPrivate ? '비공개' : '공개'}
+                            </Label>
+                        </ToggleBox>
+                    </InnerBox>
+                    <Line />
                 </Box>
-                <SubmitBtn onClick={onSubmit}>변경사항 적용하기</SubmitBtn>
+                <ToggleBox>
+                    <SubmitBtn onClick={onSubmit}>변경사항 적용하기</SubmitBtn>
+                    <SubmitBtn onClick={onClickReturn}>돌아가기</SubmitBtn>
+                </ToggleBox>
             </ProfileContainer>
         </Container>
     );

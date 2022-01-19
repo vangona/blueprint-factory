@@ -11,7 +11,8 @@ const Container = styled.div`
 const SignoutBtn = styled.button`
     ${defaultBtnAction};
     ${defaultBtn};
-    margin-top: 50px;
+    position: absolute;
+    bottom: 100px;
 `;
 
 const SettingLowerComponent = ({userObj}) => {
