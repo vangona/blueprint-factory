@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
 import CommunityWindow from './CommunityWindow';
@@ -56,6 +56,18 @@ const CommunityLowerComponent = ({userObj, users, searchWord}) => {
         alert('준비중 입니다.');
     }
 
+    const scrollRestoration = () => {
+        const box = document.getElementById('friends');
+        box.scrollTo(0, localStorage.getItem('blueprint_community_scroll'));
+        localStorage.removeItem('blueprint_community_scroll');
+    } 
+
+    useEffect(() => {
+        if(localStorage.getItem('blueprint_community_scroll')) {
+            scrollRestoration();
+        }
+    }, [])
+
     return (
         <Container>
             <NavContainer>
@@ -72,7 +84,7 @@ const CommunityLowerComponent = ({userObj, users, searchWord}) => {
                     메시지
                 </NavBox>
             </NavContainer>
-            <ContentContainer>
+            <ContentContainer id="friends">
                 {users.filter(el => !el.isPrivate).filter(el => el.isBlueprint).filter(el => el.displayName.includes(searchWord) || el.bio.includes(searchWord)).map((user, index) => (
                     <CommunityWindow key={index} userObj={userObj} user={user} />
                 ))}

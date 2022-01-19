@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { defaultContainer, defaultShadow, spreadShadow } from '../../css/styleConstants';
 import { FaPlus } from 'react-icons/fa';
@@ -86,6 +86,8 @@ const CommunityWindow = ({userObj, user}) => {
 
     const onClickUser = (e) => {
         e.preventDefault();
+        const target = document.getElementById('friends')
+        localStorage.setItem('blueprint_community_scroll', target.scrollTop);
         navigate(`/${user.uid}/blueprint`)
     }
 

@@ -18,7 +18,7 @@ const Community = ({userObj}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [searchWord, setSearchWord] = useState('');
-    
+
     const getUsers = () => {
         dbService.collection("users").onSnapshot(querySnapshot => {
             const userData = querySnapshot.docs.map(doc => ({
