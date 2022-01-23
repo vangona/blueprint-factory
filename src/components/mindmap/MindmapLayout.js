@@ -1,19 +1,53 @@
 export const MindmapLayout = { 
-    name: 'dagre',
-    rankDir: 'TB',
-    minLen: (edge) => { return 3; },
-    edgeWeight: function( edge ){ return 1; }, // higher weight edges are generally made shorter and straighter than lower weight edges
-
-    // general layout options
-    fit: true, // whether to fit to viewport
-    padding: 30, // fit padding
-    spacingFactor: undefined, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
-    nodeDimensionsIncludeLabels: true, // whether labels should be included in determining the space used by a node
-    animate: false, // whether to transition the node positions
-    animateFilter: function( node, i ){ return true; }, // whether to animate specific nodes when animation is on; non-animated nodes immediately go to their final positions
-    animationDuration: 500, // duration of animation in ms if enabled
-    boundingBox: undefined, // constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
-    transform: function( node, pos ){ return pos; }, // a function that applies a transform to the final node position
-    ready: function(){}, // on layoutready
-    stop: function(){} // on layoutstop
+    name: 'cose-bilkent',
+    ready: function () {
+    },
+    // Called on `layoutstop`
+    stop: function () {
+    },
+    // 'draft', 'default' or 'proof" 
+    // - 'draft' fast cooling rate 
+    // - 'default' moderate cooling rate 
+    // - "proof" slow cooling rate
+    quality: 'default',
+    // Whether to include labels in node dimensions. Useful for avoiding label overlap
+    nodeDimensionsIncludeLabels: true,
+    // number of ticks per frame; higher is faster but more jerky
+    refresh: 30,
+    // Whether to fit the network view after when done
+    fit: true,
+    // Padding on fit
+    padding: 10,
+    // Whether to enable incremental mode
+    randomize: true,
+    // Node repulsion (non overlapping) multiplier
+    nodeRepulsion: 4500,
+    // Ideal (intra-graph) edge length
+    idealEdgeLength: 50,
+    // Divisor to compute edge forces
+    edgeElasticity: 0.45,
+    // Nesting factor (multiplier) to compute ideal edge length for inter-graph edges
+    nestingFactor: 0.1,
+    // Gravity force (constant)
+    gravity: 0.25,
+    // Maximum number of iterations to perform
+    numIter: 2500,
+    // Whether to tile disconnected nodes
+    tile: true,
+    // Type of layout animation. The option set is {'during', 'end', false}
+    animate: 'end',
+    // Duration for animate:end
+    animationDuration: 500,
+    // Amount of vertical space to put between degree zero nodes during tiling (can also be a function)
+    tilingPaddingVertical: 10,
+    // Amount of horizontal space to put between degree zero nodes during tiling (can also be a function)
+    tilingPaddingHorizontal: 10,
+    // Gravity range (constant) for compounds
+    gravityRangeCompound: 1.5,
+    // Gravity force (constant) for compounds
+    gravityCompound: 1.0,
+    // Gravity range (constant)
+    gravityRange: 3.8,
+    // Initial cooling factor for incremental layout
+    initialEnergyOnIncremental: 0.5
 };

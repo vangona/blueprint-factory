@@ -1,9 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import cytoscape from "cytoscape";
+
 import dagre from "cytoscape-dagre";
+import coseBilkent from "cytoscape-cose-bilkent";
+
 import cxtmenu from "cytoscape-cxtmenu";
 import edgehandles from "cytoscape-edgehandles";
 import domNode from "cytoscape-dom-node";
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { dbService, firebaseInstance } from '../../fBase';
 import { EdgeHandlesOptions } from './EdgeHandlesOptions';
@@ -53,7 +57,8 @@ const CytoscapeMindmap = ({userObj}) => {
     const [dataForRank, setDataForRank] = useState('');
     let cyRef = useRef();
 
-    cytoscape.use(dagre);
+    cytoscape.use( dagre );
+    cytoscape.use( coseBilkent );
     if (typeof cytoscape("core", "cxtmenu") === "undefined") {
       cxtmenu(cytoscape);
     }
@@ -205,7 +210,7 @@ const CytoscapeMindmap = ({userObj}) => {
         adaptativeNodeSpotlightRadius: true, 
         minSpotlightRadius: 24, 
         maxSpotlightRadius: 38, 
-        openMenuEvents: 'cxttapstart taphold', 
+        openMenuEvents: 'taphold', 
         itemColor: 'white', 
         itemTextShadowColor: 'transparent', 
         zIndex: 9999, 
@@ -288,7 +293,7 @@ const CytoscapeMindmap = ({userObj}) => {
       adaptativeNodeSpotlightRadius: true, 
       minSpotlightRadius: 24, 
       maxSpotlightRadius: 38, 
-      openMenuEvents: 'cxttapstart taphold', 
+      openMenuEvents: 'taphold', 
       itemColor: 'white', 
       itemTextShadowColor: 'transparent', 
       zIndex: 9999, 
@@ -359,7 +364,7 @@ const CytoscapeMindmap = ({userObj}) => {
         adaptativeNodeSpotlightRadius: true, 
         minSpotlightRadius: 24, 
         maxSpotlightRadius: 38, 
-        openMenuEvents: 'cxttapstart taphold', 
+        openMenuEvents: 'taphold', 
         itemColor: 'white', 
         itemTextShadowColor: 'transparent', 
         zIndex: 9999, 
@@ -420,7 +425,7 @@ const CytoscapeMindmap = ({userObj}) => {
         adaptativeNodeSpotlightRadius: true, 
         minSpotlightRadius: 24, 
         maxSpotlightRadius: 38, 
-        openMenuEvents: 'cxttapstart taphold', 
+        openMenuEvents: 'taphold', 
         itemColor: 'white', 
         itemTextShadowColor: 'transparent', 
         zIndex: 9999, 
@@ -469,7 +474,7 @@ const CytoscapeMindmap = ({userObj}) => {
       adaptativeNodeSpotlightRadius: true, 
       minSpotlightRadius: 24, 
       maxSpotlightRadius: 38, 
-      openMenuEvents: 'cxttapstart taphold', 
+      openMenuEvents: 'taphold', 
       itemColor: 'white', 
       itemTextShadowColor: 'transparent', 
       zIndex: 9999, 
@@ -509,7 +514,7 @@ const CytoscapeMindmap = ({userObj}) => {
       adaptativeNodeSpotlightRadius: true, 
       minSpotlightRadius: 24, 
       maxSpotlightRadius: 38, 
-      openMenuEvents: 'cxttapstart taphold', 
+      openMenuEvents: 'taphold', 
       itemColor: 'white', 
       itemTextShadowColor: 'transparent', 
       zIndex: 9999, 
@@ -573,7 +578,7 @@ const CytoscapeMindmap = ({userObj}) => {
         adaptativeNodeSpotlightRadius: true, 
         minSpotlightRadius: 24, 
         maxSpotlightRadius: 38, 
-        openMenuEvents: 'cxttapstart taphold', 
+        openMenuEvents: 'taphold', 
         itemColor: 'white', 
         itemTextShadowColor: 'transparent', 
         zIndex: 9999, 
@@ -614,7 +619,7 @@ const CytoscapeMindmap = ({userObj}) => {
         adaptativeNodeSpotlightRadius: true, 
         minSpotlightRadius: 24, 
         maxSpotlightRadius: 38, 
-        openMenuEvents: 'cxttapstart taphold', 
+        openMenuEvents: 'taphold', 
         itemColor: 'white', 
         itemTextShadowColor: 'transparent', 
         zIndex: 9999, 
@@ -656,7 +661,7 @@ const CytoscapeMindmap = ({userObj}) => {
         adaptativeNodeSpotlightRadius: true, 
         minSpotlightRadius: 24, 
         maxSpotlightRadius: 38, 
-        openMenuEvents: 'cxttapstart taphold', 
+        openMenuEvents: 'taphold', 
         itemColor: 'white', 
         itemTextShadowColor: 'transparent', 
         zIndex: 9999, 
@@ -689,7 +694,7 @@ const CytoscapeMindmap = ({userObj}) => {
         adaptativeNodeSpotlightRadius: true, 
         minSpotlightRadius: 24, 
         maxSpotlightRadius: 38, 
-        openMenuEvents: 'cxttapstart taphold', 
+        openMenuEvents: 'taphold', 
         itemColor: 'white', 
         itemTextShadowColor: 'transparent', 
         zIndex: 9999, 
@@ -706,7 +711,7 @@ const CytoscapeMindmap = ({userObj}) => {
           "data": {
             "id" : `${el.id}`,
             "parentId" : `${el.parentId}`,
-            "label" : `${el.name}`,
+            // "label" : `${el.name}`,
             "type" : `${el.type}`,
             "explain" : `${el.explain}`,
             "deadline" : new Date(el.deadline.seconds * 1000),
@@ -854,18 +859,15 @@ const CytoscapeMindmap = ({userObj}) => {
             selector: 'node',
             "style" :{
               'background-color': '#666',
-              "shape": "round-rectangle",
               "width": '100px',
-              'label': 'data(label)',
+              // 'label': 'data(label)',
             }
           },
           {
               selector: 'edge',
               "style": {
-                "curve-style": "taxi",
-                "taxi-direction": "downward",
-                "taxi-turn": 50,
-                "taxi-turn-min-distance": 10
+                'width': 3,
+                'line-color': 'black'
               }
           },
       
@@ -879,9 +881,8 @@ const CytoscapeMindmap = ({userObj}) => {
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'blue',
-                  "shape": "round-rectangle",
                   "width": '100px',
-                  'label': 'data(label)'
+                  // 'label': 'data(label)'
               }
           },
           {
@@ -893,9 +894,8 @@ const CytoscapeMindmap = ({userObj}) => {
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'red',
-                  "shape": "round-rectangle",
                   "width": '100px',
-                  'label': 'data(label)'
+                  // 'label': 'data(label)'
               }
           },
           {
@@ -907,9 +907,8 @@ const CytoscapeMindmap = ({userObj}) => {
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'skyblue',
-                  "shape": "round-rectangle",
                   "width": '100px',
-                  'label': 'data(label)'
+                  // 'label': 'data(label)'
               }
           },
           {
@@ -921,9 +920,8 @@ const CytoscapeMindmap = ({userObj}) => {
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'yellow',
-                  "shape": "round-rectangle",
                   "width": '100px',
-                  'label': 'data(label)'
+                  // 'label': 'data(label)'
               }
           },
           {
@@ -935,7 +933,6 @@ const CytoscapeMindmap = ({userObj}) => {
                 'border-width': '1px',
                 'border-style': 'solid',
                 'border-color': 'purple',
-                "shape": "round-rectangle",
                 "width": '100px',
                 'label': 'data(label)'
             }
@@ -949,9 +946,8 @@ const CytoscapeMindmap = ({userObj}) => {
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'green',
-                  "shape": "round-rectangle",
                   "width": '100px',
-                  'label': 'data(label)'
+                  // 'label': 'data(label)'
               }
           },
           {
@@ -963,9 +959,8 @@ const CytoscapeMindmap = ({userObj}) => {
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'blue',
-                  "shape": "round-rectangle",
                   "width": '100px',
-                  'label': 'data(label)'
+                  // 'label': 'data(label)'
               }
           },
           {
@@ -977,9 +972,8 @@ const CytoscapeMindmap = ({userObj}) => {
                 'border-width': '1px',
                 'border-style': 'solid',
                 'border-color': 'black',
-                "shape": "round-rectangle",
                 "width": '100px',
-                'label': '(비공개)'
+                // 'label': '(비공개)'
             }
         },
           {
@@ -1182,7 +1176,7 @@ const CytoscapeMindmap = ({userObj}) => {
             const incompleteMenu = cy.cxtmenu( ContextIncompleteMenuOptions );
             const edgeMenu = cy.cxtmenu( ContextEdgeMenuOptions );
             const coreMenu = cy.cxtmenu( ContextCoreMenuOptions );
-        
+
             const eh = cy.edgehandles( EdgeHandlesOptions );
 
             const drawOn = document.querySelector('#draw-on');
@@ -1223,7 +1217,10 @@ const CytoscapeMindmap = ({userObj}) => {
 
         // 노드 만들기
         function makeNode(targetData) {
-          const fontMaxSize = 12;
+          const fontMaxSize = 30;
+          const nodeMaxSize = 200;
+          const nodeMinSize = 100;
+          const nodeSize = `${nodeMaxSize * pageRank.rank('#' + targetData.id) + nodeMinSize}px`;
           const nodeFontSize = `${fontMaxSize * pageRank.rank('#' + targetData.id) + fontMinSize}px`;
 
           // 변수 선언
@@ -1245,59 +1242,69 @@ const CytoscapeMindmap = ({userObj}) => {
 
           // 컨테이너 스타일링
           container.style.display = 'flex';
-          container.style.flexDirection = 'column';
           container.style.justifyContent = 'center';
           container.style.alignItems = 'center';
           container.style.padding = '15px';
+
+          container.style.userSelect = 'none';
+          container.style.width = nodeSize;
+          container.style.height = nodeSize;
+
+          container.style.fontFamily = 'SsurroundAir'
           container.style.textAlign = 'center';
           container.style.wordBreak = 'keep-all';
-          container.style.userSelect = 'none';
-          container.style.width = 'max-content';
-          container.style.maxWidth = '200px';
+          if (targetData.isPrivate) {
+            container.innerText = '( 비공개 )'
+          } else {
+            container.innerText = targetData.name;
+          }
+
 
           // Container Width with Depth
           container.style.fontSize = nodeFontSize;
 
-          // 마감기한 / 헤더 스타일링
-          title.innerHTML = `${targetData.deadline ? deadlineTime : ''}까지`;
-          title.width = '200px';
-          title.style.fontFamily = 'Ssurround';
-          title.style.fontSize = nodeFontSize;
+          // // 마감기한 / 헤더 스타일링
+          // title.innerHTML = `${targetData.deadline ? deadlineTime : ''}까지`;
+          // title.width = '200px';
+          // title.style.fontFamily = 'Ssurround';
+          // title.style.fontSize = nodeFontSize;
+
+          // 마인드맵 리뉴얼 작업 이전
 
           // 설명 스타일링
-          content.innerHTML = `${
-            targetData.desire
-            ? targetData.desire 
-            : targetData.explain 
-              ? Array.isArray(targetData.explain)
-                ? targetData.explain.join('\n')
-                : targetData.explain
-            : ''
-          }`;
-          content.style.fontFamily = 'SsurroundAir';
-          content.style.fontSize = nodeFontSize;
-          content.style.whiteSpace = 'pre-wrap';
-          content.style.lineHeight = '150%';
+          // content.innerHTML = `${
+          //   targetData.desire
+          //   ? targetData.desire 
+          //   : targetData.explain 
+          //     ? Array.isArray(targetData.explain)
+          //       ? targetData.explain.join('\n')
+          //       : targetData.explain
+          //   : ''
+          // }`;
+          // content.style.fontFamily = 'SsurroundAir';
+          // content.style.fontSize = nodeFontSize;
+          // content.style.whiteSpace = 'pre-wrap';
+          // content.style.lineHeight = '150%';
 
-          if(id && !targetData.isPrivate) {
-            if(targetData.deadline) {
-              container.appendChild(title);
-              container.appendChild(hr);
-            }
-            container.appendChild(content);
-          } else if (!id) {
-            if (targetData.deadline) {
-              container.appendChild(title);
-              container.appendChild(hr);
-            }
-            container.appendChild(content);
-          }
+          // if(id && !targetData.isPrivate) {
+          //   if(targetData.deadline) {
+          //     container.appendChild(title);
+          //     container.appendChild(hr);
+          //   }
+          //   // container.appendChild(content);
+          // } else if (!id) {
+          //   if (targetData.deadline) {
+          //     container.appendChild(title);
+          //     container.appendChild(hr);
+          //   }
+          //   container.appendChild(content);
+          // }
 
           const node = {
             "data": {
               "id" : `${targetData.id}`,
               "parentId" : `${targetData.parentId}`,
-              "label" : `${targetData.name}`,
+              // "label" : `${targetData.name}`,
               "type" : `${targetData.type}`,
               "explain" : `${targetData.explain}`,
               "deadline" : new Date(targetData.deadline.seconds * 1000),
