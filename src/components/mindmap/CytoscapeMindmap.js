@@ -1145,6 +1145,22 @@ const CytoscapeMindmap = ({userObj}) => {
         const layout = cy.layout(MindmapLayout);
         layout.run();
 
+        // 화면 크기별 맞춤
+        let resizeTimer;
+
+        window.addEventListener('resize', function () {
+            this.clearTimeout(resizeTimer);
+            resizeTimer = this.setTimeout(function(){
+                cy.fit();
+                cy.center();
+            },200);
+        });
+
+        setTimeout(() => {
+          cy.fit();
+          cy.center();
+        }, [])
+
         // cy.on('tapstart mouseover', 'node', function(e){
         //     console.log("in");
         // });
@@ -1203,15 +1219,6 @@ const CytoscapeMindmap = ({userObj}) => {
                 })
             })
         }
-
-        let resizeTimer;
-
-        window.addEventListener('resize', function () {
-            this.clearTimeout(resizeTimer);
-            resizeTimer = this.setTimeout(function(){
-                cy.fit();
-            },200);
-        });
 //
 
         // 노드 만들기
