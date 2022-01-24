@@ -13,7 +13,6 @@ import { dbService, firebaseInstance } from '../../fBase';
 import { EdgeHandlesOptions } from './EdgeHandlesOptions';
 import styled, { css } from 'styled-components';
 import { defaultBtnAction, defaultContainer } from '../../css/styleConstants';
-import { MindmapStyle } from './MindmapStyle';
 import { MindmapLayout } from './MindmapLayout';
 
 const Container = styled.div`
@@ -771,75 +770,6 @@ const CytoscapeMindmap = ({userObj}) => {
       })
     }
 
-    // const getData = async () => { 
-    //     dbService.collection('targets').where('uid', '==', `${id ? id : userObj.uid}`).onSnapshot(async (querySnapshot) => {
-    //         if (querySnapshot.docs.length) {
-    //             const nodeArr = querySnapshot.docs.map((doc) => {
-    //                 const target = {
-    //                     id: doc.id,
-    //                     ...doc.data(),
-    //                 }
-    //                 return ({
-    //                     "data": {
-    //                         "id" : `${target.id}`,
-    //                         "parentId" : `${target.parentId}`,
-    //                         "label" : `${target.name}`,
-    //                         "type" : `${target.type}`,
-    //                         "explain" : `${target.explain}`,
-    //                         "deadline" : new Date(target.deadline.seconds * 1000),
-    //                         "isComplete" : target.isComplete,
-    //                         "isComplished" : target.isComplished,
-    //                     },
-    //                 })
-    //             });
-    //             let edgeArr = [];
-    //             querySnapshot.docs.forEach((doc) => {
-    //                 const target = {
-    //                     id: doc.id,
-    //                     ...doc.data(),
-    //                 }
-    //                 const dataArr = target.childs.map(child => {
-    //                     const childData = {
-    //                         "data": {
-    //                             "id" : `${target.id}->${child}`,
-    //                             "source" : `${target.id}`,
-    //                             "target" : `${child}`
-    //                         }
-    //                     }   
-    //                     return childData;
-    //                 })
-                    
-    //                 for(let i = 0; i < dataArr.length; i++) {
-    //                     edgeArr.push(dataArr[i]);
-    //                 }
-    //             });
-    //             setData([...nodeArr, ...edgeArr]);
-    //             setIsLoading(false);
-    //         } else {
-    //             await dbService.collection("users").doc(`${id ? id : userObj.uid}`).get().then(snapshot => {
-    //                 const userData = snapshot.data();
-    //                 let initNode
-    //                 if (id) {
-    //                     initNode = {
-    //                         "data": {
-    //                             "id" : "a",
-    //                             "label" : `${userData.displayName}님은 아직 청사진을 그리지 않으셨어요.`
-    //                         }
-    //                     }    
-    //                 } else {
-    //                     initNode = {
-    //                         "data": {
-    //                             "id" : "a",
-    //                             "label" : "새로운 목표를 만들어 봅시다."
-    //                         }
-    //                     }
-    //                 }
-    //                 setData([initNode]);        
-    //                 setIsLoading(false);
-    //             })
-    //         }
-    //     })
-    // };
 
     const fillCy = async () => {
 
@@ -851,23 +781,60 @@ const CytoscapeMindmap = ({userObj}) => {
           pageRank = cy_for_rank.elements().pageRank();
         }
 
-        const titleFontMaxSize = 20;
-        const fontMinSize = 12;
+
+        // 함수 변수 선언
+
+        // edge, arrow
+        const edgeWidth = '2px';
+        const edgeActiveWidth = '4px';
+        const arrowScale = 0.8;
+        const arrowActiveScale = 1.2;
+
+        // 색상 
+        const dimColor = '#dfe4ea';
+        const edgeColor = '#ced6e0';
+        const nodeTextColor = 'black';
+        const nodeColor = 'white';
+        const nodeActiveColor = '#ffa502';
+ 
+        // on focus edge color
+        const successorColor = '#ff6348';
+        const predecessorsColor = '#1e90ff';
+
+        // 노드 크기
+        const nodeMaxSize = 100;
+        const nodeMinSize = 20;
+        const nodeActiveSize = 70;
+
+        // 폰트 크기
+        const fontMaxSize = 20;
+        const fontMinSize = 10;
+        const fontActiveSize = 16;
 
         const cyStyle = [ // the stylesheet for the graph
           {
             selector: 'node',
             "style" :{
-              'background-color': '#666',
-              "width": '100px',
-              // 'label': 'data(label)',
+              'color': nodeTextColor,
+              'background-color': nodeColor,
+              'text-halign': 'center',
+              'font-family': 'SsurroundAir',
+              'border-width': '1px',
+              'border-style': 'solid',
+              'label': 'data(label)',
+              'font-size': (ele) => {        
+                const fontSize = `${fontMaxSize * pageRank.rank('#' + ele.id()) + fontMinSize}px`;
+                return fontSize;
+              },
             }
           },
+
           {
               selector: 'edge',
               "style": {
-                'width': 3,
-                'curve-style': 'bezier',
+                'width': edgeWidth,
+                'curve-style': 'taxi',
+                'taxi-direction': 'downward',
                 'line-color': '#ccc',
                 'source-arrow-color': '#ccc',
                 'source-arrow-shape': 'vee'
@@ -878,32 +845,20 @@ const CytoscapeMindmap = ({userObj}) => {
           {
               selector: '.longterm',
               style: {
-                  'font-family': 'SsurroundAir',
-                  'background-color': 'white',
-                  'border-width': '1px',
-                  'border-style': 'solid',
-                  'border-color': 'blue',
+                  'border-color': 'yellow',
                   // 'label': 'data(label)'
               }
           },
           {
               selector: '.shortterm',
               style: {
-                  'font-family': 'SsurroundAir',
-                  'background-color': 'white',
-                  'border-width': '1px',
-                  'border-style': 'solid',
-                  'border-color': 'red',
+                  'border-color': 'blue',
                   // 'label': 'data(label)'
               }
           },
           {
               selector: '.plan',
               style: {
-                  'font-family': 'SsurroundAir',
-                  'background-color': 'white',
-                  'border-width': '1px',
-                  'border-style': 'solid',
                   'border-color': 'skyblue',
                   // 'label': 'data(label)'
               }
@@ -911,11 +866,7 @@ const CytoscapeMindmap = ({userObj}) => {
           {
               selector: '.routine',
               style: {
-                  'font-family': 'SsurroundAir',
-                  'background-color': 'white',
-                  'border-width': '1px',
-                  'border-style': 'solid',
-                  'border-color': 'yellow',
+                  'border-color': 'purple',
                   // 'label': 'data(label)'
               }
           },
@@ -923,34 +874,15 @@ const CytoscapeMindmap = ({userObj}) => {
             selector: '.todo',
             style: {
                 'font-family': 'SsurroundAir',
-                'font-size': '14px',
-                'background-color': 'white',
-                'border-width': '1px',
-                'border-style': 'solid',
-                'border-color': 'purple',
-                "width": '100px',
+                'border-color': 'red',
+                'shape': 'round-rectangle',
                 'label': 'data(label)'
             }
         },
           {
               selector: '.incomplete',
               style: {
-                  'font-family': 'SsurroundAir',
-                  'background-color': 'white',
-                  'border-width': '1px',
-                  'border-style': 'solid',
                   'border-color': 'green',
-                  // 'label': 'data(label)'
-              }
-          },
-          {
-              selector: '.isComplished',
-              style: {
-                  'font-family': 'SsurroundAir',
-                  'background-color': 'lightgreen',
-                  'border-width': '1px',
-                  'border-style': 'solid',
-                  'border-color': 'blue',
                   // 'label': 'data(label)'
               }
           },
@@ -958,23 +890,21 @@ const CytoscapeMindmap = ({userObj}) => {
             selector: '.isPrivate',
             style: {
                 'font-family': 'SsurroundAir',
-                'font-size': '14px',
-                'background-color': 'white',
-                'border-width': '1px',
-                'border-style': 'solid',
                 'border-color': 'black',
-                "width": '100px',
+                'shape': 'round-rectangle',
                 // 'label': '(비공개)'
             }
         },
-          {
-            selector: 'node',
-            style: {
-                'font-size': function (ele) {
-                  return `${titleFontMaxSize * pageRank.rank('#' + ele.id()) + fontMinSize}px`;
-                }
-            }
-        },
+        {
+          selector: '.isComplished',
+          style: {
+              'font-family': 'SsurroundAir',
+              'border-color': 'lightgreen',
+              'background-color': 'lightgreen',
+              'shape': 'round-rectangle',
+              // 'label': '(비공개)'
+          }
+      },
       
           // edgehandles
           {
@@ -1079,7 +1009,7 @@ const CytoscapeMindmap = ({userObj}) => {
                 loginBtn.style.width = 'max-content';
                 loginBtn.style.padding = '10px 15px';
                 loginBtn.style.backgroundColor = 'white';
-                loginBtn.style.border = '1px solid rgba(0, 0, 0, 0.5)';
+                loginBtn.style.border = '3px solid rgba(0, 0, 0, 0.5)';
                 loginBtn.style.borderRadius = '10px';
                 loginBtn.style.fontFamily = 'SsurroundAir';
                 loginBtn.style.fontSize = '12px';
@@ -1126,6 +1056,20 @@ const CytoscapeMindmap = ({userObj}) => {
           }
         })
 
+
+        cy.on('tap', function(e) {
+          setResetFocus(e.cy);
+
+          e.target.isNode && e.target.isNode() && setDimStyle(cy, {
+            'background-color' : dimColor,
+            'line-color'  : dimColor,
+            'source-arrow-color' : dimColor,
+            'color' : dimColor,
+          })
+          
+          e.target.isNode && e.target.isNode() && setFocus(e.target, successorColor, predecessorsColor, edgeActiveWidth, arrowActiveScale);
+        })
+
         // 레이아웃 런
         const layout = cy.layout(MindmapLayout);
         layout.run();
@@ -1146,14 +1090,6 @@ const CytoscapeMindmap = ({userObj}) => {
           cy.center();
         }, [])
 
-        // cy.on('tapstart mouseover', 'node', function(e){
-        //     console.log("in");
-        // });
-
-
-        // cy.on('tapend mouseout', 'node', function(e){
-        //     console.log("out");
-        // });
 
         // 내 마인드맵 일 때 메뉴 추가
         if (!id) {
@@ -1206,18 +1142,14 @@ const CytoscapeMindmap = ({userObj}) => {
         }
 //
 
+
         // 노드 만들기
         function makeNode(targetData) {
-          const fontMaxSize = 30;
-          const nodeMaxSize = 200;
-          const nodeMinSize = 100;
           const nodeSize = `${nodeMaxSize * pageRank.rank('#' + targetData.id) + nodeMinSize}px`;
-          const nodeFontSize = `${fontMaxSize * pageRank.rank('#' + targetData.id) + fontMinSize}px`;
 
           // 변수 선언
           const container = document.createElement('div');
           const title = document.createElement('h1');
-          const content = document.createElement('div');
           const hr = document.createElement('hr');
 
           // 시간 문자열 만들기
@@ -1232,11 +1164,6 @@ const CytoscapeMindmap = ({userObj}) => {
           }
 
           // 컨테이너 스타일링
-          container.style.display = 'flex';
-          container.style.justifyContent = 'center';
-          container.style.alignItems = 'center';
-          container.style.padding = '15px';
-
           container.style.userSelect = 'none';
           container.style.width = nodeSize;
           container.style.height = nodeSize;
@@ -1244,58 +1171,13 @@ const CytoscapeMindmap = ({userObj}) => {
           container.style.fontFamily = 'SsurroundAir'
           container.style.textAlign = 'center';
           container.style.wordBreak = 'keep-all';
-          if (targetData.isPrivate) {
-            container.innerText = '( 비공개 )'
-          } else {
-            container.innerText = targetData.name;
-          }
 
-
-          // Container Width with Depth
-          container.style.fontSize = nodeFontSize;
-
-          // // 마감기한 / 헤더 스타일링
-          // title.innerHTML = `${targetData.deadline ? deadlineTime : ''}까지`;
-          // title.width = '200px';
-          // title.style.fontFamily = 'Ssurround';
-          // title.style.fontSize = nodeFontSize;
-
-          // 마인드맵 리뉴얼 작업 이전
-
-          // 설명 스타일링
-          // content.innerHTML = `${
-          //   targetData.desire
-          //   ? targetData.desire 
-          //   : targetData.explain 
-          //     ? Array.isArray(targetData.explain)
-          //       ? targetData.explain.join('\n')
-          //       : targetData.explain
-          //   : ''
-          // }`;
-          // content.style.fontFamily = 'SsurroundAir';
-          // content.style.fontSize = nodeFontSize;
-          // content.style.whiteSpace = 'pre-wrap';
-          // content.style.lineHeight = '150%';
-
-          // if(id && !targetData.isPrivate) {
-          //   if(targetData.deadline) {
-          //     container.appendChild(title);
-          //     container.appendChild(hr);
-          //   }
-          //   // container.appendChild(content);
-          // } else if (!id) {
-          //   if (targetData.deadline) {
-          //     container.appendChild(title);
-          //     container.appendChild(hr);
-          //   }
-          //   container.appendChild(content);
-          // }
 
           const node = {
             "data": {
               "id" : `${targetData.id}`,
               "parentId" : `${targetData.parentId}`,
-              // "label" : `${targetData.name}`,
+              "label" : `${id && targetData.isPrivate ? '( 비공개 )' : targetData.name}`,
               "type" : `${targetData.type}`,
               "explain" : `${targetData.explain}`,
               "deadline" : new Date(targetData.deadline.seconds * 1000),
@@ -1331,6 +1213,78 @@ const CytoscapeMindmap = ({userObj}) => {
               
           }
         }
+
+        // 선택되지 않은 노드들 흐리게 하기
+        function setDimStyle(target_cy, style) {
+          target_cy.nodes().forEach(function (target) {
+            target.style(style);
+          });
+          target_cy.edges().forEach(function (target) {
+            target.style(style);
+          })
+        }
+
+        function setFocus(target_element, successorColor, predecessorsColor, edgeWidth, arrowScale) {
+          target_element.style('background-color', nodeActiveColor);
+          target_element.style('color', nodeTextColor);
+
+          target_element.predecessors().each(function (e) {
+            if (e.isEdge()) {
+              e.style('width', edgeWidth);
+              e.style('arrow-scale', arrowScale);
+            }
+            e.style('color', nodeTextColor);
+            e.style('background-color', predecessorsColor);
+            e.style('line-color', predecessorsColor);
+            e.style('source-arrow-color', predecessorsColor);
+            setOpacityElement(e, 0.5);
+          })
+          
+          target_element.successors().each(function (e) {
+            if (e.isEdge()) {
+              e.style('width', edgeWidth);
+              e.style('arrow-scale', arrowScale);
+            }
+            e.style('color', nodeTextColor);
+            e.style('background-color', successorColor);
+            e.style('line-color', successorColor);
+            e.style('source-arrow-color', successorColor);
+            setOpacityElement(e, 0.5);
+          });
+
+          target_element.neighborhood().each(function (e) {
+            setOpacityElement(e, 1);
+          })
+
+          target_element.style('width', Math.max(parseFloat(target_element.style('width')), nodeActiveSize));
+          target_element.style('height', Math.max(parseFloat(target_element.style('height')), nodeActiveSize));
+          target_element.style('font-size', Math.max(parseFloat(target_element.style('font-size')), fontActiveSize));
+        }
+
+        function setOpacityElement(target_element, degree) {
+          target_element.style('opacity', degree);
+        }
+
+        function setResetFocus(target_cy) {
+
+          target_cy.nodes().forEach(function (target) {
+              target.style('background-color', nodeColor);
+              var rank = pageRank.rank(target);
+              target.style('width', nodeMaxSize * rank + nodeMinSize);
+              target.style('height', nodeMaxSize * rank + nodeMinSize);
+              target.style('font-size', fontMaxSize * rank + fontMinSize);
+              target.style('color', nodeTextColor);
+              target.style('opacity', 1);
+          });
+
+          target_cy.edges().forEach(function (target) {
+              target.style('line-color', edgeColor);
+              target.style('source-arrow-color', edgeColor);
+              target.style('width', edgeWidth);
+              target.style('arrow-scale', arrowScale);
+              target.style('opacity', 1);
+          });
+        }
     }
     
     useEffect(() => {
@@ -1352,7 +1306,7 @@ const CytoscapeMindmap = ({userObj}) => {
             <Title>
               {userData.displayName}님의 <Bold>청사진</Bold>  
             </Title>
-            <MindmapContainer id="cy" style={{width: '100%', height: '95vh'}}>
+            <MindmapContainer id="cy" style={{width: '100%', height: '90vh', top: '5vh', padding: '15px'}}>
             </MindmapContainer>
             {!id && <BtnBox>
               <DrawBtn id="draw-on">
