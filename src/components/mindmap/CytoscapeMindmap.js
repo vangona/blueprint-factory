@@ -867,7 +867,10 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: 'edge',
               "style": {
                 'width': 3,
-                'line-color': 'black'
+                'curve-style': 'bezier',
+                'line-color': '#ccc',
+                'source-arrow-color': '#ccc',
+                'source-arrow-shape': 'vee'
               }
           },
       
@@ -876,12 +879,10 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.longterm',
               style: {
                   'font-family': 'SsurroundAir',
-                  'font-size': '14px',
                   'background-color': 'white',
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'blue',
-                  "width": '100px',
                   // 'label': 'data(label)'
               }
           },
@@ -889,12 +890,10 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.shortterm',
               style: {
                   'font-family': 'SsurroundAir',
-                  'font-size': '14px',
                   'background-color': 'white',
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'red',
-                  "width": '100px',
                   // 'label': 'data(label)'
               }
           },
@@ -902,12 +901,10 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.plan',
               style: {
                   'font-family': 'SsurroundAir',
-                  'font-size': '14px',
                   'background-color': 'white',
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'skyblue',
-                  "width": '100px',
                   // 'label': 'data(label)'
               }
           },
@@ -915,12 +912,10 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.routine',
               style: {
                   'font-family': 'SsurroundAir',
-                  'font-size': '14px',
                   'background-color': 'white',
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'yellow',
-                  "width": '100px',
                   // 'label': 'data(label)'
               }
           },
@@ -941,12 +936,10 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.incomplete',
               style: {
                   'font-family': 'SsurroundAir',
-                  'font-size': '14px',
                   'background-color': 'white',
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'green',
-                  "width": '100px',
                   // 'label': 'data(label)'
               }
           },
@@ -954,12 +947,10 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.isComplished',
               style: {
                   'font-family': 'SsurroundAir',
-                  'font-size': '14px',
                   'background-color': 'lightgreen',
                   'border-width': '1px',
                   'border-style': 'solid',
                   'border-color': 'blue',
-                  "width": '100px',
                   // 'label': 'data(label)'
               }
           },
