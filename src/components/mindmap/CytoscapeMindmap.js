@@ -853,6 +853,7 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.shortterm',
               style: {
                   'border-color': 'blue',
+                  'shape': 'round-octagon'
                   // 'label': 'data(label)'
               }
           },
@@ -860,6 +861,7 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.plan',
               style: {
                   'border-color': 'skyblue',
+                  'shape': 'round-hexagon'
                   // 'label': 'data(label)'
               }
           },
@@ -867,6 +869,7 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.routine',
               style: {
                   'border-color': 'purple',
+                  'shape': 'round-diamond'
                   // 'label': 'data(label)'
               }
           },
@@ -883,6 +886,7 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: '.incomplete',
               style: {
                   'border-color': 'green',
+                  'shape': 'round-tag',
                   // 'label': 'data(label)'
               }
           },
@@ -901,7 +905,6 @@ const CytoscapeMindmap = ({userObj}) => {
               'font-family': 'SsurroundAir',
               'border-color': 'lightgreen',
               'background-color': 'lightgreen',
-              'shape': 'round-rectangle',
               // 'label': '(비공개)'
           }
       },
@@ -1055,7 +1058,6 @@ const CytoscapeMindmap = ({userObj}) => {
             }
           }
         })
-
 
         cy.on('tap', function(e) {
           setResetFocus(e.cy);
@@ -1239,7 +1241,7 @@ const CytoscapeMindmap = ({userObj}) => {
             e.style('source-arrow-color', predecessorsColor);
             setOpacityElement(e, 0.5);
           })
-          
+
           target_element.successors().each(function (e) {
             if (e.isEdge()) {
               e.style('width', edgeWidth);

@@ -127,9 +127,9 @@ const RoutineFactory = ({userObj, parent}) => {
         await dbService.collection('targets').doc(targetId).set({
             id: targetId,
             uid: userObj.uid,
-            name,
-            desire : explainData,
-            explain : desire,
+            name: explainData,
+            desire : desire,
+            explain : explainData,
             deadline,
             prize,
             needArr : [period, frequency, need],
