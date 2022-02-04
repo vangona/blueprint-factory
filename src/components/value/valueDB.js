@@ -11,3 +11,17 @@ export const words = {
     N_negative : ["낙천적", "단순", "낙관적인", "만족스러운", "느긋함", "침착함", "자기 확신", "안정적", "합리적"],
     etc : ["의존적인", "독립적인", "외로움 탐", "강력한", "독립심이 강한", "겸손한", "표현력 있는", "지도력 있는"]
 }
+
+export const db = [
+    ...words.O,
+    ...words.O_negative,
+    ...words.C,
+    ...words.C_negative,
+    ...words.E,
+    ...words.E_negative,
+    ...words.A,
+    ...words.A_negative,
+    ...words.N,
+    ...words.N_negative,
+    ...words.etc,
+]
