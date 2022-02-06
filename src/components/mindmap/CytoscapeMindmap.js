@@ -34,6 +34,7 @@ const Bold = styled.span`
 const MindmapContainer = styled.div``;
 
 const BtnBox = styled.div`
+  z-index: 999;
   display: flex;
   gap: 10px;
 `;
@@ -69,9 +70,9 @@ const CytoscapeMindmap = ({userObj}) => {
     }
 
     const removeTarget = async (ele) => {
-
-      if(ele.data().parentId !== 'new') {
-        await dbService.collection('targets').doc(`${ele.data().parentId}`).update({
+      if (window.confirm('정말 삭제하시겠어요?')) {
+        if(ele.data().parentId !== 'new') {
+          await dbService.collection('targets').doc(`${ele.data().parentId}`).update({
             childs: firebaseInstance.firestore.FieldValue.arrayRemove(`${ele.id()}`)
           })
           .then(async () => {
@@ -93,6 +94,7 @@ const CytoscapeMindmap = ({userObj}) => {
           console.log('delete');
         }
       }
+    }
 
     const complishTarget = async (ele) => {
       await dbService.collection('targets').doc(`${ele.id()}`).update({
@@ -147,17 +149,6 @@ const CytoscapeMindmap = ({userObj}) => {
                   navigate({
                     pathname: `/blueprint/targets/${ele.id()}`,
                   })
-                },
-                enabled: true,
-              },
-              {
-                fillColor: 'rgba(200, 200, 200, 0.75)',
-                content: '계획 세우기',
-                contentStyle: {}, 
-                select: function(ele){
-                    navigate({
-                        pathname: `/blueprint/plan/${ele.id()}`,
-                    })
                 },
                 enabled: true,
               },

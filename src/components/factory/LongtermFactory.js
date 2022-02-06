@@ -9,30 +9,40 @@ import BackgroundTopCloud from '../background/BackgroundTopCloud';
 import LongtermParent from './longterm/LongtermParent';
 import { RiArrowGoBackLine } from 'react-icons/ri';
 import { IoMdArrowRoundBack, IoMdArrowRoundForward } from 'react-icons/io';
+import { FaExchangeAlt } from "react-icons/fa";
 import LongtermName from './longterm/LongtermName';
 import BackgroundBottomCloud from '../background/BackgroundBottomCloud';
 import LongtermDesire from './longterm/LongtermDesire';
 import LongtermNeed from './longterm/LongtermNeed';
 import LongtermDeadline from './longterm/LongtermDeadline';
 import LongtermCheck from './longterm/LongtermCheck';
+import LongtermSimple from './longterm/LongtermSimple';
 
 const Container = styled.div`
     ${defaultContainer}
 `;
 
-const TargetTitle = styled.h1``;
-
-const TargetForm = styled.form``;
-
-const TargetBox = styled.div``;
-
-const TargetLabel = styled.label``;
-
-const TargetInput = styled.input``;
-
-const TargetBtn = styled.button``;
-
-const NeedBox = styled.div``;
+const SimpleBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    transform: scaleY(-1);
+    :hover {
+        cursor: pointer;
+    }
+    :active {
+        transform: scaleY(-1) scale(0.98);
+    }
+`;
 
 const ReturnBtn = styled.button`
     display: flex;
@@ -94,15 +104,13 @@ const SubmitBtn = styled.input`
 
 const LongtermFactory = ({userObj, parent}) => {
     const navigate = useNavigate();
-    const {id} = useParams();
     const [page, setPage] = useState(1);
-    const { handleSubmit } = useForm();
-    const [target, setTarget] = useState('');
+    
+    const [isSimple, setIsSimple] = useState(false);
     const [name, setName] = useState('');
     const [desire, setDesire] = useState('');
     const [explain, setExplain] = useState('');
     const [deadline, setDeadline] = useState('');
-    const [prize, setPrize] = useState(''); 
     const [need, setNeed] = useState('');
     const [needArr, setNeedArr] = useState([]);
     const [isPrivate, setIsPrivate] = useState(false);
@@ -124,7 +132,7 @@ const LongtermFactory = ({userObj, parent}) => {
                 desire,
                 explain,
                 deadline : deadline ? new Date(deadline) : '',
-                prize,
+                prize : '',
                 needArr,
                 createdAt: Date.now(),
                 modifiedAt: 0,
@@ -151,7 +159,7 @@ const LongtermFactory = ({userObj, parent}) => {
                 desire,
                 explain,
                 deadline : deadline ? new Date(deadline) : '',
-                prize,
+                prize : '',
                 needArr,
                 createdAt: Date.now(),
                 modifiedAt: 0,
@@ -217,30 +225,7 @@ const LongtermFactory = ({userObj, parent}) => {
     }
     
 
-    const onChange = (e) => {
-        const inputName = e.target.id;
-        if (inputName === 'targetName') {
-            setName(e.target.value);
-        }
-        if (inputName === 'targetDesire') {
-            setDesire(e.target.value);
-        }
-        if (inputName === 'targetExplain') {
-            setExplain(e.target.value);
-        }
-        if (inputName === 'targetDeadline') {
-            setDeadline(e.target.value);
-        }
-        if (inputName === 'targetPrize') {
-            setPrize(e.target.value);
-        }
-        if (inputName === 'targetNeed') {
-            setNeed(e.target.value);
-        }
-    }
-
     const onClickPlus = value => {
-        console.log(value);
         if (value !== '') {
             let needArray = [...needArr];
             needArray.push(value);
@@ -305,59 +290,38 @@ const LongtermFactory = ({userObj, parent}) => {
 
     return (
         <Container>
-            {page === 1 && <BackgroundTopCloud />}
-            {page > 1 && <BackgroundBottomCloud />}
-            {page === 1 && <LongtermParent parent={parent} /> }
-            {page === 2 && <LongtermName parent={parent} target={name} getTarget={getName} /> }
-            {page === 3 && <LongtermDesire getDesire={getDesire} desire={desire} target={name} /> }
-            {page === 4 && <LongtermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={name} />}
-            {page === 5 && <LongtermDeadline getDeadline={getDeadline} deadline={deadline} target={name} />}
-            {page === 6 && <LongtermCheck getExplain={getExplain} explain={explain} name={name} desire={desire} needArr={needArr} deadline={deadline} getIsPrivate={getIsPrivate} isPrivate={isPrivate} target={target} />}
-
-            <TargetForm onSubmit={handleSubmit(onSubmit)}>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetName'>장기 목표 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={name} id='targetName' type="text" required/>
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetDesire'>목표의 이유 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={desire} id='targetDesire' type="text" />
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetExplain'>목표 설명 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={explain} id='targetExplain' type="text" />
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetDeadline'>기한 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={deadline} id='targetDeadline' type="date" required/>
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetPrize'>달성 시 보상 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={prize} id='targetPrize' type="text" required/>
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetNeed'>필요한 것들 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={need} id="targetNeed" type="text"/>
-                    <TargetBtn onClick={onClickPlus}>추가하기</TargetBtn>
-                </TargetBox>
-                {needArr && needArr.map((el, index) => (
-                        <NeedBox key={index}>{el}</NeedBox>
-                    ))}
-                <TargetInput type="submit" />
-            </TargetForm>
+            <SimpleBtn onClick={() => setIsSimple(!isSimple)}>
+                <FaExchangeAlt />
+            </SimpleBtn>
             <ReturnBtn onClick={onClickReturn} >
                 <RiArrowGoBackLine />
             </ReturnBtn>
-            {page !== 1 && <PageBtn onClick={onClickPrev} style={{left: "20px"}}>
-                <IoMdArrowRoundBack style={{fill: "white"}} />
-            </PageBtn>}
-            {page !== 6 && <PageBtn onClick={onClickNext}>
-                <IoMdArrowRoundForward style={{fill: "white"}} />
-            </PageBtn>}
-            {page === 6 && 
-                <SubmitBtn type="submit" onClick={() => {
-                    window.confirm(`${name} 목표가 마음에 드시나요?`) && onSubmit()}
-                } value="제출하기" />
+            {isSimple 
+            ? 
+                <LongtermSimple name={name} getName={getName} desire={desire} getDesire={getDesire} explain={explain} getExplain={getExplain} deadline={deadline} getDeadline={getDeadline} need={need} getNeed={getNeed} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} isPrivate={isPrivate} getIsPrivate={getIsPrivate} onSubmit={onSubmit} />
+            :             
+                <>
+                    {page === 1 && <BackgroundTopCloud />}
+                    {page > 1 && <BackgroundBottomCloud />}
+                    {page === 1 && <LongtermParent parent={parent} /> }
+                    {page === 2 && <LongtermName parent={parent} target={name} getTarget={getName} /> }
+                    {page === 3 && <LongtermDesire getDesire={getDesire} desire={desire} target={name} /> }
+                    {page === 4 && <LongtermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={name} />}
+                    {page === 5 && <LongtermDeadline getDeadline={getDeadline} deadline={deadline} target={name} />}
+                    {page === 6 && <LongtermCheck getExplain={getExplain} explain={explain} name={name} desire={desire} needArr={needArr} deadline={deadline} getIsPrivate={getIsPrivate} isPrivate={isPrivate} />}
+
+                    {page !== 1 && <PageBtn onClick={onClickPrev} style={{left: "20px"}}>
+                        <IoMdArrowRoundBack style={{fill: "white"}} />
+                    </PageBtn>}
+                    {page !== 6 && <PageBtn onClick={onClickNext}>
+                        <IoMdArrowRoundForward style={{fill: "white"}} />
+                    </PageBtn>}
+                    {page === 6 && 
+                        <SubmitBtn type="submit" onClick={() => {
+                            window.confirm(`${name} 목표가 마음에 드시나요?`) && onSubmit()}
+                        } value="제출하기" />
+                    }
+                </>
             }
         </Container>
     );

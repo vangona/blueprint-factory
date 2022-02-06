@@ -15,6 +15,7 @@ import ShorttermDigit from './shortterm/ShorttermDigit';
 import ShorttermDeadline from './shortterm/ShorttermDeadline';
 import ShorttermNeed from './shortterm/ShorttermNeed';
 import ShorttermCheck from './shortterm/ShorttermCheck';
+import { FaExchangeAlt } from 'react-icons/fa';
 
 const Container = styled.div`
     ${defaultContainer}
@@ -33,6 +34,28 @@ const TargetInput = styled.input``;
 const TargetBtn = styled.button``;
 
 const NeedBox = styled.div``;
+
+const SimpleBtn = styled.button`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border: none;
+    font-size: 30px;
+    transform: scaleY(-1);
+    :hover {
+        cursor: pointer;
+    }
+    :active {
+        transform: scaleY(-1) scale(0.98);
+    }
+`;
 
 const ReturnBtn = styled.button`
     display: flex;
@@ -94,7 +117,8 @@ const SubmitBtn = styled.input`
 
 const ShorttermFactory = ({userObj, parent}) => {
     const navigate = useNavigate();
-    const {id} = useParams();
+    const [isSimple, setIsSimple] = useState(false);
+
     const { handleSubmit } = useForm();
     const [page, setPage] = useState(1);
     const [name, setName] = useState('');
@@ -305,6 +329,9 @@ const ShorttermFactory = ({userObj, parent}) => {
 
     return (
         <Container>
+            <SimpleBtn onClick={() => setIsSimple(!isSimple)}>
+                <FaExchangeAlt />
+            </SimpleBtn>
             {page === 1 && 
                 <ShorttermParent userObj={userObj} parent={parent} />
             }
@@ -326,7 +353,6 @@ const ShorttermFactory = ({userObj, parent}) => {
             {page === 6 && 
                 <ShorttermCheck getExplain={getExplain} explain={explain} name={name} needArr={needArr} deadline={deadline} target={target} getIsPrivate={getIsPrivate} isPrivate={isPrivate} />
             }
-
 
             <TargetForm display="none" onSubmit={handleSubmit(onSubmit)}>
                 <TargetBox>
