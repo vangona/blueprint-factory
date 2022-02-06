@@ -54,16 +54,16 @@ const CheckBox = styled.input``;
 
 const Label = styled.label``;
 
-const ShorttermSimple = ({name, getName, desire, getDesire, explain, getExplain, deadline, getDeadline, need, getNeed, needArr, onClickPlus, onClickDelete, isPrivate, getIsPrivate, onSubmit}) => {
+const ShorttermSimple = ({target, getTarget, name, getName, explain, getExplain, deadline, getDeadline, need, getNeed, needArr, onClickPlus, onClickDelete, isPrivate, getIsPrivate, onSubmit}) => {
     const { handleSubmit } = useForm();
 
     const onChange = (e) => {
         const inputName = e.target.id;
+        if (inputName === 'target') {
+            getTarget(e.target.value);
+        }
         if (inputName === 'targetName') {
             getName(e.target.value);
-        }
-        if (inputName === 'targetDesire') {
-            getDesire(e.target.value);
         }
         if (inputName === 'targetExplain') {
             getExplain(e.target.value);
@@ -88,12 +88,12 @@ const ShorttermSimple = ({name, getName, desire, getDesire, explain, getExplain,
                         어떤 목표를 만들어볼까요?
                     </TargetTitle>
                     <TargetBox>
-                        <TargetLabel htmlFor='targetName'>장기 목표 : </TargetLabel>
-                        <TargetInput onChange={onChange} value={name} id='targetName' type="text" required/>
+                        <TargetLabel htmlFor='target'>단기 목표 : </TargetLabel>
+                        <TargetInput onChange={onChange} value={target} id='target' type="text" required/>
                     </TargetBox>
                     <TargetBox>
-                        <TargetLabel htmlFor='targetDesire'>목표의 이유 : </TargetLabel>
-                        <TargetInput onChange={onChange} value={desire} id='targetDesire' type="text" />
+                        <TargetLabel htmlFor='targetName'>수치화된 목표 : </TargetLabel>
+                        <TargetInput onChange={onChange} value={name} id='targetName' type="text" />
                     </TargetBox>
                     <TargetBox>
                         <TargetLabel htmlFor='targetDeadline'>기한 : </TargetLabel>
@@ -106,10 +106,10 @@ const ShorttermSimple = ({name, getName, desire, getDesire, explain, getExplain,
                             e.preventDefault();
                             onClickPlus(need)}
                         }>
-                                추가하기
+                            추가하기
                         </TargetBtn>
                     </TargetBox>
-                    {needArr && needArr.map((el, index) => (
+                        {needArr && needArr.map((el, index) => (
                             <NeedBox key={index} id={index}>
                                 {el} 
                                 <DeleteBtn onClick={(e) => {
@@ -119,7 +119,7 @@ const ShorttermSimple = ({name, getName, desire, getDesire, explain, getExplain,
                                     ❌
                                 </DeleteBtn>
                             </NeedBox>
-                    ))}
+                        ))}
                     <TargetBox>
                         <TargetLabel htmlFor='targetExplain'>목표 설명 : </TargetLabel>
                         <TargetTeatArea onChange={onChange} value={explain} id='targetExplain' type="text" />

@@ -16,6 +16,7 @@ import ShorttermDeadline from './shortterm/ShorttermDeadline';
 import ShorttermNeed from './shortterm/ShorttermNeed';
 import ShorttermCheck from './shortterm/ShorttermCheck';
 import { FaExchangeAlt } from 'react-icons/fa';
+import ShorttermSimple from './shortterm/ShorttermSimple';
 
 const Container = styled.div`
     ${defaultContainer}
@@ -263,7 +264,6 @@ const ShorttermFactory = ({userObj, parent}) => {
     }
 
     const onClickPlus = e => {
-        e.preventDefault();
         if (need !== '') {
             let needArray = [...needArr];
             needArray.push(need);
@@ -332,73 +332,47 @@ const ShorttermFactory = ({userObj, parent}) => {
             <SimpleBtn onClick={() => setIsSimple(!isSimple)}>
                 <FaExchangeAlt />
             </SimpleBtn>
-            {page === 1 && 
-                <ShorttermParent userObj={userObj} parent={parent} />
-            }
-            {page > 1 && 
-                <ShorttermBackground userObj={userObj} />
-            }
-            {page === 2 && 
-                <ShorttermName target={target} getTarget={getTarget} /> 
-            }
-            {page === 3 && 
-                <ShorttermDigit getDigit={getDigit} digit={name} target={target} />
-            }
-            {page === 4 && 
-                <ShorttermDeadline getDeadline={getDeadline} deadline={deadline} target={name} /> 
-            }
-            {page === 5 && 
-                <ShorttermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={target} />
-            }
-            {page === 6 && 
-                <ShorttermCheck getExplain={getExplain} explain={explain} name={name} needArr={needArr} deadline={deadline} target={target} getIsPrivate={getIsPrivate} isPrivate={isPrivate} />
-            }
-
-            <TargetForm display="none" onSubmit={handleSubmit(onSubmit)}>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetName'>단기 목표 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={name} id='targetName' type="text" required/>
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetDesire'>목표의 이유 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={desire} id='targetDesire' type="text" />
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetExplain'>목표 설명 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={explain} id='targetExplain' type="text" />
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetDeadline'>기한 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={deadline} id='targetDeadline' type="date" required/>
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetPrize'>달성 시 보상 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={prize} id='targetPrize' type="text" required/>
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetNeed'>필요한 것들 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={need} id="targetNeed" type="text"/>
-                    <TargetBtn onClick={onClickPlus}>추가하기</TargetBtn>
-                </TargetBox>
-                {needArr && needArr.map((el, index) => (
-                        <NeedBox key={index}>{el}</NeedBox>
-                    ))}
-                <TargetInput type="submit" />
-            </TargetForm>
-            
             <ReturnBtn onClick={onClickReturn} >
                 <RiArrowGoBackLine />
             </ReturnBtn>
-            {page !== 1 && <PageBtn onClick={onClickPrev} style={{left: "20px"}}>
-                <IoMdArrowRoundBack style={{fill: "white"}} />
-            </PageBtn>}
-            <PageBtn onClick={onClickNext}>
-                <IoMdArrowRoundForward style={{fill: "white"}} />
-            </PageBtn>
-            {page === 6 && 
-                <SubmitBtn type="submit" onClick={() => {
-                    window.confirm(`${name} 목표가 마음에 드시나요?`) && onSubmit()}
-                } value="제출하기" />
+
+            {isSimple 
+            ? <ShorttermSimple target={target} getTarget={getTarget} name={name} getName={getDigit} desire={desire} getDesire={getExplain} explain={explain} getExplain={getExplain} deadline={deadline} getDeadline={getDeadline} need={need} getNeed={getNeed} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} isPrivate={isPrivate} getIsPrivate={getIsPrivate} onSubmit={onSubmit} />
+            : <>
+                {page === 1 && 
+                <ShorttermParent userObj={userObj} parent={parent} />
+                }
+                {page > 1 && 
+                    <ShorttermBackground userObj={userObj} />
+                }
+                {page === 2 && 
+                    <ShorttermName target={target} getTarget={getTarget} /> 
+                }
+                {page === 3 && 
+                    <ShorttermDigit getDigit={getDigit} digit={name} target={target} />
+                }
+                {page === 4 && 
+                    <ShorttermDeadline getDeadline={getDeadline} deadline={deadline} target={name} /> 
+                }
+                {page === 5 && 
+                    <ShorttermNeed getNeed={getNeed} need={need} needArr={needArr} onClickPlus={onClickPlus} onClickDelete={onClickDelete} target={target} />
+                }
+                {page === 6 && 
+                    <ShorttermCheck getExplain={getExplain} explain={explain} name={name} needArr={needArr} deadline={deadline} target={target} getIsPrivate={getIsPrivate} isPrivate={isPrivate} />
+                }
+
+                {page !== 1 && <PageBtn onClick={onClickPrev} style={{left: "20px"}}>
+                    <IoMdArrowRoundBack style={{fill: "white"}} />
+                </PageBtn>}
+                <PageBtn onClick={onClickNext}>
+                    <IoMdArrowRoundForward style={{fill: "white"}} />
+                </PageBtn>
+                {page === 6 && 
+                    <SubmitBtn type="submit" onClick={() => {
+                        window.confirm(`${name} 목표가 마음에 드시나요?`) && onSubmit()}
+                    } value="제출하기" />
+                }
+            </>
             }
         </Container>
     );
