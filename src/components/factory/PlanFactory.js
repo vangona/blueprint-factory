@@ -19,34 +19,6 @@ const Container = styled.div`
     ${defaultContainer}
 `;
 
-const TargetTitle = styled.h1``;
-
-const TargetForm = styled.form``;
-
-const TargetBox = styled.div``;
-
-const TargetLabel = styled.label``;
-
-const TargetInput = styled.input``;
-
-const TargetBtn = styled.button``;
-
-const ArrayContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin: 5px;
-`;
-
-const ArrayBox = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const ArrayElement = styled.div``;
-
-const DeleteBtn = styled.button``;
-
 const ReturnBtn = styled.button`
     display: flex;
     justify-content: center;
@@ -368,59 +340,7 @@ const PlanFactory = ({userObj, parent}) => {
                 <PlanCheck explainArr={explainArr} needArr={needArr} deadlineArr={deadlineArr} target={name} isPrivate={isPrivate} getIsPrivate={getIsPrivate} />            
             }
 
-            <TargetForm display="none" onSubmit={handleSubmit(onSubmit)}>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetName'>계획이름 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={name} id='targetName' type="text" required/>
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetDesire'>계획의 이유 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={desire} id='targetDesire' type="text" />
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetExplain'>단계 나누기 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={explain} id='targetExplain' type="text" />
-                    <TargetBtn onClick={onClickStep}>추가하기</TargetBtn>
-                </TargetBox>
-                <ArrayContainer id="explain__container">
-                {explainArr && explainArr.map((el, index) => 
-                    <ArrayBox key={index}>
-                        <ArrayElement name={el}>
-                            {index + 1} : {el}
-                        </ArrayElement>
-                        <DeleteBtn onClick={onClickDeleteStep}>
-                            X
-                        </DeleteBtn>
-                    </ArrayBox>
-                )}
-                </ArrayContainer>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetDeadline'>기한 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={deadline} id='targetDeadline' type="date" required/>
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetPrize'>달성 시 보상 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={prize} id='targetPrize' type="text" required/>
-                </TargetBox>
-                <TargetBox>
-                    <TargetLabel htmlFor='targetNeed'>필요한 것들 : </TargetLabel>
-                    <TargetInput onChange={onChange} value={need} id="targetNeed" type="text"/>
-                    <TargetBtn onClick={onClickPlus}>추가하기</TargetBtn>
-                </TargetBox>
-                <ArrayContainer id="need__container">
-                {needArr && needArr.map((el, index) => 
-                    <ArrayBox key={index}>
-                        <ArrayElement name={el}>
-                            {index + 1} : {el}
-                        </ArrayElement>
-                        <DeleteBtn onClick={onClickDeleteNeed}>
-                            X
-                        </DeleteBtn>
-                    </ArrayBox>
-                )}
-                </ArrayContainer>
-                <TargetInput type="submit" />
-            </TargetForm>
+
 
             <ReturnBtn onClick={onClickReturn} >
                 <RiArrowGoBackLine />

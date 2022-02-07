@@ -49,12 +49,15 @@ const DrawBtn = styled.button`
   ${defaultBtnAction};
 `
 
+const DataContainer = styled.div``;
+
 const CytoscapeMindmap = ({userObj}) => {
     const navigate = useNavigate();
     const {id} = useParams();
     const [userData, setUserData] = useState('');
     const [snapshot, setSnapshot] = useState('');
     const [dataForRank, setDataForRank] = useState('');
+    const [currentData, setCurrentData] = useState('');
     let cyRef = useRef();
 
     cytoscape.use( dagre );
@@ -1053,6 +1056,8 @@ const CytoscapeMindmap = ({userObj}) => {
         cy.on('tap', function(e) {
           setResetFocus(e.cy);
 
+          setCurrentData(e.target.data())
+
           e.target.isNode && e.target.isNode() && setDimStyle(cy, {
             'background-color' : dimColor,
             'line-color'  : dimColor,
@@ -1309,6 +1314,11 @@ const CytoscapeMindmap = ({userObj}) => {
                   선 조정 off
               </DrawBtn>
             </BtnBox>}
+            {currentData && 
+              <DataContainer>
+                {currentData.label}
+              </DataContainer>
+            }
         </Container>
     );
 };
