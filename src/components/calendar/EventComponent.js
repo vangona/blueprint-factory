@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { defaultContainer, defaultShadow } from '../../css/styleConstants';
 
@@ -33,6 +33,8 @@ const Selection = styled.div`
     ${defaultShadow};
 `;
 
+const SelectionDetailContainer = styled.div``;
+
 const Name = styled.h1`
     color: var(--main-blue);
     font-family: Ssurround;
@@ -44,17 +46,21 @@ const Explain = styled.div`
 `;
 
 const EventComponent = ({selected}) => {
+    const [seletedData, setSelectedData] = useState('');
 
     return (
         <Container>
             <SelectionContainer>
             {selected && selected.map((el, index) => (
-                <Selection key={index}>
+                <Selection key={index} onClick={(e) => setSelectedData(el)}>
                     <Name>{el.name}</Name>
                     <Explain>{Array.isArray(el.explain) ? '계획 완료날' : el.explain}</Explain>
                 </Selection>
             ))}
             </SelectionContainer>
+            <SelectionDetailContainer>
+                {seletedData.name}
+            </SelectionDetailContainer>
         </Container>
     );
 };
