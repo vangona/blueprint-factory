@@ -816,10 +816,10 @@ const CytoscapeMindmap = ({userObj}) => {
               'border-width': '1px',
               'border-style': 'solid',
               'label': 'data(label)',
-              'font-size': (ele) => {        
-                const fontSize = `${fontMaxSize * pageRank.rank('#' + ele.id()) + fontMinSize}px`;
-                return fontSize;
-              },
+              // 'font-size': (ele) => {        
+              //   const fontSize = `${fontMaxSize * pageRank.rank('#' + ele.id()) + fontMinSize}px`;
+              //   return fontSize;
+              // },
             }
           },
 
@@ -975,7 +975,7 @@ const CytoscapeMindmap = ({userObj}) => {
   
           snapshot.forEach(targetData => {
             makeEdge(targetData);
-          })  
+          })
         } else {
           let initNode;
 
@@ -1056,7 +1056,9 @@ const CytoscapeMindmap = ({userObj}) => {
         cy.on('tap', function(e) {
           setResetFocus(e.cy);
 
-          setCurrentData(e.target.data())
+          setCurrentData(e.target.data());
+
+          if(e.target.isNode) console.log(e.target.data());
 
           e.target.isNode && e.target.isNode() && setDimStyle(cy, {
             'background-color' : dimColor,
@@ -1122,12 +1124,12 @@ const CytoscapeMindmap = ({userObj}) => {
                 await dbService.collection("targets")
                 .doc(`${targetNode.id()}`)
                 .update({
-                    parentId: firebaseInstance.firestore.FieldValue.arrayUnion(sourceNode.id())
+                    parentId: firebaseInstance.firestore.FieldValue.arrayUnion(targetNode.id())
                 }).then(async () => {
                     await dbService.collection('targets')
                     .doc(`${sourceNode.id()}`)
                     .update({
-                        childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetNode.id())
+                        childs: firebaseInstance.firestore.FieldValue.arrayUnion(sourceNode.id())
                     }).then(() => {
                         console.log('success');
                     }).catch(error => {
@@ -1170,23 +1172,31 @@ const CytoscapeMindmap = ({userObj}) => {
           container.style.textAlign = 'center';
           container.style.wordBreak = 'keep-all';
 
+          targetData.parentId.forEach((parentId, index) => {
+            let filtered = parentId;
+            if (targetData.type === 'shortterm' || targetData.type === 'longterm') {
+              filtered = '';
+            }
+ 
+            const node = {
+              "data": {
+                "id" : `${index === 0 ? targetData.id : targetData.id + '_' + index}`,
+                "parent" : `${filtered}`,
+                "parentId" : `${targetData.parentId}`,
+                "label" : `${id && targetData.isPrivate ? '( 비공개 )' : targetData.name}`,
+                "type" : `${targetData.type}`,
+                "explain" : `${targetData.explain}`,
+                "deadline" : new Date(targetData.deadline.seconds * 1000),
+                "isComplete" : targetData.isComplete,
+                "isComplished" : targetData.isComplished,
+                "isPrivate" : targetData.isPrivate,
+                'dom': container,
+              },
+            } 
+  
+            cy.add(node)
+          })
 
-          const node = {
-            "data": {
-              "id" : `${targetData.id}`,
-              "parentId" : `${targetData.parentId}`,
-              "label" : `${id && targetData.isPrivate ? '( 비공개 )' : targetData.name}`,
-              "type" : `${targetData.type}`,
-              "explain" : `${targetData.explain}`,
-              "deadline" : new Date(targetData.deadline.seconds * 1000),
-              "isComplete" : targetData.isComplete,
-              "isComplished" : targetData.isComplished,
-              "isPrivate" : targetData.isPrivate,
-              'dom': container,
-            },
-          } 
-
-          cy.add(node)
         }
         
         // 선 만들기
