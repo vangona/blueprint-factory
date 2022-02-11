@@ -698,32 +698,35 @@ const CytoscapeMindmap = ({userObj}) => {
     const getDataForRank = (snapshot) => {
       let node = [];
       let edge = [];
+      
       snapshot.forEach(el => {
 
-        const nodeData = {
-          "data": {
-            "id" : `${el.id}`,
-            "parentId" : `${el.parentId}`,
-            // "label" : `${el.name}`,
-            "type" : `${el.type}`,
-            "explain" : `${el.explain}`,
-            "deadline" : new Date(el.deadline.seconds * 1000),
-            "isComplete" : el.isComplete,
-            "isComplished" : el.isComplished,
-            "isPrivate" : el.isPrivate,
-          },
-        }
-        node.push(nodeData);
-
-        el.childs.forEach(child => {
-          const originEdge = { 
-            "data" : {
-              "id" : `${el.id}->${child}`,
-              "source" : `${child}`,
-              "target" : `${el.id}`
-            }
+        el.parentId.forEach((parentId, index) => {
+          const nodeData = {
+            "data": {
+              "id" : `${index === 0 ? el.id : el.id + '_' + index}`,
+              "parentId" : `${el.parentId}`,
+              // "label" : `${el.name}`,
+              "type" : `${el.type}`,
+              "explain" : `${el.explain}`,
+              "deadline" : new Date(el.deadline.seconds * 1000),
+              "isComplete" : el.isComplete,
+              "isComplished" : el.isComplished,
+              "isPrivate" : el.isPrivate,
+            },
           }
-          edge.push(originEdge);
+          node.push(nodeData);
+  
+          el.childs.forEach(child => {
+            const originEdge = { 
+              "data" : {
+                "id" : `${el.id}->${child}`,
+                "source" : `${child}`,
+                "target" : `${el.id}`
+              }
+            }
+            edge.push(originEdge);
+          })
         })
       })
 
@@ -973,7 +976,7 @@ const CytoscapeMindmap = ({userObj}) => {
             makeNode(targetData);
           })
   
-          snapshot.forEach(targetData => {
+          snapshot.filter(targetData => targetData.type === 'longterm' || targetData.type === 'shortterm').forEach(targetData => {
             makeEdge(targetData);
           })
         } else {
@@ -1172,16 +1175,10 @@ const CytoscapeMindmap = ({userObj}) => {
           container.style.textAlign = 'center';
           container.style.wordBreak = 'keep-all';
 
-          targetData.parentId.forEach((parentId, index) => {
-            let filtered = parentId;
-            if (targetData.type === 'shortterm' || targetData.type === 'longterm') {
-              filtered = '';
-            }
- 
+          if (targetData.type === 'shortterm' || targetData.type === 'longterm') {
             const node = {
               "data": {
-                "id" : `${index === 0 ? targetData.id : targetData.id + '_' + index}`,
-                "parent" : `${filtered}`,
+                "id" : `${targetData.id}`,
                 "parentId" : `${targetData.parentId}`,
                 "label" : `${id && targetData.isPrivate ? '( 비공개 )' : targetData.name}`,
                 "type" : `${targetData.type}`,
@@ -1195,8 +1192,29 @@ const CytoscapeMindmap = ({userObj}) => {
             } 
   
             cy.add(node)
-          })
+          } else {
+            targetData.parentId.forEach((parentId, index) => {
+              const node = {
+                "data": {
+                  "id" : `${index === 0 ? targetData.id : targetData.id + '_' + index}`,
+                  "parent" : `${parentId}`,
+                  "parentId" : `${parentId}`,
+                  "label" : `${id && targetData.isPrivate ? '( 비공개 )' : targetData.name}`,
+                  "type" : `${targetData.type}`,
+                  "explain" : `${targetData.explain}`,
+                  "deadline" : new Date(targetData.deadline.seconds * 1000),
+                  "isComplete" : targetData.isComplete,
+                  "isComplished" : targetData.isComplished,
+                  "isPrivate" : targetData.isPrivate,
+                  'dom': container,
+                },
+              } 
+    
+              if (node.data.id === "58f3d252-8f82-4649-8b20-77e29c9b23b9") console.log(node.data.parent);
 
+              cy.add(node)
+            })
+          }
         }
         
         // 선 만들기
