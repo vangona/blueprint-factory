@@ -972,13 +972,8 @@ const CytoscapeMindmap = ({userObj}) => {
         cy.domNode();
 
         if(snapshot.length !== 0) {
-          snapshot.forEach(targetData => {
-            makeNode(targetData);
-          })
-  
-          snapshot.filter(targetData => targetData.type === 'longterm' || targetData.type === 'shortterm').forEach(targetData => {
-            makeEdge(targetData);
-          })
+          makeNode(snapshot);
+          makeEdge(snapshot);
         } else {
           let initNode;
 
@@ -1147,58 +1142,56 @@ const CytoscapeMindmap = ({userObj}) => {
 
 
         // 노드 만들기
-        function makeNode(targetData) {
-          const nodeSize = `${nodeMaxSize * pageRank.rank('#' + targetData.id) + nodeMinSize}px`;
+        function makeNode(snapshot) {
+          let visited = new Array(snapshot.length);
 
-          // 변수 선언
-          const container = document.createElement('div');
-          const title = document.createElement('h1');
-          const hr = document.createElement('hr');
-
-          // 시간 문자열 만들기
-          let deadlineTime = ''
-          if (targetData.deadline) {
-            const Time = new Date(targetData.deadline.seconds * 1000);
-            const Year = Time.getFullYear();
-            const Month = Time.getMonth() + 1;
-            const DateTime = Time.getDate();
-            const remainTime = Time - Date.now();
-            deadlineTime = `${Year}-${Month > 9 ? Month : '0' + Month}-${DateTime > 9 ? DateTime : '0' + DateTime}`;
+          // 서브 노드 그리기
+          for (let i = 0; i < snapshot.length; i++) {
+            if(visited[i]) continue;
+            dfs(i);
           }
 
-          // 컨테이너 스타일링
-          container.style.userSelect = 'none';
-          container.style.width = nodeSize;
-          container.style.height = nodeSize;
+          // 최상위 노드 그리기
+          for (let i = 0; i < snapshot.length; i++) {
+            if(visited[i]) continue;
+            paintNode(snapshot[i], 'new');
+          }
 
-          container.style.fontFamily = 'SsurroundAir'
-          container.style.textAlign = 'center';
-          container.style.wordBreak = 'keep-all';
+          function dfs(index) {
+            const parent = snapshot[index].id;
 
-          if (targetData.type === 'shortterm' || targetData.type === 'longterm') {
-            const node = {
-              "data": {
-                "id" : `${targetData.id}`,
-                "parentId" : `${targetData.parentId}`,
-                "label" : `${id && targetData.isPrivate ? '( 비공개 )' : targetData.name}`,
-                "type" : `${targetData.type}`,
-                "explain" : `${targetData.explain}`,
-                "deadline" : new Date(targetData.deadline.seconds * 1000),
-                "isComplete" : targetData.isComplete,
-                "isComplished" : targetData.isComplished,
-                "isPrivate" : targetData.isPrivate,
-                'dom': container,
-              },
-            } 
+            for (let i = 0; i < snapshot[index].childs.length; i++) {
+              let childIndex;
+              for (let j = 0; j < snapshot.length; j++) {
+                if(snapshot[j].id === snapshot[index].childs[i]) childIndex = j;
+              }
+              if (visited[childIndex]) continue;
+              paintNode(snapshot[childIndex], parent);
+              visited[childIndex] = true;  
+              dfs(childIndex);
+            }
+          }
+
+          function paintNode(targetData, parent) {
+            // 변수 선언
+            const container = document.createElement('div');
+            const nodeSize = `${nodeMaxSize * pageRank.rank('#' + targetData.id) + nodeMinSize}px`;
+
+            // 컨테이너 스타일링
+            container.style.userSelect = 'none';
+            container.style.width = nodeSize;
+            container.style.height = nodeSize;
   
-            cy.add(node)
-          } else {
-            targetData.parentId.forEach((parentId, index) => {
+            container.style.fontFamily = 'SsurroundAir'
+            container.style.textAlign = 'center';
+            container.style.wordBreak = 'keep-all';
+  
+            if (targetData.type === 'shortterm' || targetData.type === 'longterm') {
               const node = {
                 "data": {
-                  "id" : `${index === 0 ? targetData.id : targetData.id + '_' + index}`,
-                  "parent" : `${parentId}`,
-                  "parentId" : `${parentId}`,
+                  "id" : `${targetData.id}`,
+                  "parentId" : `${parent}`,
+                  "childs": targetData.childs,
                   "label" : `${id && targetData.isPrivate ? '( 비공개 )' : targetData.name}`,
                   "type" : `${targetData.type}`,
                   "explain" : `${targetData.explain}`,
@@ -1210,33 +1203,75 @@ const CytoscapeMindmap = ({userObj}) => {
                 },
               } 
     
-              if (node.data.id === "58f3d252-8f82-4649-8b20-77e29c9b23b9") console.log(node.data.parent);
-
               cy.add(node)
-            })
+            } else {
+                const node = {
+                  "data": {
+                    "id" : `${targetData.id}`,
+                    "parent" : `${parent}`,
+                    "parentId" : `${parent}`,
+                    "childs": targetData.childs,
+                    "label" : `${id && targetData.isPrivate ? '( 비공개 )' : targetData.name}`,
+                    "type" : `${targetData.type}`,
+                    "explain" : `${targetData.explain}`,
+                    "deadline" : new Date(targetData.deadline.seconds * 1000),
+                    "isComplete" : targetData.isComplete,
+                    "isComplished" : targetData.isComplished,
+                    "isPrivate" : targetData.isPrivate,
+                    'dom': container,
+                  },
+                } 
+  
+                cy.add(node);
+            }
           }
         }
+
+
         
         // 선 만들기
-        function makeEdge(targetData) {
-          const dataArr = targetData.childs.map(child => {
-            const childData = {
-                "data": {
-                    "id" : `${targetData.id}->${child}`,
-                    "source" : `${targetData.id}`,
-                    "target" : `${child}`
-                }
-            }   
-            return childData;
-          })
-        
-          for(let i = 0; i < dataArr.length; i++) {
-            try {
-              cy.add(dataArr[i]);
-            } catch (error) {
-              console.log(error);
+        function makeEdge(snapshot) {
+          let visited = new Array(snapshot.length);
+
+          // 간선 그리기
+          for (let i = 0; i < snapshot.length; i++) {
+            if(visited[i]) continue;
+            dfs(i);
+          }
+
+          function dfs(index) {
+            const parent = snapshot[index];
+            if (parent.type !== 'longterm' && parent.type !== 'shortterm') return;
+            if (visited[index]) return;
+
+            visited[index] = true;
+
+            for (let i = 0; i < snapshot[index].childs.length; i++) {
+
+              // 데이터 찾기
+              let childIndex;
+              for (let j = 0; j < snapshot.length; j++) {
+                if(snapshot[j].id === snapshot[index].childs[i]) childIndex = j;
+              }
+
+              // 데이터가 목표일 때만 간선을 그림
+              if (snapshot[childIndex].type !== 'shortterm' && snapshot[childIndex].type !== 'longterm') continue;
+
+              paintEdge(parent.id, snapshot[childIndex].id);
+              dfs(childIndex);
             }
-              
+          }
+
+          function paintEdge(parent, child) {
+            const edgeData = {
+              "data": {
+                "id" : `${parent}->${child}`,
+                "source" : `${parent}`,
+                "target" : `${child}`
+              }
+            }
+
+            cy.add(edgeData);
           }
         }
 
