@@ -1,13 +1,14 @@
 export const MindmapLayout = { 
-    name: 'dagre',
+    name: 'cose-bilkent',
     rankDir: 'TB',
-    minLen: (edge) => { return 1.5; },
+    minLen: (edge) => { return 3; },
     edgeWeight: function( edge ){ return 1; }, // higher weight edges are generally made shorter and straighter than lower weight edges
 
+    randomize: false,
     // general layout options
     fit: true, // whether to fit to viewport
     padding: 30, // fit padding
-    spacingFactor: 0.7, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
+    spacingFactor: 1.5, // Applies a multiplicative factor (>0) to expand or compress the overall area that the nodes take up
     nodeDimensionsIncludeLabels: true, // whether labels should be included in determining the space used by a node
     animate: false, // whether to transition the node positions
     animateFilter: function( node, i ){ return true; }, // whether to animate specific nodes when animation is on; non-animated nodes immediately go to their final positions

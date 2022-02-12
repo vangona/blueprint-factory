@@ -705,7 +705,8 @@ const CytoscapeMindmap = ({userObj}) => {
           const nodeData = {
             "data": {
               "id" : `${index === 0 ? el.id : el.id + '_' + index}`,
-              "parentId" : `${el.parentId}`,
+              "parent": `${parentId}`,
+              "parentId" : `${parentId}`,
               // "label" : `${el.name}`,
               "type" : `${el.type}`,
               "explain" : `${el.explain}`,
@@ -717,16 +718,18 @@ const CytoscapeMindmap = ({userObj}) => {
           }
           node.push(nodeData);
   
-          el.childs.forEach(child => {
-            const originEdge = { 
-              "data" : {
-                "id" : `${el.id}->${child}`,
-                "source" : `${child}`,
-                "target" : `${el.id}`
+          if (el.type === 'shortterm' || el.type === 'longterm') {
+            el.childs.forEach(child => {
+              const originEdge = { 
+                "data" : {
+                  "id" : `${el.id}->${child}`,
+                  "source" : `${child}`,
+                  "target" : `${el.id}`
+                }
               }
-            }
-            edge.push(originEdge);
-          })
+              edge.push(originEdge);
+            })              
+          }
         })
       })
 
@@ -830,7 +833,7 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: 'edge',
               "style": {
                 'width': edgeWidth,
-                'curve-style': 'taxi',
+                'curve-style': 'bezier',
                 'taxi-direction': 'downward',
                 'line-color': '#ccc',
                 'source-arrow-color': '#ccc',
@@ -1071,6 +1074,13 @@ const CytoscapeMindmap = ({userObj}) => {
         // 레이아웃 런
         const layout = cy.layout(MindmapLayout);
         layout.run();
+
+        cy.nodes().forEach(node => {
+          node.position({
+            x: pageRank.rank(node) * 10000,
+            y: pageRank.rank(node) * 10000
+          })
+        });
 
         // 화면 크기별 맞춤
         let resizeTimer;
