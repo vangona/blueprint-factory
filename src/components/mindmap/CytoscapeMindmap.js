@@ -49,7 +49,14 @@ const DrawBtn = styled.button`
   ${defaultBtnAction};
 `
 
-const DataContainer = styled.div``;
+const DataContainer = styled.div`
+  font-family: SsurroundAir;
+  font-size: 18px;
+  background-color: white;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+`;
 
 const CytoscapeMindmap = ({userObj}) => {
     const navigate = useNavigate();
@@ -796,6 +803,15 @@ const CytoscapeMindmap = ({userObj}) => {
         const nodeTextColor = 'black';
         const nodeColor = 'white';
         const nodeActiveColor = '#ffa502';
+
+        const longtermColor = 'red';
+        const shorttermColor = 'blue';
+        const planColor = 'skyblue';
+        const routineColor = 'purple';
+        const todoColor = 'yellow';
+        const privateColor = 'black';
+        const incompleteColor = 'lightgreen';
+        const complishedColor = 'green';
  
         // on focus edge color
         const successorColor = '#ff6348';
@@ -833,7 +849,7 @@ const CytoscapeMindmap = ({userObj}) => {
               selector: 'edge',
               "style": {
                 'width': edgeWidth,
-                'curve-style': 'bezier',
+                'curve-style': 'taxi',
                 'taxi-direction': 'downward',
                 'line-color': '#ccc',
                 'source-arrow-color': '#ccc',
@@ -845,14 +861,16 @@ const CytoscapeMindmap = ({userObj}) => {
           {
               selector: '.longterm',
               style: {
-                  'border-color': 'yellow',
+                  'border-color': longtermColor,
+                  'background-color': longtermColor,
                   // 'label': 'data(label)'
               }
           },
           {
               selector: '.shortterm',
               style: {
-                  'border-color': 'blue',
+                  'border-color': shorttermColor,
+                  'background-color': shorttermColor,
                   'shape': 'round-octagon'
                   // 'label': 'data(label)'
               }
@@ -860,7 +878,8 @@ const CytoscapeMindmap = ({userObj}) => {
           {
               selector: '.plan',
               style: {
-                  'border-color': 'skyblue',
+                  'border-color': planColor,
+                  'background-color': planColor,
                   'shape': 'round-hexagon'
                   // 'label': 'data(label)'
               }
@@ -868,7 +887,8 @@ const CytoscapeMindmap = ({userObj}) => {
           {
               selector: '.routine',
               style: {
-                  'border-color': 'purple',
+                  'border-color': routineColor,
+                  'background-color': routineColor,
                   'shape': 'round-diamond'
                   // 'label': 'data(label)'
               }
@@ -876,16 +896,15 @@ const CytoscapeMindmap = ({userObj}) => {
           {
             selector: '.todo',
             style: {
-                'font-family': 'SsurroundAir',
-                'border-color': 'red',
+                'border-color': todoColor,
+                'background-color': todoColor,
                 'shape': 'round-rectangle',
-                'label': 'data(label)'
             }
         },
           {
               selector: '.incomplete',
               style: {
-                  'border-color': 'green',
+                  'border-color': incompleteColor,
                   'shape': 'round-tag',
                   // 'label': 'data(label)'
               }
@@ -893,8 +912,8 @@ const CytoscapeMindmap = ({userObj}) => {
           {
             selector: '.isPrivate',
             style: {
-                'font-family': 'SsurroundAir',
-                'border-color': 'black',
+                'border-color': privateColor,
+                'background-color': privateColor,
                 'shape': 'round-rectangle',
                 // 'label': '(비공개)'
             }
@@ -902,9 +921,8 @@ const CytoscapeMindmap = ({userObj}) => {
         {
           selector: '.isComplished',
           style: {
-              'font-family': 'SsurroundAir',
-              'border-color': 'lightgreen',
-              'background-color': 'lightgreen',
+              'border-color': complishedColor,
+              'background-color': complishedColor,
               // 'label': '(비공개)'
           }
       },
@@ -1057,9 +1075,14 @@ const CytoscapeMindmap = ({userObj}) => {
         cy.on('tap', function(e) {
           setResetFocus(e.cy);
 
-          setCurrentData(e.target.data());
+          if(e.target.isNode) {
+            if(!e.target.isEdge()) {
+              setCurrentData(e.target.data());
+              console.log(e.target.data());  
+            }
+          } 
 
-          if(e.target.isNode) console.log(e.target.data());
+          if (!e.target.isNode) setCurrentData('');
 
           e.target.isNode && e.target.isNode() && setDimStyle(cy, {
             'background-color' : dimColor,
@@ -1074,13 +1097,6 @@ const CytoscapeMindmap = ({userObj}) => {
         // 레이아웃 런
         const layout = cy.layout(MindmapLayout);
         layout.run();
-
-        cy.nodes().forEach(node => {
-          node.position({
-            x: pageRank.rank(node) * 10000,
-            y: pageRank.rank(node) * 10000
-          })
-        });
 
         // 화면 크기별 맞춤
         let resizeTimer;
@@ -1218,7 +1234,6 @@ const CytoscapeMindmap = ({userObj}) => {
                 const node = {
                   "data": {
                     "id" : `${targetData.id}`,
-                    "parent" : `${parent}`,
                     "parentId" : `${parent}`,
                     "childs": targetData.childs,
                     "label" : `${id && targetData.isPrivate ? '( 비공개 )' : targetData.name}`,
@@ -1251,7 +1266,6 @@ const CytoscapeMindmap = ({userObj}) => {
 
           function dfs(index) {
             const parent = snapshot[index];
-            if (parent.type !== 'longterm' && parent.type !== 'shortterm') return;
             if (visited[index]) return;
 
             visited[index] = true;
@@ -1265,7 +1279,6 @@ const CytoscapeMindmap = ({userObj}) => {
               }
 
               // 데이터가 목표일 때만 간선을 그림
-              if (snapshot[childIndex].type !== 'shortterm' && snapshot[childIndex].type !== 'longterm') continue;
 
               paintEdge(parent.id, snapshot[childIndex].id);
               dfs(childIndex);
@@ -1339,13 +1352,23 @@ const CytoscapeMindmap = ({userObj}) => {
         function setResetFocus(target_cy) {
 
           target_cy.nodes().forEach(function (target) {
-              target.style('background-color', nodeColor);
-              var rank = pageRank.rank(target);
-              target.style('width', nodeMaxSize * rank + nodeMinSize);
-              target.style('height', nodeMaxSize * rank + nodeMinSize);
-              target.style('font-size', fontMaxSize * rank + fontMinSize);
-              target.style('color', nodeTextColor);
-              target.style('opacity', 1);
+            const targetList = ['longterm', 'shortterm', 'plan', 'routine', 'todo', 'incomplete'];
+            const colorList = [longtermColor, shorttermColor, planColor, routineColor, todoColor, 'white'];
+
+            let resetColor = colorList[            targetList.indexOf(target.data().type)
+            ]
+
+            if (target.data().isComplished) resetColor = complishedColor;
+
+            if (target.data().isPrivate) resetColor = privateColor;
+
+            target.style('background-color', resetColor);
+            var rank = pageRank.rank(target);
+            target.style('width', nodeMaxSize * rank + nodeMinSize);
+            target.style('height', nodeMaxSize * rank + nodeMinSize);
+            target.style('font-size', fontMaxSize * rank + fontMinSize);
+            target.style('color', nodeTextColor);
+            target.style('opacity', 1);
           });
 
           target_cy.edges().forEach(function (target) {
@@ -1379,7 +1402,12 @@ const CytoscapeMindmap = ({userObj}) => {
             </Title>
             <MindmapContainer id="cy" style={{width: '100%', height: '90vh', top: '5vh', padding: '15px'}}>
             </MindmapContainer>
-            {!id && <BtnBox>
+            {currentData && 
+               <DataContainer>
+                  {currentData.label}
+                </DataContainer>
+              }
+            {!id && !currentData && <BtnBox>
               <DrawBtn id="draw-on">
                   선 조정 on
               </DrawBtn>
@@ -1387,11 +1415,6 @@ const CytoscapeMindmap = ({userObj}) => {
                   선 조정 off
               </DrawBtn>
             </BtnBox>}
-            {currentData && 
-              <DataContainer>
-                {currentData.label}
-              </DataContainer>
-            }
         </Container>
     );
 };
