@@ -1360,7 +1360,7 @@ const CytoscapeMindmap = ({userObj}) => {
 
             if (target.data().isComplished) resetColor = complishedColor;
 
-            if (target.data().isPrivate) resetColor = privateColor;
+            if (id && target.data().isPrivate) resetColor = privateColor;
 
             target.style('background-color', resetColor);
             var rank = pageRank.rank(target);

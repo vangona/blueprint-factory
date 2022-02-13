@@ -13,6 +13,7 @@ import CalendarRoute from "../router/CalendarRoute";
 import SomeonesBlueprint from "../router/SomeonesBlueprint";
 import NotFound from "./error/NotFound";
 import FindValue from "../router/FindValue";
+import FindInterest from "../router/FindInterest";
 
 const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
     return (
@@ -24,6 +25,7 @@ const AppRouter = ({isLoggedIn, userObj, refreshUser}) => {
                 <>
                     <Route path="/" element={<Blueprint userObj={userObj} />} />
                     <Route path='/value' element={<FindValue />} />
+                    <Route path='/interest' element={<FindInterest />} />
                     <Route path="/community" element={
                         <Community userObj={userObj} />
                     } />
