@@ -1321,7 +1321,7 @@ const CytoscapeMindmap = ({userObj}) => {
             e.style('background-color', predecessorsColor);
             e.style('line-color', predecessorsColor);
             e.style('source-arrow-color', predecessorsColor);
-            setOpacityElement(e, 0.5);
+            setOpacityElement(e, 1);
           })
 
           target_element.successors().each(function (e) {
@@ -1333,7 +1333,7 @@ const CytoscapeMindmap = ({userObj}) => {
             e.style('background-color', successorColor);
             e.style('line-color', successorColor);
             e.style('source-arrow-color', successorColor);
-            setOpacityElement(e, 0.5);
+            setOpacityElement(e, 1);
           });
 
           target_element.neighborhood().each(function (e) {

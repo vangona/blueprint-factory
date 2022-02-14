@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PrevBtn from '../components/btn/PrevBtn';
 import CytoscapeMindmap from '../components/mindmap/CytoscapeMindmap';
-import TargetMindmap from '../components/TargetMindmap';
 import { defaultContainer } from '../css/styleConstants';
 
 const Container = styled.div`
@@ -16,7 +15,6 @@ const Blueprint = ({userObj}) => {
         <Container>
             <PrevBtn />
             <CytoscapeMindmap userObj={userObj} />
-            {/* <TargetMindmap userObj={userObj} /> */}
         </Container>        
     );
 };

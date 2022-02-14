@@ -2,8 +2,8 @@ import { select } from 'd3-selection';
 import React, { useEffect, useState } from 'react';
 import ReactWordcloud from "react-wordcloud";
 import styled from 'styled-components';
-import { defaultBtnAction } from '../../css/styleConstants';
-import Loading from '../loading/Loading';
+import { defaultBtnAction } from '../../../css/styleConstants';
+import Loading from '../../loading/Loading';
 import { db } from './valueDB';
 
 const Container = styled.div`

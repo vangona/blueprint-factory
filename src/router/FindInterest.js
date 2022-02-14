@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import NextBtn from '../components/btn/NextBtn';
 import InterestFactory from '../components/factory/interest/InterestFactory';
+import ValueFactory from '../components/factory/value/ValueFactory';
 import { defaultContainer } from '../css/styleConstants';
 
 const Container = styled.div`
@@ -8,9 +10,13 @@ const Container = styled.div`
 `;
 
 const FindInterest = () => {
+    const [page, setPage] = useState(1);
+
     return (
         <Container>
-            <InterestFactory />
+            {page === 1 && <InterestFactory />}
+            {page === 2 && <ValueFactory />}
+            <NextBtn page={page} setPage={setPage} />
         </Container>
     );
 };
