@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { defaultContainer } from '../../../css/styleConstants';
+import { questions } from '../value/valueDB';
 
 const Container = styled.div`
     ${defaultContainer};
@@ -27,7 +28,7 @@ const InterestFactory = () => {
         <Container>
             <InterestBox>
                 <InterestLabel htmlFor='input__interest'>
-                    흥미
+                    {questions[Math.floor(Math.random() * questions.length)]}
                 </InterestLabel>
                 <InterestInput id='input__interest' type="text" value={interest} onChange={onChange} />
             </InterestBox>
