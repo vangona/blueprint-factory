@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { defaultContainer } from '../../../css/styleConstants';
-import cloud from "../../../img/bottom-cloud.png"
+import cloud from "assets/img/background/bottom-cloud.png"
 
 const Container = styled.div`
     ${defaultContainer};

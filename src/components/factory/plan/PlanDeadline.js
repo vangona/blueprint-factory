@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { blockBtn, defaultBtnAction, defaultContainer, factoryImg, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
-import img from "../../../img/deadline.png";
+import { blockBtn, defaultBtnAction, defaultContainer, factoryImg, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from 'css/styleConstants';
+import img from "assets/img/finder/deadline.png";
 import StepInput from './StepInput';
 
 const Container = styled.div`

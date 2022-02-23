@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { defaultContainer } from '../../css/styleConstants';
+import { defaultContainer } from 'css/styleConstants';
 import DoughnutChart from './DoughnutChart';
-import cloud from "../../img/cloud.png"
+import cloud from "assets/img/cloud.png"
 
 const Container = styled.div`
     ${defaultContainer};

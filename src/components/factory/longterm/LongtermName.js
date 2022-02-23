@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { blockBtn, defaultContainer } from '../../../css/styleConstants';
-import cloud from "../../../img/cloud.png"
+import { blockBtn, defaultContainer } from 'css/styleConstants';
+import cloud from "assets/img/cloud.png"
 
 const Container = styled.div`
     ${defaultContainer};

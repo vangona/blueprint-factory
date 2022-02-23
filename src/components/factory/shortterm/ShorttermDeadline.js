@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { blockBtn, defaultContainer, factoryImg, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
-import img from "../../../img/deadline.png";
+import { blockBtn, defaultContainer, factoryImg, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from 'css/styleConstants';
+import img from "assets/img/finder/deadline.png";
 
 const Container = styled.div`
     ${defaultContainer};

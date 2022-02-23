@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { defaultBtnAction, defaultContainer, factoryImg, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from '../../../css/styleConstants';
-import img from "../../../img/need.png";
+import { defaultBtnAction, defaultContainer, factoryImg, targetFactoryContent, targetFactoryContentInput, targetFactoryContentTitle } from 'css/styleConstants';
+import img from "assets/img/finder/need.png";
 
 const Container = styled.div`
     ${defaultContainer};
