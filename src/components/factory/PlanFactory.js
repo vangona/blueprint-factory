@@ -130,7 +130,7 @@ const PlanFactory = ({userObj, parent}) => {
                 isPrivate,
                 type: "plan",
                 parentId: [parent.parentId[0]],
-                childs: childIds,
+                childs: stepIds,
                 completeFeeling: '',
                 cancelReason: '',
             }).then(async () => {
@@ -157,11 +157,12 @@ const PlanFactory = ({userObj, parent}) => {
                 isPrivate,
                 type: "plan",
                 parentId: [parent.id],
-                childs: childIds,
+                childs: stepIds,
                 completeFeeling: '',
                 cancelReason: '',
             }).then(async () => {
-                await dbService.collection('targets').doc(`${parent.id}`)
+                await dbService.collection('targets')
+                .doc(`${parent.id}`)
                 .update({
                     childs: firebaseInstance.firestore.FieldValue.arrayUnion(targetId)
                 }).then(() => {
@@ -193,7 +194,7 @@ const PlanFactory = ({userObj, parent}) => {
             isComplished: false,
             isOpen: true,
             isPrivate,
-            type: "todo",
+            type: "shortterm",
             parentId: [parentId],
             childs: [],
             completeFeeling: '',

@@ -33,6 +33,7 @@ const ValueFactory = () => {
     }
 
     const getQuestion = () => {
+        // 동적으로 이미지를 할당하기 위해서, require로 이미지를 불러올 수 있는 주소를 DB 배열에 입력해두고 질문에 맞는 이미지를 불러오게 함.
         const randumNum = Math.floor(Math.random() * valueDB.length);
         setIndex(randumNum);
         setQuestion(valueDB[randumNum][0]);
