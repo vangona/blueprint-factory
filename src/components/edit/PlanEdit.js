@@ -1,11 +1,7 @@
-import React from 'react';
+import React from "react";
 
-const PlanEdit = ({element}) => {
-    return (
-        <div>
-            PlanEdit
-        </div>
-    );
-};
+function PlanEdit({ element }) {
+  return <div>PlanEdit</div>;
+}
 
 export default PlanEdit;

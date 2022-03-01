@@ -1,16 +1,14 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import PrevBtn from '../components/btn/PrevBtn';
-import CytoscapeMindmap from '../components/mindmap/CytoscapeMindmap';
+import React from "react";
+import PrevBtn from "../components/btn/PrevBtn";
+import CytoscapeMindmap from "../components/mindmap/CytoscapeMindmap";
 
-const SomeonesBlueprint = ({userObj}) => {
-
-    return (
-        <div>
-            <PrevBtn />
-            <CytoscapeMindmap userObj={userObj} />
-        </div>
-    );
-};
+function SomeonesBlueprint({ userObj }) {
+  return (
+    <>
+      <PrevBtn />
+      <CytoscapeMindmap userObj={userObj} />
+    </>
+  );
+}
 
 export default SomeonesBlueprint;

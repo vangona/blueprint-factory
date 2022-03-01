@@ -1,11 +1,7 @@
-import React from 'react';
+import React from "react";
 
-const RoutineSimple = () => {
-    return (
-        <div>
-            
-        </div>
-    );
-};
+function RoutineSimple() {
+  return <div />;
+}
 
 export default RoutineSimple;

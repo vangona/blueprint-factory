@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Reset } from 'styled-reset';
-import App from './components/App';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Reset } from "styled-reset";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import App from "./components/App";
 import "./styles.css";
-import * as serviceWorker from './serviceWorkerRegistration';
+import * as serviceWorker from "./serviceWorkerRegistration";
 
 Sentry.init({
   dsn: "https://5564f12ab54c4c8385cc9c046072be54@o1065943.ingest.sentry.io/6151464",
@@ -22,9 +22,9 @@ ReactDOM.render(
     <Reset />
     <App />
   </>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 if ("serviceWorker" in navigator) {
-  serviceWorker.register()
+  serviceWorker.register();
 }
