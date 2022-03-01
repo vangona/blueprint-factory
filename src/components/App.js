@@ -39,9 +39,9 @@ function App() {
           .doc(`${user.uid}`)
           .get()
           .then(async (snapshot) => {
-            isPrivate = snapshot.data().isPrivate;
-            bio = snapshot.data().bio;
             if (!snapshot.exists && user.providerData.length) {
+              isPrivate = snapshot.data().isPrivate;
+              bio = snapshot.data().bio;
               await dbService
                 .collection("users")
                 .doc(`${user.uid}`)

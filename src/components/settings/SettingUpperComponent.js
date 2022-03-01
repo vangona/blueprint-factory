@@ -245,81 +245,88 @@ function SettingUpperComponent({ userObj, refreshUser }) {
   };
 
   return (
-    <Container>
-      <BackgroundBottomCloud />
-      <ProfileContainer>
-        <Box style={{ flexDirection: "column" }}>
-          <ProfileBox htmlFor="profile__pic">
-            {userObj.photoURL ? (
-              <ProfilePic src={userObj.photoURL} />
-            ) : (
-              <FaUserCircle
-                fontSize={profileSize}
-                style={{ fill: "#3e83e1" }}
-              />
-            )}
-          </ProfileBox>
-          <Label htmlFor="profile__pic">프로필 사진 변경하기</Label>
-        </Box>
-        <PicUploader
-          id="profile__pic"
-          onChange={onFileChange}
-          type="file"
-          accept="image/*"
-        />
-        <Box>
-          <InnerBox>
-            <Label htmlFor="display-name">이름</Label>
-            <DisplayNameInput
-              id="display-name"
-              value={newName}
-              name="displayname"
-              onChange={onChange}
-              type="text"
+    <>
+      {userObj.isVisitor 
+        ? null
+        :      
+        <Container>
+          <BackgroundBottomCloud />
+          <ProfileContainer>
+            <Box style={{ flexDirection: "column" }}>
+              <ProfileBox htmlFor="profile__pic">
+                {userObj.photoURL ? (
+                  <ProfilePic src={userObj.photoURL} />
+                ) : (
+                  <FaUserCircle
+                    fontSize={profileSize}
+                    style={{ fill: "#3e83e1" }}
+                  />
+                )}
+              </ProfileBox>
+              <Label htmlFor="profile__pic">프로필 사진 변경하기</Label>
+            </Box>
+            <PicUploader
+              id="profile__pic"
+              onChange={onFileChange}
+              type="file"
+              accept="image/*"
             />
-          </InnerBox>
-          <Line />
-        </Box>
-        <Box>
-          <InnerBox>
-            <Label htmlFor="bio">소개글</Label>
-            <BioTextarea
-              id="bio"
-              value={newBio}
-              name="bio"
-              onChange={onChange}
-            />
-          </InnerBox>
-          <Line />
-        </Box>
-        <Box>
-          <InnerBox>
-            <Label htmlFor="is-private">청사진 공개</Label>
-            <ToggleBox>
-              <ToggleSwitch
-                htmlFor="is-private"
-                style={{ backgroundColor: isPrivate && "#ccc" }}
-              >
-                <CheckBox
-                  name="isPrivate"
-                  type="checkbox"
-                  id="is-private"
+            <Box>
+              <InnerBox>
+                <Label htmlFor="display-name">이름</Label>
+                <DisplayNameInput
+                  id="display-name"
+                  value={newName}
+                  name="displayname"
                   onChange={onChange}
-                  checked={isPrivate}
+                  type="text"
                 />
-                <Slider style={{ left: isPrivate && "2px" }} />
-              </ToggleSwitch>
-              <Label>{isPrivate ? "비공개" : "공개"}</Label>
+              </InnerBox>
+              <Line />
+            </Box>
+            <Box>
+              <InnerBox>
+                <Label htmlFor="bio">소개글</Label>
+                <BioTextarea
+                  id="bio"
+                  value={newBio}
+                  name="bio"
+                  onChange={onChange}
+                />
+              </InnerBox>
+              <Line />
+            </Box>
+            <Box>
+              <InnerBox>
+                <Label htmlFor="is-private">청사진 공개</Label>
+                <ToggleBox>
+                  <ToggleSwitch
+                    htmlFor="is-private"
+                    style={{ backgroundColor: isPrivate && "#ccc" }}
+                  >
+                    <CheckBox
+                      name="isPrivate"
+                      type="checkbox"
+                      id="is-private"
+                      onChange={onChange}
+                      checked={isPrivate}
+                    />
+                    <Slider style={{ left: isPrivate && "2px" }} />
+                  </ToggleSwitch>
+                  <Label>{isPrivate ? "비공개" : "공개"}</Label>
+                </ToggleBox>
+              </InnerBox>
+              <Line />
+            </Box>
+            <ToggleBox>
+              <SubmitBtn onClick={onSubmit}>변경사항 적용하기</SubmitBtn>
+              <SubmitBtn onClick={onClickReturn}>돌아가기</SubmitBtn>
             </ToggleBox>
-          </InnerBox>
-          <Line />
-        </Box>
-        <ToggleBox>
-          <SubmitBtn onClick={onSubmit}>변경사항 적용하기</SubmitBtn>
-          <SubmitBtn onClick={onClickReturn}>돌아가기</SubmitBtn>
-        </ToggleBox>
-      </ProfileContainer>
-    </Container>
+          </ProfileContainer>
+        </Container>
+      } 
+
+    </>
   );
 }
 
