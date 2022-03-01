@@ -21,13 +21,13 @@ function AppRouter({ isLoggedIn, userObj, refreshUser }) {
       <Routes>
         {isLoggedIn ? (
           <>
-            <Route path="/" element={<Blueprint userObj={userObj} />} />
+            <Route path="/" element={<Home userObj={userObj} />} />
             <Route path="/value" element={<FindValue />} />
             <Route
               path="/community"
               element={<Community userObj={userObj} />}
             />
-            <Route path="/blueprint" element={<Home userObj={userObj} />} />
+            <Route path="/blueprint" element={<Blueprint userObj={userObj} />} />
             <Route path="/setting" element={<Setting userObj={userObj} />} />
             <Route
               path="/calendar"
