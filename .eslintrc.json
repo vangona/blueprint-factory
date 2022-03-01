@@ -22,8 +22,17 @@
         "react"
     ],
     "rules": {
-        "quotes": ["error", "single", { "avoidEscape": true }],
         "indent": ["error", 2],
-        "react/prop-types": 0
+        "react/prop-types": 0,
+        "prettier/prettier": "off",
+        "quotes": "off",
+        "react/jsx-filename-extension": "off"
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+        "paths": ["src"]
+        }
+      }
     }
 }

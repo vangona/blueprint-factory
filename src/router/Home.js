@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import HomeLowerComponent from "../components/home/HomeLowerComponent";
-import HomeUpperComponent from "../components/home/HomeUpperComponent";
-import Loading from "../components/loading/Loading";
-import { defaultContainer } from "../css/styleConstants";
-import { dbService } from "../fBase";
-import PrevBtn from "../components/btn/PrevBtn";
+import Loading from "components/loading/Loading";
+import { defaultContainer } from "css/styleConstants";
+import { dbService } from "fBase";
+import PrevBtn from "components/btn/PrevBtn";
+import TodolistToday from "components/home/TodolistToday";
+import TodolistCalendar from "components/home/TodolistCalendar";
 
 const Container = styled.div`
   ${defaultContainer}
@@ -13,6 +13,7 @@ const Container = styled.div`
 `;
 
 function Home({ userObj }) {
+  const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [todayTargets, setTodayTargets] = useState([]);
 
@@ -44,7 +45,18 @@ function Home({ userObj }) {
     setTimeout(setIsLoading(false), []);
   };
 
+  const onWheel = e => {
+    if (e.deltaY > 0) {
+      setPage(2);
+    }
+
+    if (e.deltaY < 0) {
+      setPage(1);
+    }
+  }
+
   useEffect(() => {
+    window.addEventListener('wheel', onWheel);
     getTodayTarget();
   }, []);
 
@@ -55,8 +67,10 @@ function Home({ userObj }) {
       ) : (
         <>
           <PrevBtn />
-          <HomeUpperComponent userObj={userObj} todayTargets={todayTargets} />
-          <HomeLowerComponent userObj={userObj} todayTargets={todayTargets} />
+          {page === 1 
+            ? <TodolistToday userObj={userObj} todayTargets={todayTargets} /> 
+            : <TodolistCalendar userObj={userObj} />
+          }
         </>
       )}
     </Container>

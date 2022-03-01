@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { defaultContainer } from "../css/styleConstants";
-import CalendarComponent from "../components/calendar/CalendarComponent";
-import EventComponent from "../components/calendar/EventComponent";
-import Loading from "../components/loading/Loading";
-import PrevBtn from "../components/btn/PrevBtn";
-import { dbService } from "../fBase";
+import { defaultContainer } from "css/styleConstants";
+import CalendarComponent from "components/calendar/CalendarComponent";
+import EventComponent from "components/calendar/EventComponent";
+import Loading from "components//loading/Loading";
+import PrevBtn from "components//btn/PrevBtn";
+import { dbService } from "fBase";
 
 const Container = styled.div`
   ${defaultContainer};

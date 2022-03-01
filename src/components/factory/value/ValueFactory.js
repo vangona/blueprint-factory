@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { defaultContainer } from "css/styleConstants";
-import { valueDB } from "assets/db/value/valueDB.js";
+import valueDB from "assets/db/value/valueDB";
 
 const Container = styled.div`
   ${defaultContainer};

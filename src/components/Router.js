@@ -8,7 +8,7 @@ import Navigation from "router/Navigation";
 import Community from "router/Community";
 import Blueprint from "router/Blueprint";
 import Setting from "router/Setting";
-import CalendarRoute from "router/CalendarRoute";
+import CalendarRoute from "components/home/CalendarRoute";
 import SomeonesBlueprint from "router/SomeonesBlueprint";
 import NotFound from "components/error/NotFound";
 import FindValue from "router/FindValue";
@@ -29,10 +29,10 @@ function AppRouter({ isLoggedIn, userObj, refreshUser }) {
             />
             <Route path="/blueprint" element={<Blueprint userObj={userObj} />} />
             <Route path="/setting" element={<Setting userObj={userObj} />} />
-            <Route
-              path="/calendar"
+            {/* <Route
+              path="/shop"
               element={<CalendarRoute userObj={userObj} />}
-            />
+            /> */}
             <Route
               path="/:id/blueprint"
               element={<SomeonesBlueprint userObj={userObj} />}

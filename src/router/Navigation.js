@@ -72,7 +72,7 @@ function Navigation({ userObj }) {
   };
 
   const onClickCalendar = () => {
-    navigate("/calendar");
+    // navigate("/calendar");
   };
 
   const onClickSetting = () => {

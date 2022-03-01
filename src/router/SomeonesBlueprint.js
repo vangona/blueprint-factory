@@ -1,6 +1,6 @@
-import React from "react";
-import PrevBtn from "../components/btn/PrevBtn";
-import CytoscapeMindmap from "../components/mindmap/CytoscapeMindmap";
+import React from 'react';
+import PrevBtn from '../components/btn/PrevBtn';
+import CytoscapeMindmap from '../components/mindmap/CytoscapeMindmap';
 
 function SomeonesBlueprint({ userObj }) {
   return (
