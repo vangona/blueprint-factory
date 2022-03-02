@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { AiOutlineHome } from "react-icons/ai";
 import { FiUsers } from "react-icons/fi";
 import { GiArcheryTarget } from "react-icons/gi";
-import { FaRegCalendarAlt, FaUserCircle } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
+import { HiOutlineShoppingCart } from "react-icons/hi";
 import {
   defaultBtnAction,
   defaultContainer,
@@ -72,7 +73,7 @@ function Navigation({ userObj }) {
   };
 
   const onClickCalendar = () => {
-    // navigate("/calendar");
+    navigate("/shop");
   };
 
   const onClickSetting = () => {
@@ -91,7 +92,7 @@ function Navigation({ userObj }) {
         <FiUsers className="navIcon" />
       </NavBox>
       <NavBox onClick={onClickCalendar}>
-        <FaRegCalendarAlt className="navIcon" />
+        <HiOutlineShoppingCart className="navIcon" />
       </NavBox>
       <ProfileBox onClick={onClickSetting}>
         {userObj.photoURL ? (

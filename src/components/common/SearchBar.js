@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { BiSearchAlt2 } from "react-icons/bi";
-import { defaultContainer } from "../../css/styleConstants";
+import { defaultContainer } from "css/styleConstants";
 
 const Container = styled.div`
   ${defaultContainer};

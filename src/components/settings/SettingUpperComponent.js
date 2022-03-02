@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import imageCompression from "browser-image-compression";
-import { RiArrowGoBackLine } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import BackgroundBottomCloud from "../background/BackgroundBottomCloud";
-import { authService, dbService, storageService } from "../../fBase";
+import { dbService, storageService } from "../../fBase";
 import {
   defaultBtn,
   defaultBtnAction,
   defaultContainer,
-  returnBtn,
 } from "../../css/styleConstants";
 
 const profileSize = "80px";
@@ -133,10 +131,6 @@ const BioTextarea = styled.textarea`
 const SubmitBtn = styled.button`
   ${defaultBtnAction};
   ${defaultBtn};
-`;
-
-const ReturnBtn = styled.button`
-  ${returnBtn};
 `;
 
 function SettingUpperComponent({ userObj, refreshUser }) {

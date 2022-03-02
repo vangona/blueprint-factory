@@ -8,13 +8,13 @@ import Navigation from "router/Navigation";
 import Community from "router/Community";
 import Blueprint from "router/Blueprint";
 import Setting from "router/Setting";
-import CalendarRoute from "components/home/CalendarRoute";
 import SomeonesBlueprint from "router/SomeonesBlueprint";
 import NotFound from "components/error/NotFound";
 import FindValue from "router/FindValue";
-import Signout from "./Signout";
+import Shop from "router/Shop";
+import Signout from "components/Signout";
 
-function AppRouter({ isLoggedIn, userObj, refreshUser }) {
+function AppRouter({ isLoggedIn, userObj }) {
   return (
     <Router>
       {isLoggedIn && <Navigation userObj={userObj} />}
@@ -26,6 +26,10 @@ function AppRouter({ isLoggedIn, userObj, refreshUser }) {
             <Route
               path="/community"
               element={<Community userObj={userObj} />}
+            />
+            <Route
+              path="/shop"
+              element={<Shop userObj={userObj} />}
             />
             <Route path="/blueprint" element={<Blueprint userObj={userObj} />} />
             <Route path="/setting" element={<Setting userObj={userObj} />} />

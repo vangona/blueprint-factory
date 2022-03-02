@@ -11,6 +11,7 @@
         "plugin:react/recommended",
         "plugin:prettier/recommended"
     ],
+    "parser": "babel-parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": false
@@ -27,7 +28,9 @@
         "prettier/prettier": "off",
         "quotes": "off",
         "react/jsx-filename-extension": "off",
-        "react/jsx-no-useless-fragment": "off"
+        "react/jsx-no-useless-fragment": "off",
+        "react/no-array-index-key": "off",
+        "react/self-closing-comp": "off"
     },
     "settings": {
       "import/resolver": {

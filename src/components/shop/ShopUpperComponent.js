@@ -25,7 +25,7 @@ const Cloud = styled.div`
   transform: scaleX(-1);
 `;
 
-function UpperComponent({ getSearchWord, searchWord }) {
+function ShopUpperComponent({ getSearchWord, searchWord }) {
   return (
     <Container>
       <Cloud>
@@ -36,4 +36,4 @@ function UpperComponent({ getSearchWord, searchWord }) {
   );
 }
 
-export default UpperComponent;
+export default ShopUpperComponent;
