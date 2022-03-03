@@ -14,6 +14,7 @@ import FindValue from "router/FindValue";
 import Shop from "router/Shop";
 import Signout from "components/Signout";
 import MvpWelcome from "router/MvpWelcome";
+import MvpBlueprint from "router/MvpBlueprint";
 
 function AppRouter({ isLoggedIn, userObj }) {
   return (
@@ -26,6 +27,10 @@ function AppRouter({ isLoggedIn, userObj }) {
             <Route
               path="/welcome"
               element={<MvpWelcome />}
+            />
+            <Route
+              path="/mvp"
+              element={<MvpBlueprint />}
             />
             <Route path="/value" element={<FindValue />} />
             <Route
