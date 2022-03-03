@@ -1260,7 +1260,8 @@ function CytoscapeMindmap({ userObj }) {
           });
       });
     }
-    //
+
+    console.log(cy);
 
     // 노드 만들기
     function makeNode(snapshot) {

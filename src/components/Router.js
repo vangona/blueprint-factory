@@ -13,6 +13,7 @@ import NotFound from "components/error/NotFound";
 import FindValue from "router/FindValue";
 import Shop from "router/Shop";
 import Signout from "components/Signout";
+import MvpWelcome from "router/MvpWelcome";
 
 function AppRouter({ isLoggedIn, userObj }) {
   return (
@@ -22,6 +23,10 @@ function AppRouter({ isLoggedIn, userObj }) {
         {isLoggedIn ? (
           <>
             <Route path="/" element={<Home userObj={userObj} />} />
+            <Route
+              path="/welcome"
+              element={<MvpWelcome />}
+            />
             <Route path="/value" element={<FindValue />} />
             <Route
               path="/community"
