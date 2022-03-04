@@ -11,7 +11,7 @@
         "plugin:react/recommended",
         "plugin:prettier/recommended"
     ],
-    "parser": "babel-parser",
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": false

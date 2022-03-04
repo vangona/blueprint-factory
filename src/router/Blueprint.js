@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import AddBtn from "components/mindmap/AddBtn";
+import React from "react";
 import styled from "styled-components";
 import PrevBtn from "../components/btn/PrevBtn";
 import CytoscapeMindmap from "../components/mindmap/CytoscapeMindmap";
@@ -15,6 +16,7 @@ function Blueprint({ userObj }) {
     <Container>
       <PrevBtn />
       <CytoscapeMindmap userObj={userObj} />
+      <AddBtn />
     </Container>
   );
 }

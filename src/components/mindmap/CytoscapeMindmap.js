@@ -9,11 +9,12 @@ import edgehandles from "cytoscape-edgehandles";
 import domNode from "cytoscape-dom-node";
 
 import { useNavigate, useParams } from "react-router-dom";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { dbService, firebaseInstance } from "../../fBase";
 import { EdgeHandlesOptions } from "./EdgeHandlesOptions";
 import { defaultBtnAction, defaultContainer } from "../../css/styleConstants";
 import { MindmapLayout } from "./MindmapLayout";
+import removeTarget from "components/mindmap/functions/removeTarget";
 
 const Container = styled.div`
   ${defaultContainer};
@@ -65,7 +66,6 @@ function CytoscapeMindmap({ userObj }) {
   const [snapshot, setSnapshot] = useState("");
   const [dataForRank, setDataForRank] = useState("");
   const [currentData, setCurrentData] = useState("");
-  const cyRef = useRef();
 
   cytoscape.use(dagre);
   cytoscape.use(coseBilkent);
@@ -78,47 +78,6 @@ function CytoscapeMindmap({ userObj }) {
   if (typeof cytoscape("core", "edgehandles") === "undefined") {
     edgehandles(cytoscape);
   }
-
-  const removeTarget = async (ele) => {
-    if (window.confirm("정말 삭제하시겠어요?")) {
-      if (ele.data().parentId !== "new") {
-        await dbService
-          .collection("targets")
-          .doc(`${ele.data().parentId}`)
-          .update({
-            childs: firebaseInstance.firestore.FieldValue.arrayRemove(
-              `${ele.id()}`
-            ),
-          })
-          .then(async () => {
-            await dbService
-              .collection("targets")
-              .doc(`${ele.id()}`)
-              .delete()
-              .then(async () => {
-                console.log("delete");
-              })
-              .catch((error) => {
-                console.log(error.message);
-              });
-          })
-          .catch(async (error) => {
-            await dbService
-              .collection("targets")
-              .doc(`${ele.id()}`)
-              .delete()
-              .then(() => {
-                console.log("delete");
-              })
-              .catch((error) => {
-                console.log(error.message);
-              });
-          });
-      } else {
-        console.log("delete");
-      }
-    }
-  };
 
   const complishTarget = async (ele) => {
     await dbService
