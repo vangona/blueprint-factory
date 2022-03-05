@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import cytoscape from "cytoscape";
 
 import dagre from "cytoscape-dagre";
-import coseBilkent from "cytoscape-cose-bilkent";
 
 import cxtmenu from "cytoscape-cxtmenu";
 import edgehandles from "cytoscape-edgehandles";
-import domNode from "cytoscape-dom-node";
 
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { dbService, firebaseInstance } from "../../fBase";
+import { dbService, firebaseInstance } from "fBase";
 import { EdgeHandlesOptions } from "./EdgeHandlesOptions";
-import { defaultBtnAction, defaultContainer } from "../../css/styleConstants";
+import { defaultBtnAction, defaultContainer } from "css/styleConstants";
 import { MindmapLayout } from "./MindmapLayout";
 import removeTarget from "components/mindmap/functions/removeTarget";
 import complishTarget from "./functions/complishTarget";
@@ -63,7 +61,7 @@ const DataContainer = styled.div`
   border-radius: 10px;
 `;
 
-function CytoscapeMindmap({ userObj }) {
+function MvpMindmap({ userObj }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const [userData, setUserData] = useState("");
@@ -72,12 +70,8 @@ function CytoscapeMindmap({ userObj }) {
   const [currentData, setCurrentData] = useState("");
 
   cytoscape.use(dagre);
-  cytoscape.use(coseBilkent);
   if (typeof cytoscape("core", "cxtmenu") === "undefined") {
     cxtmenu(cytoscape);
-  }
-  if (typeof cytoscape("core", "domNode") === "undefined") {
-    domNode(cytoscape);
   }
   if (typeof cytoscape("core", "edgehandles") === "undefined") {
     edgehandles(cytoscape);
@@ -1291,4 +1285,4 @@ function CytoscapeMindmap({ userObj }) {
   );
 }
 
-export default CytoscapeMindmap;
+export default MvpMindmap;

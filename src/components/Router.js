@@ -14,24 +14,26 @@ import FindValue from "router/FindValue";
 import Shop from "router/Shop";
 import Signout from "components/Signout";
 import MvpWelcome from "router/MvpWelcome";
-import MvpBlueprint from "router/MvpBlueprint";
+import Mvp from "router/Mvp";
 
 function AppRouter({ isLoggedIn, userObj }) {
   return (
     <Router>
-      {isLoggedIn && <Navigation userObj={userObj} />}
+      {/* {isLoggedIn && <Navigation userObj={userObj} />} */}
       <Routes>
-        {isLoggedIn ? (
+        <Route
+          path="/"
+          element={<MvpWelcome />}
+        />
+        <Route
+          path="/mvp"
+          element={<Mvp />}
+        />
+        <Route path="/blueprint" element={<Blueprint userObj={userObj} />} />
+        <Route path="/signout" element={<Signout />} />
+        {/* {isLoggedIn ? (
           <>
             <Route path="/" element={<Home userObj={userObj} />} />
-            <Route
-              path="/welcome"
-              element={<MvpWelcome />}
-            />
-            <Route
-              path="/mvp"
-              element={<MvpBlueprint />}
-            />
             <Route path="/value" element={<FindValue />} />
             <Route
               path="/community"
@@ -41,12 +43,11 @@ function AppRouter({ isLoggedIn, userObj }) {
               path="/shop"
               element={<Shop userObj={userObj} />}
             />
-            <Route path="/blueprint" element={<Blueprint userObj={userObj} />} />
             <Route path="/setting" element={<Setting userObj={userObj} />} />
-            {/* <Route
+            <Route
               path="/shop"
               element={<CalendarRoute userObj={userObj} />}
-            /> */}
+            />
             <Route
               path="/:id/blueprint"
               element={<SomeonesBlueprint userObj={userObj} />}
@@ -63,11 +64,10 @@ function AppRouter({ isLoggedIn, userObj }) {
               path="/blueprint/:type/:id"
               element={<BlueprintMaker userObj={userObj} />}
             />
-            <Route path="/signout" element={<Signout />} />
           </>
         ) : (
           <Route path="/" element={<Auth />} />
-        )}
+        )} */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
