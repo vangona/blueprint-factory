@@ -23,17 +23,6 @@ const Container = styled.div`
   padding: 10px;
 `;
 
-const Title = styled.div`
-  position: absolute;
-  top: 30px;
-  font-size: 20px;
-  font-family: Ssurround;
-`;
-
-const Bold = styled.span`
-  color: var(--main-blue);
-`;
-
 const MindmapContainer = styled.div``;
 
 const BtnBox = styled.div`
@@ -64,9 +53,7 @@ const DataContainer = styled.div`
 function MvpMindmap({ userObj }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [userData, setUserData] = useState("");
   const [snapshot, setSnapshot] = useState("");
-  const [dataForRank, setDataForRank] = useState("");
   const [currentData, setCurrentData] = useState("");
 
   cytoscape.use(dagre);
@@ -657,102 +644,7 @@ function MvpMindmap({ userObj }) {
     outsideMenuCancel: 10,
   };
 
-  const getDataForRank = (snapshot) => {
-    const node = [];
-    const edge = [];
-
-    snapshot.forEach((el) => {
-      el.parentId.forEach((parentId, index) => {
-        const nodeData = {
-          data: {
-            id: `${index === 0 ? el.id : `${el.id}_${index}`}`,
-            parent: `${parentId}`,
-            parentId: `${parentId}`,
-            // "label" : `${el.name}`,
-            type: `${el.type}`,
-            explain: `${el.explain}`,
-            deadline: new Date(el.deadline.seconds * 1000),
-            isComplete: el.isComplete,
-            isComplished: el.isComplished,
-            isPrivate: el.isPrivate,
-          },
-        };
-        node.push(nodeData);
-
-        if (el.type === "shortterm" || el.type === "longterm") {
-          el.childs.forEach((child) => {
-            const originEdge = {
-              data: {
-                id: `${el.id}->${child}`,
-                source: `${child}`,
-                target: `${el.id}`,
-              },
-            };
-            edge.push(originEdge);
-          });
-        }
-      });
-    });
-
-    setDataForRank([...node, ...edge]);
-  };
-
-  const getSnapshot = async () => {
-    await dbService
-      .collection("targets")
-      .where("uid", "==", `${id || userObj.uid}`)
-      .get()
-      .then((querySnapshot) => {
-        const data = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        getDataForRank(data);
-        setSnapshot(data);
-      });
-  };
-
-  const userSnapshot = () => {
-    dbService
-      .collection("targets")
-      .where("uid", "==", `${id || userObj.uid}`)
-      .onSnapshot((querySnapshot) => {
-        const data = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        getDataForRank(data);
-        setSnapshot(data);
-      });
-  };
-
-  const getUserData = async (id) => {
-    await dbService
-      .collection("users")
-      .doc(`${id}`)
-      .get()
-      .then((snapshot) => {
-        const user = snapshot.data();
-        setUserData(user);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  };
-
   const fillCy = async () => {
-    let pageRank = {
-      rank: () => {
-        return 0.0001;
-      },
-    };
-    if (dataForRank.length) {
-      const cy_for_rank = cytoscape({
-        elements: dataForRank,
-      });
-      pageRank = cy_for_rank.elements().pageRank();
-    }
-
     // 함수 변수 선언
 
     // edge, arrow
@@ -806,62 +698,6 @@ function MvpMindmap({ userObj }) {
       makeNode(snapshot);
       makeEdge(snapshot);
     } else {
-      let initNode;
-
-      if (id) {
-        await dbService
-          .collection("users")
-          .doc(`${id}`)
-          .get()
-          .then((snapshot) => {
-            const user = snapshot.data();
-            initNode = {
-              data: {
-                id: "a",
-                label: `${user.displayName}님은 아직 청사진을 그리지 않으셨어요.`,
-              },
-            };
-          })
-          .catch((error) => {
-            console.log(error.message);
-          });
-      } else {
-        let label = "배경을 길게 터치해보세요.";
-        initNode = {
-          data: {
-            id: "a",
-            label,
-          },
-        };
-
-        if (userObj.isVisitor) {
-          const loginBtn = document.createElement("div");
-          loginBtn.innerHTML = "로그인하러가기";
-          loginBtn.style.width = "max-content";
-          loginBtn.style.padding = "10px 15px";
-          loginBtn.style.backgroundColor = "white";
-          loginBtn.style.border = "3px solid rgba(0, 0, 0, 0.5)";
-          loginBtn.style.borderRadius = "10px";
-          loginBtn.style.fontFamily = "SsurroundAir";
-          loginBtn.style.fontSize = "12px";
-          loginBtn.addEventListener("click", () => {
-            navigate("/signout");
-          });
-          loginBtn.addEventListener("mouseover", () => {
-            loginBtn.style.cursor = "pointer";
-          });
-
-          label = "청사진을 그리려면 로그인 해주세요.";
-          initNode = {
-            data: {
-              id: "a",
-              label,
-              dom: loginBtn,
-            },
-          };
-        }
-      }
-      cy.add(initNode);
     }
 
     cy.nodes().forEach((node) => {
@@ -1039,9 +875,7 @@ function MvpMindmap({ userObj }) {
       function paintNode(targetData, parent) {
         // 변수 선언
         const container = document.createElement("div");
-        const nodeSize = `${
-          nodeMaxSize * pageRank.rank(`#${targetData.id}`) + nodeMinSize
-        }px`;
+        const nodeSize = nodeMaxSize;
 
         // 컨테이너 스타일링
         container.style.userSelect = "none";
@@ -1083,7 +917,7 @@ function MvpMindmap({ userObj }) {
               }`,
               type: `${targetData.type}`,
               explain: `${targetData.explain}`,
-              deadline: new Date(targetData.deadline.seconds * 1000),
+              deadline: new Date(targetData.deadline.seconds * 1000),  
               isComplete: targetData.isComplete,
               isComplished: targetData.isComplished,
               isPrivate: targetData.isPrivate,
@@ -1231,10 +1065,9 @@ function MvpMindmap({ userObj }) {
         if (id && target.data().isPrivate) resetColor = privateColor;
 
         target.style("background-color", resetColor);
-        const rank = pageRank.rank(target);
-        target.style("width", nodeMaxSize * rank + nodeMinSize);
-        target.style("height", nodeMaxSize * rank + nodeMinSize);
-        target.style("font-size", fontMaxSize * rank + fontMinSize);
+        target.style("width", nodeMaxSize);
+        target.style("height", nodeMaxSize);
+        target.style("font-size", fontMaxSize);
         target.style("color", nodeTextColor);
         target.style("opacity", 1);
       });
@@ -1249,25 +1082,22 @@ function MvpMindmap({ userObj }) {
     }
   };
 
-  useEffect(() => {
-    if (!snapshot) {
-      if (id) {
-        getUserData(id);
-        getSnapshot();
-      } else {
-        userSnapshot();
-        setUserData(userObj);
-      }
+  const getSnapshot = () => {
+    const data = localStorage.getItem('blueprint_factory_targe');
+    if (data) {
+      setSnapshot(data);
     } else {
-      fillCy();
+      navigate('/guide');
     }
-  }, [snapshot]);
+    console.log('get data', data);
+  }
+
+  useEffect(() => {
+    getSnapshot();
+  }, []);
 
   return (
     <Container>
-      <Title>
-        {userData.displayName}님의 <Bold>청사진</Bold>
-      </Title>
       <MindmapContainer
         id="cy"
         style={{ width: "100%", height: "90vh", top: "5vh", padding: "15px" }}

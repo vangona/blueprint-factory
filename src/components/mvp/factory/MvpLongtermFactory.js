@@ -1,40 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { RiArrowGoBackLine } from "react-icons/ri";
-import { IoMdArrowRoundBack, IoMdArrowRoundForward } from "react-icons/io";
+import { 
+  IoMdArrowRoundBack, 
+  IoMdArrowRoundForward 
+} from "react-icons/io";
 import { FaExchangeAlt } from "react-icons/fa";
-import { defaultBtnAction, defaultContainer } from "../../css/styleConstants";
-import { dbService, firebaseInstance } from "../../fBase";
-
-import ShorttermParent from "./shortterm/ShorttermParent";
-import ShorttermBackground from "./shortterm/ShorttermBackground";
-import ShorttermName from "./shortterm/ShorttermName";
-import ShorttermDigit from "./shortterm/ShorttermDigit";
-import ShorttermDeadline from "./shortterm/ShorttermDeadline";
-import ShorttermNeed from "./shortterm/ShorttermNeed";
-import ShorttermCheck from "./shortterm/ShorttermCheck";
-import ShorttermSimple from "./shortterm/ShorttermSimple";
+import { defaultBtnAction, defaultContainer } from "css/styleConstants";
+import { dbService, firebaseInstance } from "fBase";
+import BackgroundTopCloud from "components/background/BackgroundTopCloud";
+import BackgroundBottomCloud from "components/background/BackgroundBottomCloud";
+import LongtermParent from "components/factory/longterm/LongtermParent";
+import LongtermName from "components/factory/longterm/LongtermName";
+import LongtermDesire from "components/factory/longterm/LongtermDesire";
+import LongtermNeed from "components/factory/longterm/LongtermNeed";
+import LongtermDeadline from "components/factory/longterm/LongtermDeadline";
+import LongtermCheck from "components/factory/longterm/LongtermCheck";
+import LongtermSimple from "components/factory/longterm/LongtermSimple";
 
 const Container = styled.div`
   ${defaultContainer}
 `;
-
-const TargetTitle = styled.h1``;
-
-const TargetForm = styled.form``;
-
-const TargetBox = styled.div``;
-
-const TargetLabel = styled.label``;
-
-const TargetInput = styled.input``;
-
-const TargetBtn = styled.button``;
-
-const NeedBox = styled.div``;
 
 const SimpleBtn = styled.button`
   display: flex;
@@ -116,22 +104,19 @@ const SubmitBtn = styled.input`
   ${defaultBtnAction};
 `;
 
-function ShorttermFactory({ userObj, parent }) {
+function MvpLongtermFactory({ userObj, parent }) {
   const navigate = useNavigate();
-  const [isSimple, setIsSimple] = useState(false);
-
-  const { handleSubmit } = useForm();
   const [page, setPage] = useState(1);
+
+  const [isSimple, setIsSimple] = useState(false);
   const [name, setName] = useState("");
   const [desire, setDesire] = useState("");
   const [explain, setExplain] = useState("");
   const [deadline, setDeadline] = useState("");
-  const [prize, setPrize] = useState("");
   const [need, setNeed] = useState("");
   const [needArr, setNeedArr] = useState([]);
-  const [target, setTarget] = useState("");
-  const [isInComplete, setIsInComplete] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
+  const [isInComplete, setIsInComplete] = useState(false);
 
   const onSubmit = async (e) => {
     const targetId = uuidv4();
@@ -151,8 +136,8 @@ function ShorttermFactory({ userObj, parent }) {
           name,
           desire,
           explain,
-          deadline: new Date(deadline),
-          prize,
+          deadline: deadline ? new Date(deadline) : "",
+          prize: "",
           needArr,
           createdAt: Date.now(),
           modifiedAt: 0,
@@ -160,14 +145,14 @@ function ShorttermFactory({ userObj, parent }) {
           isComplished: false,
           isOpen: true,
           isPrivate,
-          type: "shortterm",
+          type: "longterm",
           parentId: [parent.parentId[0]],
           childs: childIds,
           completeFeeling: "",
           cancelReason: "",
         })
-        .then(() => {
-          alert("작은 구름이 하나 만들어졌어요!");
+        .then(async () => {
+          alert("구름이 완성 됐어요!");
           navigate("/");
         })
         .catch((error) => {
@@ -183,8 +168,8 @@ function ShorttermFactory({ userObj, parent }) {
           name,
           desire,
           explain,
-          deadline: new Date(deadline),
-          prize,
+          deadline: deadline ? new Date(deadline) : "",
+          prize: "",
           needArr,
           createdAt: Date.now(),
           modifiedAt: 0,
@@ -192,7 +177,7 @@ function ShorttermFactory({ userObj, parent }) {
           isComplished: false,
           isOpen: true,
           isPrivate,
-          type: "shortterm",
+          type: "longterm",
           parentId: [parent.id],
           childs: childIds,
           completeFeeling: "",
@@ -209,7 +194,7 @@ function ShorttermFactory({ userObj, parent }) {
               })
               .then(() => {
                 console.log("success");
-                alert("작은 구름이 하나 만들어졌어요!");
+                alert("큰 구름이 하나 만들어졌어요!");
                 navigate("/");
               })
               .catch((error) => {
@@ -264,32 +249,10 @@ function ShorttermFactory({ userObj, parent }) {
       });
   };
 
-  const onChange = (e) => {
-    const inputName = e.target.id;
-    if (inputName === "targetName") {
-      setName(e.target.value);
-    }
-    if (inputName === "targetDesire") {
-      setDesire(e.target.value);
-    }
-    if (inputName === "targetExplain") {
-      setExplain(e.target.value);
-    }
-    if (inputName === "targetDeadline") {
-      setDeadline(e.target.value);
-    }
-    if (inputName === "targetPrize") {
-      setPrize(e.target.value);
-    }
-    if (inputName === "targetNeed") {
-      setNeed(e.target.value);
-    }
-  };
-
-  const onClickPlus = (e) => {
-    if (need !== "") {
+  const onClickPlus = (value) => {
+    if (value !== "") {
       const needArray = [...needArr];
-      needArray.push(need);
+      needArray.push(value);
       setNeed("");
       setNeedArr(needArray);
     }
@@ -302,30 +265,6 @@ function ShorttermFactory({ userObj, parent }) {
       (el, index) => index !== parseInt(clickedIndex)
     );
     setNeedArr(filtered);
-  };
-
-  const getTarget = (value) => {
-    setTarget(value);
-  };
-
-  const getDigit = (value) => {
-    setName(value);
-  };
-
-  const getDeadline = (value) => {
-    setDeadline(value);
-  };
-
-  const getNeed = (value) => {
-    setNeed(value);
-  };
-
-  const getExplain = (value) => {
-    setExplain(value);
-  };
-
-  const getIsPrivate = (value) => {
-    setIsPrivate(value);
   };
 
   const onClickReturn = (e) => {
@@ -343,10 +282,33 @@ function ShorttermFactory({ userObj, parent }) {
     setPage(page + 1);
   };
 
+  const getName = (value) => {
+    setName(value);
+  };
+
+  const getDesire = (value) => {
+    setDesire(value);
+  };
+
+  const getNeed = (value) => {
+    setNeed(value);
+  };
+
+  const getDeadline = (value) => {
+    setDeadline(value);
+  };
+
+  const getExplain = (value) => {
+    setExplain(value);
+  };
+
+  const getIsPrivate = (value) => {
+    setIsPrivate(value);
+  };
+
   useEffect(() => {
     if (parent.type === "incomplete") {
       setIsInComplete(true);
-      setTarget(parent.name);
       setName(parent.name);
       setPage(3);
     }
@@ -360,15 +322,12 @@ function ShorttermFactory({ userObj, parent }) {
       <ReturnBtn onClick={onClickReturn}>
         <RiArrowGoBackLine />
       </ReturnBtn>
-
       {isSimple ? (
-        <ShorttermSimple
-          target={target}
-          getTarget={getTarget}
+        <LongtermSimple
           name={name}
-          getName={getDigit}
+          getName={getName}
           desire={desire}
-          getDesire={getExplain}
+          getDesire={getDesire}
           explain={explain}
           getExplain={getExplain}
           deadline={deadline}
@@ -384,39 +343,44 @@ function ShorttermFactory({ userObj, parent }) {
         />
       ) : (
         <>
-          {page === 1 && <ShorttermParent userObj={userObj} parent={parent} />}
-          {page > 1 && <ShorttermBackground userObj={userObj} />}
+          {page === 1 && <BackgroundTopCloud />}
+          {page > 1 && <BackgroundBottomCloud />}
+          {page === 1 && <LongtermParent parent={parent} />}
           {page === 2 && (
-            <ShorttermName target={target} getTarget={getTarget} />
+            <LongtermName parent={parent} target={name} getTarget={getName} />
           )}
           {page === 3 && (
-            <ShorttermDigit getDigit={getDigit} digit={name} target={target} />
-          )}
-          {page === 4 && (
-            <ShorttermDeadline
-              getDeadline={getDeadline}
-              deadline={deadline}
+            <LongtermDesire
+              getDesire={getDesire}
+              desire={desire}
               target={name}
             />
           )}
-          {page === 5 && (
-            <ShorttermNeed
+          {page === 4 && (
+            <LongtermNeed
               getNeed={getNeed}
               need={need}
               needArr={needArr}
               onClickPlus={onClickPlus}
               onClickDelete={onClickDelete}
-              target={target}
+              target={name}
+            />
+          )}
+          {page === 5 && (
+            <LongtermDeadline
+              getDeadline={getDeadline}
+              deadline={deadline}
+              target={name}
             />
           )}
           {page === 6 && (
-            <ShorttermCheck
+            <LongtermCheck
               getExplain={getExplain}
               explain={explain}
               name={name}
+              desire={desire}
               needArr={needArr}
               deadline={deadline}
-              target={target}
               getIsPrivate={getIsPrivate}
               isPrivate={isPrivate}
             />
@@ -427,9 +391,11 @@ function ShorttermFactory({ userObj, parent }) {
               <IoMdArrowRoundBack style={{ fill: "white" }} />
             </PageBtn>
           )}
-          <PageBtn onClick={onClickNext}>
-            <IoMdArrowRoundForward style={{ fill: "white" }} />
-          </PageBtn>
+          {page !== 6 && (
+            <PageBtn onClick={onClickNext}>
+              <IoMdArrowRoundForward style={{ fill: "white" }} />
+            </PageBtn>
+          )}
           {page === 6 && (
             <SubmitBtn
               type="submit"
@@ -445,4 +411,4 @@ function ShorttermFactory({ userObj, parent }) {
   );
 }
 
-export default ShorttermFactory;
+export default MvpLongtermFactory;

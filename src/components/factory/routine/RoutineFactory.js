@@ -5,13 +5,13 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { RiArrowGoBackLine } from "react-icons/ri";
 import { IoMdArrowRoundBack, IoMdArrowRoundForward } from "react-icons/io";
-import RoutineName from "./routine/RoutineName";
-import ShorttermBackground from "./shortterm/ShorttermBackground";
-import { dbService, firebaseInstance } from "../../fBase";
-import { defaultBtnAction, defaultContainer } from "../../css/styleConstants";
-import RoutineParent from "./routine/RoutineParent";
-import RoutineTodo from "./routine/RoutineTodo";
-import RoutinePeriod from "./routine/RoutinePeriod";
+import { dbService, firebaseInstance } from "fBase";
+import { defaultBtnAction, defaultContainer } from "css/styleConstants";
+import ShorttermBackground from "components/factory/shortterm/ShorttermBackground";
+import RoutineName from "components/factory/routine/RoutineName";
+import RoutineParent from "components/factory/routine/RoutineParent";
+import RoutineTodo from "components/factory/routine/RoutineTodo";
+import RoutinePeriod from "components/factory/routine/RoutinePeriod";
 
 const Container = styled.div`
   ${defaultContainer}

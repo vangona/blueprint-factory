@@ -1,7 +1,9 @@
+import BackgroundTopCloud from 'components/background/BackgroundTopCloud';
 import MoveBtn from 'components/common/MoveBtn';
 import { authService } from 'fBase';
 import React from 'react';
 import styled from 'styled-components';
+import cloud from "assets/img/background/top-cloud.png";
 
 const Container = styled.div`
   display: flex;
@@ -10,18 +12,44 @@ const Container = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
+  gap: 5vh;
+`;
+
+const CloudImg = styled.img`
+  position: fixed;
+  top: 0;
+  height: 10%;
+  width: 100%;
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 `;
 
 const Title = styled.h1`
-  color: black;
+  font-family: Ssurround;
+  font-size: 30px;
+  color: var(--main-blue);
+`;
+
+const Explain = styled.h3`
+  font-family: SsurroundAir;
+  color: var(--main-blue);
+  white-space: pre-line;
+  text-align: center;
+  line-height: 140%;
 `;
 
 const MvpVideo = styled.iframe`
   padding: 10px;
   width: 100vw;
   height: 56.25vw;
-  max-height: 100vh;
-  max-width: 177.78vh;
+  max-height: 400px;
+  max-width: 800px;
 `;
 
 const MvpWelcome = () => {
@@ -31,9 +59,16 @@ const MvpWelcome = () => {
 
   return (
     <Container>
-      <Title>
-        청사진 제작소
-      </Title>
+      <CloudImg src={cloud} />
+      <TitleContainer>
+        <Title>
+          청사진 제작소
+        </Title>
+        <Explain>
+          내 꿈을 찾아서 오늘 할 일로 만들어주는 {`\n`}
+          '온라인 목표관리 플랫폼'.
+        </Explain>
+      </TitleContainer>
       <MvpVideo 
         src="https://www.youtube.com/embed/tBlGPyAcYPw" 
         title="YouTube video player" 

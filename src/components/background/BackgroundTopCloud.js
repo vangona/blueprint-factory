@@ -8,8 +8,8 @@ const Container = styled.div`
   justify-content: center;
   position: fixed;
   top: 0;
-  background-color: white;
-  z-index: 10;
+  background-color: transparent;
+  z-index: 0;
 `;
 
 const Cloud = styled.img`

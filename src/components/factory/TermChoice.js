@@ -6,10 +6,10 @@ import {
   defaultBtnAction,
   defaultContainer,
   defaultTitle,
-} from "../../css/styleConstants";
-import BackgroundBottomCloud from "../background/BackgroundBottomCloud";
-import LongtermFactory from "./LongtermFactory";
-import ShorttermFactory from "./ShorttermFactory";
+} from "css/styleConstants";
+import BackgroundBottomCloud from "components/background/BackgroundBottomCloud";
+import LongtermFactory from "components/factory/longterm/LongtermFactory";
+import ShorttermFactory from "components/factory/shortterm/ShorttermFactory";
 
 const Container = styled.div`
   ${defaultContainer};

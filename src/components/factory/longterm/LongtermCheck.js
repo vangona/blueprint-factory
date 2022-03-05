@@ -5,7 +5,7 @@ import {
   targetFactoryContent,
   targetFactoryContentInput,
   targetFactoryContentTitle,
-} from "../../../css/styleConstants";
+} from "css/styleConstants";
 
 const Container = styled.div`
   ${defaultContainer};

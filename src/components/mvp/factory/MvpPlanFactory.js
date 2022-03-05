@@ -5,15 +5,15 @@ import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { IoMdArrowRoundBack, IoMdArrowRoundForward } from "react-icons/io";
 import { RiArrowGoBackLine } from "react-icons/ri";
-import { defaultBtnAction, defaultContainer } from "../../css/styleConstants";
-import { dbService, firebaseInstance } from "../../fBase";
-import PlanParent from "./plan/PlanParent";
-import ShorttermBackground from "./shortterm/ShorttermBackground";
-import PlanName from "./plan/PlanName";
-import PlanStep from "./plan/PlanStep";
-import PlanDeadline from "./plan/PlanDeadline";
-import PlanNeed from "./plan/PlanNeed";
-import PlanCheck from "./plan/PlanCheck";
+import { defaultBtnAction, defaultContainer } from "css/styleConstants";
+import { dbService, firebaseInstance } from "fBase";
+import ShorttermBackground from "components/factory/shortterm/ShorttermBackground";
+import PlanParent from "components/factory/plan/PlanParent";
+import PlanName from "components/factory/plan/PlanName";
+import PlanStep from "components/factory/plan/PlanStep";
+import PlanDeadline from "components/factory/plan/PlanDeadline";
+import PlanNeed from "components/factory/plan/PlanNeed";
+import PlanCheck from "components/factory/plan/PlanCheck";
 
 const Container = styled.div`
   ${defaultContainer}
@@ -77,7 +77,7 @@ const SubmitBtn = styled.input`
   ${defaultBtnAction};
 `;
 
-function PlanFactory({ userObj, parent }) {
+function MvpPlanFactory({ userObj, parent }) {
   const navigate = useNavigate();
   const { id } = useParams();
   const [page, setPage] = useState(1);
@@ -424,4 +424,4 @@ function PlanFactory({ userObj, parent }) {
   );
 }
 
-export default PlanFactory;
+export default MvpPlanFactory;
