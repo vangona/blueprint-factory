@@ -65,8 +65,8 @@ const MvpWelcome = () => {
           청사진 제작소
         </Title>
         <Explain>
-          내 꿈을 찾아서 오늘 할 일로 만들어주는 {`\n`}
-          '온라인 목표관리 플랫폼'.
+          꿈부터 오늘 할 일까지 찾을 수 있게 도와주는 {`\n`}
+          '온라인 목표관리 플랫폼
         </Explain>
       </TitleContainer>
       <MvpVideo 

@@ -11,46 +11,51 @@ const Container = styled.div`
   font-family: Ssurround;
 `;
 
-const ValueBox = styled.div``;
+const ValueTitle = styled.div`
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+`;
 
-const ValueLabel = styled.label``;
+const ValueLabel = styled.label`
+  font-family: SsurroundAir;
+  margin: 10px;
+  max-width: 80vw;
+  text-indent: 1rem;
+  word-break: keep-all;
+  line-height: 160%;
+  white-space: pre-line;
+`;
 
-const ValueImg = styled.img``;
+const ValueImg = styled.img`
+  width: 80vw;
+  height: auto;
+`;
 
-const ValueInput = styled.input``;
+const ValueInput = styled.textarea`
+  width: 80vw;
+  height: 10vh;
+  padding: 10px;
+  font-family: SsurroundAir;
+`;
 
-function MvpValueFactory() {
-  const [questionArr, setQuestionArr] = useState([]);
-  const [index, setIndex] = useState("");
-  const [question, setQuestion] = useState("");
-  const [questionImg, setQuestionImg] = useState("");
-  const [value, setValue] = useState("");
+function MvpValueFactory({ page, value, setValue }) {
 
   const onChange = (e) => {
-    e.preventDefault();
-
     setValue(e.target.value);
-  };
-
-  const getQuestion = () => {
-    // 동적으로 이미지를 할당하기 위해서, require로 이미지를 불러올 수 있는 주소를 DB 배열에 입력해두고 질문에 맞는 이미지를 불러오게 함.
-    const randumNum = Math.floor(Math.random() * valueDB.length);
-    setIndex(randumNum);
-    setQuestion(valueDB[randumNum][0]);
-    setQuestionImg(valueDB[randumNum][1]);
-  };
+  }
 
   useEffect(() => {
-    getQuestion();
   }, []);
 
   return (
     <Container>
-      <ValueLabel htmlFor="input__Value">{question}</ValueLabel>
-      <ValueImg src={questionImg} alt="사진이 없네용" />
+      <ValueTitle>
+        {valueDB[page].title}
+      </ValueTitle>
+      <ValueImg src={valueDB[page].img} alt="사진이 없네용" />
+      <ValueLabel htmlFor="input__Value">{valueDB[page].question}</ValueLabel>
       <ValueInput
         id="input__Value"
-        type="text"
         value={value}
         onChange={onChange}
       />

@@ -4,7 +4,7 @@ import { defaultContainer } from "css/styleConstants";
 import CalendarComponent from "components/calendar/CalendarComponent";
 import EventComponent from "components/calendar/EventComponent";
 import Loading from "components//loading/Loading";
-import PrevBtn from "components//btn/PrevBtn";
+import ReturnBtn from "components/btn/ReturnBtn";
 import { dbService } from "fBase";
 
 const Container = styled.div`
@@ -58,7 +58,7 @@ function CalendarRoute({ userObj }) {
         <Loading />
       ) : (
         <Container>
-          <PrevBtn />
+          <ReturnBtn />
           <CalendarComponent getSelected={getSelected} schedules={schedules} />
           <EventComponent selected={selected} />
         </Container>

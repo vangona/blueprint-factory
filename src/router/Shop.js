@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { defaultContainer } from "css/styleConstants";
 import { dbService } from "fBase";
 import Loading from "components/loading/Loading";
-import PrevBtn from "components/btn/PrevBtn";
+import ReturnBtn from "components/btn/ReturnBtn";
 import ShopUpperComponent from "components/shop/ShopUpperComponent";
 import ShopLowerComponent from "components/shop/ShopLowerComponent";
 
@@ -39,7 +39,7 @@ function Shop({ userObj }) {
 
   return (
     <Container>
-      <PrevBtn />
+      <ReturnBtn />
       <ShopUpperComponent
         userObj={userObj}
         users={users}

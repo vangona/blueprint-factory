@@ -1,11 +1,11 @@
 import React from 'react';
-import PrevBtn from '../components/btn/PrevBtn';
+import ReturnBtn from '../components/btn/ReturnBtn';
 import CytoscapeMindmap from '../components/mindmap/CytoscapeMindmap';
 
 function SomeonesBlueprint({ userObj }) {
   return (
     <>
-      <PrevBtn />
+      <ReturnBtn />
       <CytoscapeMindmap userObj={userObj} />
     </>
   );

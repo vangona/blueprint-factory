@@ -6,7 +6,7 @@ import { defaultContainer } from "../css/styleConstants";
 import CommunityLowerComponent from "../components/community/CommunityLowerComponent";
 import { dbService } from "../fBase";
 import Loading from "../components/loading/Loading";
-import PrevBtn from "../components/btn/PrevBtn";
+import ReturnBtn from "../components/btn/ReturnBtn";
 
 const Container = styled.div`
   ${defaultContainer};
@@ -40,7 +40,7 @@ function Community({ userObj }) {
 
   return (
     <Container>
-      <PrevBtn />
+      <ReturnBtn />
       <CommunityUpperComponent
         userObj={userObj}
         users={users}

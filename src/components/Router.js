@@ -18,6 +18,7 @@ import Mvp from "router/mvp/Mvp";
 import MvpBlueprintMaker from "router/mvp/MvpBlueprintMaker";
 import Guide from "components/mvp/guide/Guide";
 import MvpSurvey from "router/mvp/MvpSurvey";
+import MvpFindValue from "router/mvp/MvpFindValue";
 
 function AppRouter({ isLoggedIn, userObj }) {
   return (
@@ -35,7 +36,7 @@ function AppRouter({ isLoggedIn, userObj }) {
         <Route path="/guide" element={<Guide userObj={userObj} />} />
         <Route path="/blueprint" element={<Blueprint userObj={userObj} />} />
         <Route path="/survey" element={<MvpSurvey />} />
-        <Route path="/value" element={<FindValue />} />
+        <Route path="/value" element={<MvpFindValue />} />
         <Route
           path="/blueprint/:type"
           element={<MvpBlueprintMaker userObj={userObj} />}

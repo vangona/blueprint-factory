@@ -26,61 +26,65 @@ function App() {
     });
   };
 
+  // const getUserObj = () => {
+  //   authService.onAuthStateChanged(async (user) => {
+  //     if (user) {
+  //       let displayName = "익명";
+  //       let isVisitor = false;
+  //       let isPrivate = false;
+  //       let bio = "";
+
+  //       await dbService
+  //         .collection("users")
+  //         .doc(`${user.uid}`)
+  //         .get()
+  //         .then(async (snapshot) => {
+  //           if (!snapshot.exists && user.providerData.length) {
+  //             isPrivate = snapshot.data().isPrivate;
+  //             bio = snapshot.data().bio;
+  //             await dbService
+  //               .collection("users")
+  //               .doc(`${user.uid}`)
+  //               .set({
+  //                 uid: user.uid,
+  //                 displayName: user.displayName ? user.displayName : "익명",
+  //                 photoURL: user.photoURL,
+  //                 bio: "",
+  //                 isPrivate: false,
+  //                 isBlueprint: false,
+  //               });
+  //           }
+  //         });
+
+  //       if (user.providerData.length === 0) {
+  //         isVisitor = true;
+  //         displayName = "방문객";
+  //       }
+
+  //       if (user.displayName) {
+  //         displayName = user.displayName;
+  //       }
+
+  //       setUserObj({
+  //         uid: user.uid,
+  //         isPrivate,
+  //         isVisitor,
+  //         photoURL: user.photoURL ? user.photoURL : "",
+  //         displayName,
+  //         bio,
+  //         updateProfile: (args) => user.updateProfile(args),
+  //       });
+  //       setInit(true);
+  //     } else {
+  //       setUserObj(null);
+  //       setInit(true);
+  //     }
+  //   });
+  // };
+
   const getUserObj = () => {
-    authService.onAuthStateChanged(async (user) => {
-      if (user) {
-        let displayName = "익명";
-        let isVisitor = false;
-        let isPrivate = false;
-        let bio = "";
-
-        await dbService
-          .collection("users")
-          .doc(`${user.uid}`)
-          .get()
-          .then(async (snapshot) => {
-            if (!snapshot.exists && user.providerData.length) {
-              isPrivate = snapshot.data().isPrivate;
-              bio = snapshot.data().bio;
-              await dbService
-                .collection("users")
-                .doc(`${user.uid}`)
-                .set({
-                  uid: user.uid,
-                  displayName: user.displayName ? user.displayName : "익명",
-                  photoURL: user.photoURL,
-                  bio: "",
-                  isPrivate: false,
-                  isBlueprint: false,
-                });
-            }
-          });
-
-        if (user.providerData.length === 0) {
-          isVisitor = true;
-          displayName = "방문객";
-        }
-
-        if (user.displayName) {
-          displayName = user.displayName;
-        }
-
-        setUserObj({
-          uid: user.uid,
-          isPrivate,
-          isVisitor,
-          photoURL: user.photoURL ? user.photoURL : "",
-          displayName,
-          bio,
-          updateProfile: (args) => user.updateProfile(args),
-        });
-        setInit(true);
-      } else {
-        setUserObj(null);
-        setInit(true);
-      }
-    });
-  };
+    setInit(true);
+  }
 
   useEffect(() => {
     if (!userObj) {

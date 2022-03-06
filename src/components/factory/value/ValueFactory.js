@@ -46,8 +46,8 @@ function ValueFactory() {
 
   return (
     <Container>
-      <ValueLabel htmlFor="input__Value">{question}</ValueLabel>
       <ValueImg src={questionImg} alt="사진이 없네용" />
+      <ValueLabel htmlFor="input__Value">{question}</ValueLabel>
       <ValueInput
         id="input__Value"
         type="text"

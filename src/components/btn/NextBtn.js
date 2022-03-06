@@ -20,9 +20,9 @@ const Btn = styled.button`
   ${defaultBtnAction};
 `;
 
-function NextBtn({ page, setPage }) {
+function NextBtn({ onClick, arg }) {
   return (
-    <Btn onClick={() => setPage(page + 1)}>
+    <Btn onClick={() => onClick(arg)}>
       <IoMdArrowRoundForward style={{ fill: "white" }} />
     </Btn>
   );

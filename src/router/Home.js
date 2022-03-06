@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Loading from "components/loading/Loading";
 import { defaultContainer } from "css/styleConstants";
 import { dbService } from "fBase";
-import PrevBtn from "components/btn/PrevBtn";
+import ReturnBtn from "components/btn/ReturnBtn";
 import TodolistToday from "components/home/TodolistToday";
 import TodolistCalendar from "components/home/TodolistCalendar";
 
@@ -66,7 +66,7 @@ function Home({ userObj }) {
         <Loading />
       ) : (
         <>
-          <PrevBtn />
+          <ReturnBtn />
           {page === 1 
             ? <TodolistToday userObj={userObj} todayTargets={todayTargets} /> 
             : <TodolistCalendar userObj={userObj} />

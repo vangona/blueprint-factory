@@ -1,7 +1,7 @@
 import AddBtn from "components/mindmap/AddBtn";
 import React from "react";
 import styled from "styled-components";
-import PrevBtn from "../components/btn/PrevBtn";
+import ReturnBtn from "../components/btn/ReturnBtn";
 import CytoscapeMindmap from "../components/mindmap/CytoscapeMindmap";
 import { defaultContainer } from "../css/styleConstants";
 
@@ -14,7 +14,7 @@ const Container = styled.div`
 function Blueprint({ userObj }) {
   return (
     <Container>
-      <PrevBtn />
+      <ReturnBtn />
       <CytoscapeMindmap userObj={userObj} />
       <AddBtn />
     </Container>

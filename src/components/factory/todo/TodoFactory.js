@@ -9,7 +9,7 @@ import {
 } from "../../../css/styleConstants";
 import { dbService, firebaseInstance } from "../../../fBase";
 import BackgroundTopCloud from "../../background/BackgroundTopCloud";
-import PrevBtn from "../../btn/PrevBtn";
+import ReturnBtn from "../../btn/ReturnBtn";
 
 const Container = styled.div`
   ${defaultContainer};
@@ -148,7 +148,7 @@ function TodoFactory({ userObj, parent }) {
 
   return (
     <Container>
-      <PrevBtn />
+      <ReturnBtn />
       <BackgroundTopCloud />
       <Title>할 일 쓰기</Title>
       <TargetName>
