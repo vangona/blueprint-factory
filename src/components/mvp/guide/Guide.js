@@ -40,7 +40,7 @@ const Guide = () => {
   const navigate = useNavigate();
 
   const onClickValue = () => {
-    navigate('/value');
+    navigate('/guide/value');
   }
 
   const onClickNext = () => {

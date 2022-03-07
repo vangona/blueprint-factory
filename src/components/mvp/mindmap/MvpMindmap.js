@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import cytoscape from "cytoscape";
 
 import dagre from "cytoscape-dagre";
+import domNode from "cytoscape-dom-node";
 
 import cxtmenu from "cytoscape-cxtmenu";
 import edgehandles from "cytoscape-edgehandles";
@@ -21,6 +22,8 @@ import cyStyle from "./cyStyle";
 const Container = styled.div`
   ${defaultContainer};
   padding: 10px;
+  width: 100%;
+  height: 100%;
 `;
 
 const MindmapContainer = styled.div``;
@@ -59,6 +62,9 @@ function MvpMindmap({ userObj }) {
   cytoscape.use(dagre);
   if (typeof cytoscape("core", "cxtmenu") === "undefined") {
     cxtmenu(cytoscape);
+  }
+  if (typeof cytoscape("core", "domNode") === "undefined") {
+    domNode(cytoscape);
   }
   if (typeof cytoscape("core", "edgehandles") === "undefined") {
     edgehandles(cytoscape);
@@ -845,11 +851,11 @@ function MvpMindmap({ userObj }) {
     function makeNode(snapshot) {
       const visited = new Array(snapshot.length);
 
-      // 서브 노드 그리기
-      for (let i = 0; i < snapshot.length; i++) {
-        if (visited[i]) continue;
-        dfs(i);
-      }
+      // // 서브 노드 그리기
+      // for (let i = 0; i < snapshot.length; i++) {
+      //   if (visited[i]) continue;
+      //   dfs(i);
+      // }
 
       // 최상위 노드 그리기
       for (let i = 0; i < snapshot.length; i++) {
@@ -1083,18 +1089,21 @@ function MvpMindmap({ userObj }) {
   };
 
   const getSnapshot = () => {
-    const data = localStorage.getItem('blueprint_factory_targe');
+    const data = localStorage.getItem('blueprint-factory_target');
     if (data) {
-      setSnapshot(data);
+      setSnapshot(JSON.parse(data));
     } else {
       navigate('/guide');
     }
-    console.log('get data', data);
   }
 
   useEffect(() => {
-    getSnapshot();
-  }, []);
+    if (snapshot) {
+      fillCy();
+    } else {
+      getSnapshot();
+    }
+  }, [snapshot]);
 
   return (
     <Container>

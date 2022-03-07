@@ -13,8 +13,7 @@ const Container = styled.div`
 const Mvp = () => {
   return (
     <Container>
-      {/* <MvpBlueprint /> */}
-      <Guide />
+      <MvpBlueprint />
     </Container>
   );
 };
