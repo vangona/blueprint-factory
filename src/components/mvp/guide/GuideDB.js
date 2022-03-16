@@ -5,6 +5,11 @@ const GuideDB = [
     'imgSrc' : require('assets/img/guide/example.png'),
   },
   {
+    'comment' : `방문해주셔서 정말 감사합니다. 
+    바로 이야기로 들어갈게요!`,
+    'imgSrc' : require('assets/img/guide/example.png'),
+  },
+  {
     'comment' : `사람은 살면서 길을 잃어서 꿈을 잃기도,  
     반복해서 좌절하다가 놓아버리기도 한대요.`,
     'imgSrc' : require('assets/img/guide/example.png'),
