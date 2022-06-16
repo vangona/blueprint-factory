@@ -1,5 +1,2 @@
-2022.01.15 23시 할일
-
-[] 응원하기 구현
-[] 비밀로하기 구현
-[] 달성 소감 작성 구현
+![](https://tokei.rs/b1/github/vangona/blueprint_maker)
+![](https://tokei.rs/b1/github/vangona/blueprint_maker?category=files)
