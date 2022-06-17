@@ -1,0 +1,32 @@
+html,
+body,
+#root {
+  background-color: white;
+  color: black;
+  width: 100%;
+  height: 100%;
+}
+
+@font-face {
+  font-family: "Kyobo Handwriting";
+  src: url("/src/fonts/KyoboHandwriting2020pdy.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Jeju Myeongjo";
+  src: url("/src/fonts/JejuMyeongjo.ttf") format("truetype");
+}
+
+.target__btn {
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.target__btn:hover {
+  cursor: pointer;
+}
+
+.target__btn:active {
+  transform: scale(0.98);
+}
