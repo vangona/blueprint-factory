@@ -1,0 +1,20 @@
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+#root,
+.home__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.home__container {
+  flex-direction: column;
+}
+
+.home__title {
+}
